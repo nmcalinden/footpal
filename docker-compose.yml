@@ -6,14 +6,14 @@ services:
     ports:
       - 5433:5432
     environment:
-      POSTGRES_DB: itrepair
+      POSTGRES_DB: footpaldb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
       - db:/var/lib/postgresql/data
   flyway:
     image: flyway/flyway
-    command: -url=jdbc:postgresql://db/itrepair -schemas=public -user=postgres
+    command: -url=jdbc:postgresql://db/footpaldb -schemas=public -user=postgres
       -password=password -connectRetries=5 migrate
     volumes:
       - ./migrations:/flyway/sql

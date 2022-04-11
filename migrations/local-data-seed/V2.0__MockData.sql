@@ -23,13 +23,8 @@ INSERT INTO footpal_user VALUES (20, 'Lionel', 'Messi', 'messi10@gmailcom');
 
 -- Init Venues
 
-INSERT INTO venue VALUES (1, 'Shankill Sports Arena', '123 Shankill Street', 'BT87 3QW', 'Belfast', '07824712319', 'ssa@booking.com', null);
-INSERT INTO venue VALUES (2, 'Lurgan Liars Soccer Dome', '95 William Street', 'BT66 8RT', 'Belfast', '07824712319', 'lurgansoccerdome@info.co.uk', null);
-
-UPDATE venue
-SET opening_hours = '[ {"day": "Monday", "hours": "13:00-22:00"} , {"day": "Tuesday", "hours": "13:00-22:00"}, {"day": "Wednesday", "hours": "13:00-22:00"} ,
-  {"day": "Thursday", "hours": "13:00-22:00"}, {"day": "Friday", "hours": "13:00-22:00"} , {"day": "Saturday", "hours": "09:00-17:00"},  {"day": "Sunday", "hours": "09:00-17:00"} ]'
-WHERE venue_id = 1 OR venue_id = 2;
+INSERT INTO venue VALUES (1, 'Shankill Sports Arena', '123 Shankill Street', 'BT87 3QW', 'Belfast', '07824712319', 'ssa@booking.com');
+INSERT INTO venue VALUES (2, 'Lurgan Liars Soccer Dome', '95 William Street', 'BT66 8RT', 'Belfast', '07824712319', 'lurgansoccerdome@info.co.uk');
 
 -- Init Venue Admins
 INSERT INTO venue_admin VALUES (1, 2, 1);
@@ -56,7 +51,6 @@ INSERT INTO player VALUES (16, 19, null, '07858274821', 'BT98 6UY', 'Belfast');
 INSERT INTO player VALUES (17, 20, 'Leo', '07858274821', 'BT98 6UY', 'Lurgan');
 
 -- Init Pitches
-
 INSERT INTO pitch VALUES(1, 1, 'Pitch 1', 10, 30.0);
 INSERT INTO pitch VALUES(2, 1, 'Pitch 2', 10, 30.0);
 INSERT INTO pitch VALUES(3, 1, 'Pitch 3', 14, 50.0);
@@ -201,37 +195,35 @@ INSERT INTO pitch_time_slot VALUES(121, 4, 'Sunday', '15:00:00', '16:00:00');
 INSERT INTO pitch_time_slot VALUES(122, 4, 'Sunday', '16:00:00', '17:00:00');
 
 
--- Init Groups
-INSERT INTO group_details VALUES(1, 'Leos 5 a side', 'Belfast');
-INSERT INTO group_details VALUES(2, 'CR7 5 a side', 'Belfast');
+-- Init Squads
+INSERT INTO squad VALUES(1, 'Leos 5 a side', 'Belfast');
+INSERT INTO squad VALUES(2, 'CR7 5 a side', 'Belfast');
 
--- Init Group Admins
-INSERT INTO player_group_admin VALUES(1, 1, 17);
-INSERT INTO player_group_admin VALUES(2, 2, 6);
+-- Init Squad Players
+INSERT INTO squad_player VALUES(1, 1, 7, 'player', 1);
+INSERT INTO squad_player VALUES(2, 1, 11, 'player', 1);
+INSERT INTO squad_player VALUES(3, 1, 5, 'player', 1);
+INSERT INTO squad_player VALUES(4, 1, 15, 'player', 1);
+INSERT INTO squad_player VALUES(5, 1, 1, 'player', 1);
+INSERT INTO squad_player VALUES(6, 1, 14, 'player', 1);
+INSERT INTO squad_player VALUES(7, 1, 10, 'player', 1);
+INSERT INTO squad_player VALUES(8, 1, 17, 'player', 1);
+INSERT INTO squad_player VALUES(9, 1, 8, 'player', 1);
+INSERT INTO squad_player VALUES(10, 1, 6, 'admin', 1);
 
--- Init Player Groups
-INSERT INTO player_group VALUES(1, 1, 7);
-INSERT INTO player_group VALUES(2, 1, 11);
-INSERT INTO player_group VALUES(3, 1, 5);
-INSERT INTO player_group VALUES(4, 1, 15);
-INSERT INTO player_group VALUES(5, 1, 1);
-INSERT INTO player_group VALUES(6, 1, 14);
-INSERT INTO player_group VALUES(7, 1, 10);
-INSERT INTO player_group VALUES(8, 1, 17);
-INSERT INTO player_group VALUES(9, 1, 8);
-INSERT INTO player_group VALUES(10, 1, 13);
-
-INSERT INTO player_group VALUES(11, 2, 9);
-INSERT INTO player_group VALUES(12, 2, 3);
-INSERT INTO player_group VALUES(13, 2, 12);
-INSERT INTO player_group VALUES(14, 2, 15);
-INSERT INTO player_group VALUES(15, 2, 16);
-INSERT INTO player_group VALUES(16, 2, 17);
-INSERT INTO player_group VALUES(17, 2, 16);
+INSERT INTO squad_player VALUES(11, 2, 9, 'player', 1);
+INSERT INTO squad_player VALUES(12, 2, 3, 'player', 1);
+INSERT INTO squad_player VALUES(13, 2, 12, 'player', 1);
+INSERT INTO squad_player VALUES(14, 2, 15, 'player', 1);
+INSERT INTO squad_player VALUES(15, 2, 16, 'player', 1);
+INSERT INTO squad_player VALUES(16, 2, 17, 'player', 1);
+INSERT INTO squad_player VALUES(17, 2, 16, 'player', 1);
+INSERT INTO squad_player VALUES(18, 2, 17, 'admin', 1);
+INSERT INTO squad_player VALUES(19, 2, 13, 'player', 1);
 
 -- Init Bookings
-INSERT INTO booking VALUES(1, 17, 1, current_timestamp, current_timestamp);
-INSERT INTO booking VALUES(2, 6, 4, current_timestamp, current_timestamp);
+INSERT INTO booking VALUES(1, 1, 17, current_timestamp, current_timestamp);
+INSERT INTO booking VALUES(2, 4, 6, current_timestamp, current_timestamp);
 
 -- Init Pitch Slots
 INSERT INTO pitch_slot VALUES(1, 1, 70, DATE '2022-04-20', 1);
@@ -240,9 +232,9 @@ INSERT INTO pitch_slot VALUES(3, 1, 70, DATE '2022-05-04', 1);
 INSERT INTO pitch_slot VALUES(4, 2, 52, DATE '2022-04-25', 4);
 
 -- Init Match
-INSERT INTO match VALUES(1, 1, 2, 1, 30.0, false, current_timestamp, current_timestamp);
-INSERT INTO match VALUES(2, 1, 2, 4, 30.0, false, current_timestamp, current_timestamp);
-INSERT INTO match VALUES(3, 1, 2, 4, 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO match VALUES(1, 1, 2, 1, DATE '2022-04-20', 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO match VALUES(2, 1, 2, 4, DATE '2022-04-27', 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO match VALUES(3, 1, 2, 4, DATE '2022-05-04', 30.0, false, current_timestamp, current_timestamp);
 
 -- Init Match Player
 INSERT INTO match_player VALUES(1, 1, 4, 3.0, 1);
