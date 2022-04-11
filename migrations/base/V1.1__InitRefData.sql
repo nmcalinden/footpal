@@ -4,6 +4,13 @@ INSERT INTO booking_status_ref VALUES (2, 'cancelled');
 INSERT INTO booking_status_ref VALUES (3, 'denied');
 INSERT INTO booking_status_ref VALUES (4, 'pending');
 
+-- Squad Player Status
+INSERT INTO squad_player_status_ref VALUES (1, 'active');
+INSERT INTO squad_player_status_ref VALUES (2, 'cancelled');
+INSERT INTO squad_player_status_ref VALUES (3, 'deactivated');
+INSERT INTO squad_player_status_ref VALUES (4, 'pending');
+INSERT INTO squad_player_status_ref VALUES (5, 'rejected');
+
 -- Match Status
 INSERT INTO match_status_ref VALUES (1, 'active');
 INSERT INTO match_status_ref VALUES (2, 'cancelled');
