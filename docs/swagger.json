@@ -1,0 +1,2178 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is swagger for Footpal",
+        "title": "Footpal API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Footpal Support",
+            "email": "nathan.mcalinden@unosquare.com"
+        },
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:3000",
+    "basePath": "/",
+    "paths": {
+        "/bookings": {
+            "get": {
+                "description": "Retrieve all bookings by user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Retrieve bookings",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Booking"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new single or recurring booking",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Create new booking",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bookings/{bookingId}": {
+            "get": {
+                "description": "Retrieve booking by bookingId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Retrieve booking",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Booking ID",
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Booking"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edit booking details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Edit booking",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Booking ID",
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Booking"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Cancel active or pending booking",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Cancel booking",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Booking ID",
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bookings/{bookingId}/matches": {
+            "get": {
+                "description": "Get all matches linked to booking",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "summary": "Get matches by booking",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Booking ID",
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Match"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/deactivate": {
+            "delete": {
+                "description": "Delete user from Footpal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Deactivate User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userRoute.UserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login to Footpal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/matches": {
+            "get": {
+                "description": "Retrieve all public matches",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "match"
+                ],
+                "summary": "Retrieve Matches",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Match"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/matches/{matchId}": {
+            "get": {
+                "description": "Retrieve match details by matchId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "match"
+                ],
+                "summary": "Retrieve Match by matchId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Match"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Cancel match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "match"
+                ],
+                "summary": "Cancel match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/matches/{matchId}/players": {
+            "get": {
+                "description": "Retrieve all players opted into a match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "match"
+                ],
+                "summary": "Retrieve Players by Match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Match"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/matches/{matchId}/players/{playerId}": {
+            "delete": {
+                "description": "As a booking/squad admin, remove player from match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "match"
+                ],
+                "summary": "Remove player from match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players": {
+            "get": {
+                "description": "Retrieve all players",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Players",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Player"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edit player information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Edit Player",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PlayerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Player"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/matches": {
+            "get": {
+                "description": "Retrieve a players opted in matches",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Matches by player",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Match"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/players/matches/{matchId}": {
+            "get": {
+                "description": "Retrieve a match linked to a player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Match by match id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Match"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Request to join match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Join match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "accepted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Leave match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Leave match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/matches/{matchId}/pay": {
+            "post": {
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Match player payment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Update player payment type",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Payment Type",
+                        "name": "paymentType",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/squads": {
+            "get": {
+                "description": "Retrieve all squads linked to player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Squads",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Squad"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/squads/{squadId}": {
+            "get": {
+                "description": "Retrieve squad by squad id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Squad by squadId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Player"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}": {
+            "get": {
+                "description": "Get Player information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Player",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Player"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Register as new player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Register",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Register"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userRoute.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/squads": {
+            "get": {
+                "description": "Retrieve all squads",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Retrieve Squads",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Squad"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new squad for building up a team of players",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Create new squad",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SquadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/squads/{squadId}": {
+            "get": {
+                "description": "Get squad by squadId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Retrieve squad by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Squad"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Get squad by squadId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Retrieve squad by id",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SquadRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Squad"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete squad from footpal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Remove squad",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "accepted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/squads/{squadId}/players": {
+            "get": {
+                "description": "List of players associated with squad",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Retrieve players by squad",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SquadPlayer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/squads/{squadId}/players/{playerId}": {
+            "put": {
+                "description": "Approve player to join squad",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Approve squad request",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove player from squad",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "squad"
+                ],
+                "summary": "Remove squad player",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues": {
+            "get": {
+                "description": "Retrieve all venues",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Retrieve Venues",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Venue"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edit venue details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Edit venue",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.VenueRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Venue"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new football venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Create new venue",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.VenueRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}": {
+            "get": {
+                "description": "Retrieve venue by venueId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Retrieve Venues by id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Venue"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove venue from Footpal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Delete venue",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}/admins": {
+            "get": {
+                "description": "Retrieve venue administrators",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Get Venue Admins",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/venueRoute.VenueAdminResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add new administrator to venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Add Venue Admin",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/venueRoute.VenueAdminRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/venueRoute.VenueAdminResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove administrator from venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Remove Venue Admin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}/pitches": {
+            "get": {
+                "description": "Get Pitches by Venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Get Pitches by Venue",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Pitch"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add new pitch to existing venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Add Venue Pitch",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PitchRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Pitch"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}/pitches/{pitchId}": {
+            "get": {
+                "description": "Get pitch info by venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Get Venue Pitch",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pitch"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edit pitch details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Edit Pitch",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PitchRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pitch ID",
+                        "name": "pitchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pitch"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove pitch from venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Delete Pitch",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pitch ID",
+                        "name": "pitchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}/pitches/{pitchId}/timeslots": {
+            "get": {
+                "description": "Retrieve all time slots by Pitch",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Retrieve Pitch time slots",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pitch ID",
+                        "name": "pitchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/venues/{venueId}/timeslots": {
+            "get": {
+                "description": "Retrieve all time slots by Venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "summary": "Retrieve Venue time slots",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "param": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Booking": {
+            "type": "object",
+            "required": [
+                "bookingStatusId",
+                "created",
+                "createdBy",
+                "lastUpdated"
+            ],
+            "properties": {
+                "bookingId": {
+                    "type": "integer"
+                },
+                "bookingStatusId": {
+                    "type": "integer"
+                },
+                "created": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "integer"
+                },
+                "lastUpdated": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BookingRequest": {
+            "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "matchAccessStatusId",
+                "noOfWeeks",
+                "pitchId",
+                "startTime",
+                "venueId"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Login": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 5
+                }
+            }
+        },
+        "models.Match": {
+            "type": "object",
+            "required": [
+                "bookingId",
+                "cost",
+                "created",
+                "isPaid",
+                "lastUpdated",
+                "matchAccessStatusId",
+                "matchStatusId"
+            ],
+            "properties": {
+                "bookingId": {
+                    "type": "integer"
+                },
+                "cost": {
+                    "type": "number"
+                },
+                "created": {
+                    "type": "string"
+                },
+                "isPaid": {
+                    "type": "boolean"
+                },
+                "lastUpdated": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "matchId": {
+                    "type": "integer"
+                },
+                "matchStatusId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.OpeningHours": {
+            "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "startTime"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 3
+                },
+                "startTime": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 3
+                }
+            }
+        },
+        "models.Pitch": {
+            "type": "object",
+            "required": [
+                "cost",
+                "maxPlayers",
+                "name",
+                "venueId"
+            ],
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "maxPlayers": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.PitchRequest": {
+            "type": "object",
+            "required": [
+                "cost",
+                "maxPlayers",
+                "name"
+            ],
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "maxPlayers": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "models.Player": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "nickname",
+                "postcode"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 16,
+                    "minLength": 2
+                },
+                "playerId": {
+                    "type": "integer"
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                }
+            }
+        },
+        "models.PlayerRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "nickname",
+                "postcode"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 16,
+                    "minLength": 2
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                }
+            }
+        },
+        "models.Register": {
+            "type": "object",
+            "required": [
+                "email",
+                "forename",
+                "password",
+                "surname"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                },
+                "forename": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 5
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                }
+            }
+        },
+        "models.Squad": {
+            "type": "object",
+            "required": [
+                "city",
+                "name"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 2
+                },
+                "squadId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SquadPlayer": {
+            "type": "object",
+            "properties": {
+                "playerId": {
+                    "type": "integer"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "squadPlayerId": {
+                    "type": "integer"
+                },
+                "squadPlayerStatusId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SquadRequest": {
+            "type": "object",
+            "required": [
+                "city",
+                "name"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 2
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "required": [
+                "email",
+                "forename",
+                "surname"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                },
+                "forename": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Venue": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "email",
+                "phoneNo",
+                "postcode",
+                "venueName"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 10
+                },
+                "openingHours": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.OpeningHours"
+                    }
+                },
+                "phoneNo": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                },
+                "venueId": {
+                    "type": "integer"
+                },
+                "venueName": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "models.VenueRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "email",
+                "phoneNo",
+                "postcode",
+                "venueName"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 10
+                },
+                "phoneNo": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                },
+                "venueName": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "userRoute.UserResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "venueRoute.VenueAdminRequest": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "venueRoute.VenueAdminResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "forename": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "venueAdminId": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

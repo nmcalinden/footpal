@@ -1,0 +1,1478 @@
+basePath: /
+definitions:
+  ErrorResponse:
+    properties:
+      message:
+        type: string
+      param:
+        type: string
+      value:
+        type: string
+    type: object
+  models.Booking:
+    properties:
+      bookingId:
+        type: integer
+      bookingStatusId:
+        type: integer
+      created:
+        type: string
+      createdBy:
+        type: integer
+      lastUpdated:
+        type: string
+    required:
+    - bookingStatusId
+    - created
+    - createdBy
+    - lastUpdated
+    type: object
+  models.BookingRequest:
+    properties:
+      day:
+        maxLength: 10
+        minLength: 3
+        type: string
+      endTime:
+        type: string
+      matchAccessStatusId:
+        type: integer
+      noOfWeeks:
+        type: integer
+      pitchId:
+        type: integer
+      squadId:
+        type: integer
+      startTime:
+        type: string
+      venueId:
+        type: integer
+    required:
+    - day
+    - endTime
+    - matchAccessStatusId
+    - noOfWeeks
+    - pitchId
+    - startTime
+    - venueId
+    type: object
+  models.Login:
+    properties:
+      email:
+        maxLength: 8
+        minLength: 5
+        type: string
+      password:
+        maxLength: 30
+        minLength: 5
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.Match:
+    properties:
+      bookingId:
+        type: integer
+      cost:
+        type: number
+      created:
+        type: string
+      isPaid:
+        type: boolean
+      lastUpdated:
+        type: string
+      matchAccessStatusId:
+        type: integer
+      matchId:
+        type: integer
+      matchStatusId:
+        type: integer
+    required:
+    - bookingId
+    - cost
+    - created
+    - isPaid
+    - lastUpdated
+    - matchAccessStatusId
+    - matchStatusId
+    type: object
+  models.OpeningHours:
+    properties:
+      day:
+        maxLength: 100
+        minLength: 3
+        type: string
+      endTime:
+        maxLength: 15
+        minLength: 3
+        type: string
+      startTime:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - day
+    - endTime
+    - startTime
+    type: object
+  models.Pitch:
+    properties:
+      cost:
+        type: number
+      maxPlayers:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+      pitchId:
+        type: integer
+      venueId:
+        type: integer
+    required:
+    - cost
+    - maxPlayers
+    - name
+    - venueId
+    type: object
+  models.PitchRequest:
+    properties:
+      cost:
+        type: number
+      maxPlayers:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - cost
+    - maxPlayers
+    - name
+    type: object
+  models.Player:
+    properties:
+      address:
+        maxLength: 15
+        minLength: 11
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      nickname:
+        maxLength: 16
+        minLength: 2
+        type: string
+      playerId:
+        type: integer
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+    required:
+    - address
+    - city
+    - nickname
+    - postcode
+    type: object
+  models.PlayerRequest:
+    properties:
+      address:
+        maxLength: 15
+        minLength: 11
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      nickname:
+        maxLength: 16
+        minLength: 2
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+    required:
+    - address
+    - city
+    - nickname
+    - postcode
+    type: object
+  models.Register:
+    properties:
+      email:
+        maxLength: 8
+        minLength: 5
+        type: string
+      forename:
+        maxLength: 50
+        minLength: 3
+        type: string
+      password:
+        maxLength: 30
+        minLength: 5
+        type: string
+      surname:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - forename
+    - password
+    - surname
+    type: object
+  models.Squad:
+    properties:
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      name:
+        maxLength: 30
+        minLength: 2
+        type: string
+      squadId:
+        type: integer
+    required:
+    - city
+    - name
+    type: object
+  models.SquadPlayer:
+    properties:
+      playerId:
+        type: integer
+      role:
+        type: string
+      squadId:
+        type: integer
+      squadPlayerId:
+        type: integer
+      squadPlayerStatusId:
+        type: integer
+    type: object
+  models.SquadRequest:
+    properties:
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      name:
+        maxLength: 30
+        minLength: 2
+        type: string
+    required:
+    - city
+    - name
+    type: object
+  models.User:
+    properties:
+      email:
+        maxLength: 8
+        minLength: 5
+        type: string
+      forename:
+        maxLength: 50
+        minLength: 3
+        type: string
+      surname:
+        maxLength: 50
+        minLength: 3
+        type: string
+      venueId:
+        type: integer
+    required:
+    - email
+    - forename
+    - surname
+    type: object
+  models.Venue:
+    properties:
+      address:
+        maxLength: 100
+        minLength: 3
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      email:
+        maxLength: 100
+        minLength: 10
+        type: string
+      openingHours:
+        items:
+          $ref: '#/definitions/models.OpeningHours'
+        type: array
+      phoneNo:
+        maxLength: 15
+        minLength: 11
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+      venueId:
+        type: integer
+      venueName:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - address
+    - city
+    - email
+    - phoneNo
+    - postcode
+    - venueName
+    type: object
+  models.VenueRequest:
+    properties:
+      address:
+        maxLength: 100
+        minLength: 3
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      email:
+        maxLength: 100
+        minLength: 10
+        type: string
+      phoneNo:
+        maxLength: 15
+        minLength: 11
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+      venueName:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - address
+    - city
+    - email
+    - phoneNo
+    - postcode
+    - venueName
+    type: object
+  userRoute.UserResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  venueRoute.VenueAdminRequest:
+    properties:
+      userId:
+        type: string
+      venueId:
+        type: integer
+    type: object
+  venueRoute.VenueAdminResponse:
+    properties:
+      email:
+        type: string
+      forename:
+        type: string
+      surname:
+        type: string
+      venueAdminId:
+        type: integer
+    type: object
+host: 127.0.0.1:3000
+info:
+  contact:
+    email: nathan.mcalinden@unosquare.com
+    name: Footpal Support
+  description: This is swagger for Footpal
+  termsOfService: http://swagger.io/terms/
+  title: Footpal API
+  version: "1.0"
+paths:
+  /bookings:
+    get:
+      description: Retrieve all bookings by user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Booking'
+            type: array
+      summary: Retrieve bookings
+      tags:
+      - booking
+    post:
+      description: Create new single or recurring booking
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookingRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create new booking
+      tags:
+      - booking
+  /bookings/{bookingId}:
+    delete:
+      description: Cancel active or pending booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Cancel booking
+      tags:
+      - booking
+    get:
+      description: Retrieve booking by bookingId
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Booking'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve booking
+      tags:
+      - booking
+    put:
+      description: Edit booking details
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Booking'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit booking
+      tags:
+      - booking
+  /bookings/{bookingId}/matches:
+    get:
+      description: Get all matches linked to booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get matches by booking
+      tags:
+      - booking
+  /deactivate:
+    delete:
+      description: Delete user from Footpal
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userRoute.UserResponse'
+      summary: Deactivate User
+      tags:
+      - user
+  /login:
+    post:
+      description: Login to Footpal
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Login
+      tags:
+      - user
+  /matches:
+    get:
+      description: Retrieve all public matches
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+      summary: Retrieve Matches
+      tags:
+      - match
+  /matches/{matchId}:
+    delete:
+      description: Cancel match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Cancel match
+      tags:
+      - match
+    get:
+      description: Retrieve match details by matchId
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Match'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Match by matchId
+      tags:
+      - match
+  /matches/{matchId}/players:
+    get:
+      description: Retrieve all players opted into a match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Match'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Players by Match
+      tags:
+      - match
+  /matches/{matchId}/players/{playerId}:
+    delete:
+      description: As a booking/squad admin, remove player from match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Remove player from match
+      tags:
+      - match
+  /players:
+    get:
+      description: Retrieve all players
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Player'
+            type: array
+      summary: Retrieve Players
+      tags:
+      - player
+    put:
+      description: Edit player information
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.PlayerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Player
+      tags:
+      - player
+  /players/{playerId}:
+    get:
+      description: Get Player information
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Player
+      tags:
+      - player
+  /players/matches:
+    get:
+      description: Retrieve a players opted in matches
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+      summary: Retrieve Matches by player
+      tags:
+      - player
+  /players/matches/{matchId}:
+    delete:
+      description: Leave match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Leave match
+      tags:
+      - player
+    get:
+      description: Retrieve a match linked to a player
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Match by match id
+      tags:
+      - player
+    post:
+      description: Request to join match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: accepted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Join match
+      tags:
+      - player
+  /players/matches/{matchId}/pay:
+    patch:
+      description: For a match, pay amount owed by player
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      - description: Payment Type
+        in: query
+        name: paymentType
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Update player payment type
+      tags:
+      - player
+    post:
+      description: For a match, pay amount owed by player
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Match player payment
+      tags:
+      - player
+  /players/squads:
+    get:
+      description: Retrieve all squads linked to player
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Squad'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Squads
+      tags:
+      - player
+  /players/squads/{squadId}:
+    get:
+      description: Retrieve squad by squad id
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Player'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Squad by squadId
+      tags:
+      - player
+  /register:
+    post:
+      description: Register as new player
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userRoute.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Register
+      tags:
+      - user
+  /squads:
+    get:
+      description: Retrieve all squads
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Squad'
+            type: array
+      summary: Retrieve Squads
+      tags:
+      - squad
+    post:
+      description: Create new squad for building up a team of players
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.SquadRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create new squad
+      tags:
+      - squad
+  /squads/{squadId}:
+    delete:
+      description: Delete squad from footpal
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: accepted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Remove squad
+      tags:
+      - squad
+    get:
+      description: Get squad by squadId
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Squad'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve squad by id
+      tags:
+      - squad
+    put:
+      description: Get squad by squadId
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.SquadRequest'
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Squad'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve squad by id
+      tags:
+      - squad
+  /squads/{squadId}/players:
+    get:
+      description: List of players associated with squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SquadPlayer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve players by squad
+      tags:
+      - squad
+  /squads/{squadId}/players/{playerId}:
+    delete:
+      description: Remove player from squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Remove squad player
+      tags:
+      - squad
+    put:
+      description: Approve player to join squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Approve squad request
+      tags:
+      - squad
+  /venues:
+    get:
+      description: Retrieve all venues
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Venue'
+            type: array
+      summary: Retrieve Venues
+      tags:
+      - venue
+    post:
+      description: Create new football venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.VenueRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Create new venue
+      tags:
+      - venue
+    put:
+      description: Edit venue details
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.VenueRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Venue'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit venue
+      tags:
+      - venue
+  /venues/{venueId}:
+    delete:
+      description: Remove venue from Footpal
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete venue
+      tags:
+      - venue
+    get:
+      description: Retrieve venue by venueId
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Venue'
+      summary: Retrieve Venues by id
+      tags:
+      - venue
+  /venues/{venueId}/admins:
+    delete:
+      description: Remove administrator from venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Remove Venue Admin
+      tags:
+      - venue
+    get:
+      description: Retrieve venue administrators
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/venueRoute.VenueAdminResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Venue Admins
+      tags:
+      - venue
+    post:
+      description: Add new administrator to venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/venueRoute.VenueAdminRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/venueRoute.VenueAdminResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Add Venue Admin
+      tags:
+      - venue
+  /venues/{venueId}/pitches:
+    get:
+      description: Get Pitches by Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pitch'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Pitches by Venue
+      tags:
+      - venue
+    post:
+      description: Add new pitch to existing venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.PitchRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pitch'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Add Venue Pitch
+      tags:
+      - venue
+  /venues/{venueId}/pitches/{pitchId}:
+    delete:
+      description: Remove pitch from venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Delete Pitch
+      tags:
+      - venue
+    get:
+      description: Get pitch info by venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Get Venue Pitch
+      tags:
+      - venue
+    put:
+      description: Edit pitch details
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.PitchRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Pitch
+      tags:
+      - venue
+  /venues/{venueId}/pitches/{pitchId}/timeslots:
+    get:
+      description: Retrieve all time slots by Pitch
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Pitch time slots
+      tags:
+      - venue
+  /venues/{venueId}/timeslots:
+    get:
+      description: Retrieve all time slots by Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Retrieve Venue time slots
+      tags:
+      - venue
+swagger: "2.0"
