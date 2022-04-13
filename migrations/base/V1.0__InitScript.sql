@@ -91,7 +91,8 @@ CREATE TABLE venue_admin
     CONSTRAINT fk_venue_user_id FOREIGN KEY (footpal_user_id)
         REFERENCES footpal_user(id),
     CONSTRAINT fk_venue_admin_id FOREIGN KEY (venue_id)
-        REFERENCES venue(id)
+        REFERENCES venue(id),
+    CONSTRAINT admin_unique UNIQUE (footpal_user_id)
 );
 
 
