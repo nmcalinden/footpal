@@ -27,49 +27,6 @@ definitions:
     - createdBy
     - lastUpdated
     type: object
-  models.BookingRequest:
-    properties:
-      day:
-        maxLength: 10
-        minLength: 3
-        type: string
-      endTime:
-        type: string
-      matchAccessStatusId:
-        type: integer
-      noOfWeeks:
-        type: integer
-      pitchId:
-        type: integer
-      squadId:
-        type: integer
-      startTime:
-        type: string
-      venueId:
-        type: integer
-    required:
-    - day
-    - endTime
-    - matchAccessStatusId
-    - noOfWeeks
-    - pitchId
-    - startTime
-    - venueId
-    type: object
-  models.Login:
-    properties:
-      email:
-        maxLength: 8
-        minLength: 5
-        type: string
-      password:
-        maxLength: 30
-        minLength: 5
-        type: string
-    required:
-    - email
-    - password
-    type: object
   models.Match:
     properties:
       bookingId:
@@ -84,6 +41,8 @@ definitions:
         type: string
       matchAccessStatusId:
         type: integer
+      matchDate:
+        type: string
       matchId:
         type: integer
       matchStatusId:
@@ -95,26 +54,26 @@ definitions:
     - isPaid
     - lastUpdated
     - matchAccessStatusId
+    - matchDate
     - matchStatusId
     type: object
-  models.OpeningHours:
+  models.MatchPlayer:
     properties:
-      day:
-        maxLength: 100
-        minLength: 3
-        type: string
-      endTime:
-        maxLength: 15
-        minLength: 3
-        type: string
-      startTime:
-        maxLength: 15
-        minLength: 3
-        type: string
+      amountToPay:
+        type: number
+      matchId:
+        type: integer
+      matchPlayerId:
+        type: integer
+      paymentTypeId:
+        type: integer
+      playerId:
+        type: integer
     required:
-    - day
-    - endTime
-    - startTime
+    - amountToPay
+    - matchId
+    - paymentTypeId
+    - playerId
     type: object
   models.Pitch:
     properties:
@@ -171,59 +130,13 @@ definitions:
         maxLength: 8
         minLength: 5
         type: string
+      userId:
+        type: integer
     required:
     - address
     - city
     - nickname
     - postcode
-    type: object
-  models.PlayerRequest:
-    properties:
-      address:
-        maxLength: 15
-        minLength: 11
-        type: string
-      city:
-        maxLength: 50
-        minLength: 3
-        type: string
-      nickname:
-        maxLength: 16
-        minLength: 2
-        type: string
-      postcode:
-        maxLength: 8
-        minLength: 5
-        type: string
-    required:
-    - address
-    - city
-    - nickname
-    - postcode
-    type: object
-  models.Register:
-    properties:
-      email:
-        maxLength: 8
-        minLength: 5
-        type: string
-      forename:
-        maxLength: 50
-        minLength: 3
-        type: string
-      password:
-        maxLength: 30
-        minLength: 5
-        type: string
-      surname:
-        maxLength: 50
-        minLength: 3
-        type: string
-    required:
-    - email
-    - forename
-    - password
-    - surname
     type: object
   models.Squad:
     properties:
@@ -241,18 +154,14 @@ definitions:
     - city
     - name
     type: object
-  models.SquadPlayer:
+  models.SquadPlayerDetails:
     properties:
       playerId:
-        type: integer
+        type: string
       role:
         type: string
       squadId:
-        type: integer
-      squadPlayerId:
-        type: integer
-      squadPlayerStatusId:
-        type: integer
+        type: string
     type: object
   models.SquadRequest:
     properties:
@@ -268,27 +177,6 @@ definitions:
     - city
     - name
     type: object
-  models.User:
-    properties:
-      email:
-        maxLength: 8
-        minLength: 5
-        type: string
-      forename:
-        maxLength: 50
-        minLength: 3
-        type: string
-      surname:
-        maxLength: 50
-        minLength: 3
-        type: string
-      venueId:
-        type: integer
-    required:
-    - email
-    - forename
-    - surname
-    type: object
   models.Venue:
     properties:
       address:
@@ -303,10 +191,6 @@ definitions:
         maxLength: 100
         minLength: 10
         type: string
-      openingHours:
-        items:
-          $ref: '#/definitions/models.OpeningHours'
-        type: array
       phoneNo:
         maxLength: 15
         minLength: 11
@@ -363,15 +247,104 @@ definitions:
     - postcode
     - venueName
     type: object
-  userRoute.UserResponse:
+  routers.BookingRequest:
     properties:
-      id:
+      day:
+        maxLength: 10
+        minLength: 3
+        type: string
+      endTime:
+        type: string
+      matchAccessStatusId:
         type: integer
+      noOfWeeks:
+        type: integer
+      pitchId:
+        type: integer
+      squadId:
+        type: integer
+      startTime:
+        type: string
+      venueId:
+        type: integer
+    required:
+    - day
+    - endTime
+    - matchAccessStatusId
+    - noOfWeeks
+    - pitchId
+    - startTime
+    - venueId
+    type: object
+  routers.JoinMatchResponse:
+    type: object
+  routers.Login:
+    properties:
+      email:
+        maxLength: 100
+        minLength: 5
+        type: string
+    required:
+    - email
+    type: object
+  routers.MatchPaymentRequest:
+    properties:
+      amountToPay:
+        type: number
+    required:
+    - amountToPay
+    type: object
+  routers.PlayerRequest:
+    properties:
+      address:
+        maxLength: 15
+        minLength: 11
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      nickname:
+        maxLength: 16
+        minLength: 2
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+    required:
+    - address
+    - city
+    - nickname
+    - postcode
+    type: object
+  routers.Register:
+    properties:
+      email:
+        maxLength: 100
+        minLength: 5
+        type: string
+      forename:
+        maxLength: 50
+        minLength: 3
+        type: string
+      surname:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - forename
+    - surname
+    type: object
+  routers.SquadResponse:
+    type: object
+  routers.UserResponse:
     type: object
   venueRoute.VenueAdminRequest:
     properties:
       userId:
-        type: string
+        type: integer
       venueId:
         type: integer
     type: object
@@ -408,6 +381,10 @@ paths:
             items:
               $ref: '#/definitions/models.Booking'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve bookings
       tags:
       - booking
@@ -419,7 +396,7 @@ paths:
         name: message
         required: true
         schema:
-          $ref: '#/definitions/models.BookingRequest'
+          $ref: '#/definitions/routers.BookingRequest'
       produces:
       - application/json
       responses:
@@ -427,6 +404,10 @@ paths:
           description: ""
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Create new booking
@@ -450,6 +431,10 @@ paths:
             type: string
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Cancel booking
@@ -490,7 +475,7 @@ paths:
         name: message
         required: true
         schema:
-          $ref: '#/definitions/models.BookingRequest'
+          $ref: '#/definitions/routers.BookingRequest'
       produces:
       - application/json
       responses:
@@ -500,6 +485,10 @@ paths:
             $ref: '#/definitions/models.Booking'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Edit booking
@@ -527,19 +516,31 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Get matches by booking
       tags:
       - booking
-  /deactivate:
+  /deactivate/{userId}:
     delete:
       description: Delete user from Footpal
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: ""
+        "400":
+          description: Bad Request
           schema:
-            $ref: '#/definitions/userRoute.UserResponse'
+            $ref: '#/definitions/ErrorResponse'
       summary: Deactivate User
       tags:
       - user
@@ -552,14 +553,14 @@ paths:
         name: message
         required: true
         schema:
-          $ref: '#/definitions/models.Login'
+          $ref: '#/definitions/routers.Login'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/routers.UserResponse'
         "400":
           description: Bad Request
           schema:
@@ -579,6 +580,10 @@ paths:
             items:
               $ref: '#/definitions/models.Match'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Matches
       tags:
       - match
@@ -598,6 +603,10 @@ paths:
           description: ok
           schema:
             type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Cancel match
       tags:
       - match
@@ -638,9 +647,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Match'
+            items:
+              $ref: '#/definitions/models.MatchPlayer'
+            type: array
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Players by Match
@@ -671,6 +686,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Remove player from match
       tags:
       - match
@@ -686,30 +705,11 @@ paths:
             items:
               $ref: '#/definitions/models.Player'
             type: array
-      summary: Retrieve Players
-      tags:
-      - player
-    put:
-      description: Edit player information
-      parameters:
-      - description: Request
-        in: body
-        name: message
-        required: true
-        schema:
-          $ref: '#/definitions/models.PlayerRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Player'
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-      summary: Edit Player
+      summary: Retrieve Players
       tags:
       - player
   /players/{playerId}:
@@ -735,9 +735,47 @@ paths:
       summary: Retrieve Player
       tags:
       - player
-  /players/matches:
+    put:
+      description: Edit player information
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/routers.PlayerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Edit Player
+      tags:
+      - player
+  /players/{playerId}/matches:
     get:
       description: Retrieve a players opted in matches
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -747,13 +785,26 @@ paths:
             items:
               $ref: '#/definitions/models.Match'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Matches by player
       tags:
       - player
-  /players/matches/{matchId}:
+  /players/{playerId}/matches/{matchId}:
     delete:
       description: Leave match
       parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       - description: Match ID
         in: path
         name: matchId
@@ -763,19 +814,26 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
-          schema:
-            type: string
+          description: ""
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Leave match
       tags:
       - player
-    get:
-      description: Retrieve a match linked to a player
+    post:
+      description: Request to join match
       parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       - description: Match ID
         in: path
         name: matchId
@@ -787,83 +845,97 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Match'
-            type: array
+            $ref: '#/definitions/routers.JoinMatchResponse'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
-      summary: Retrieve Match by match id
-      tags:
-      - player
-    post:
-      description: Request to join match
-      parameters:
-      - description: Match ID
-        in: path
-        name: matchId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "202":
-          description: accepted
-          schema:
-            type: string
-        "400":
-          description: Bad Request
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Join match
       tags:
       - player
-  /players/matches/{matchId}/pay:
+  /players/{playerId}/matches/{matchId}/pay:
     patch:
       description: For a match, pay amount owed by player
       parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       - description: Match ID
         in: path
         name: matchId
         required: true
         type: integer
-      - description: Payment Type
+      - description: Payment Type ID
         in: query
-        name: paymentType
+        name: paymentTypeId
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: ok
+          description: ""
+        "400":
+          description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Update player payment type
       tags:
       - player
     post:
       description: For a match, pay amount owed by player
       parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       - description: Match ID
         in: path
         name: matchId
         required: true
         type: integer
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/routers.MatchPaymentRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: ok
+          description: ""
+        "400":
+          description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Match player payment
       tags:
       - player
-  /players/squads:
+  /players/{playerId}/squads:
     get:
       description: Retrieve all squads linked to player
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -877,13 +949,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Squads
       tags:
       - player
-  /players/squads/{squadId}:
+  /players/{playerId}/squads/{squadId}:
     get:
       description: Retrieve squad by squad id
       parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
       - description: Squad ID
         in: path
         name: squadId
@@ -902,7 +983,42 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Squad by squadId
+      tags:
+      - player
+    post:
+      description: Request to join squad
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/routers.JoinMatchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Join squad
       tags:
       - player
   /register:
@@ -914,14 +1030,14 @@ paths:
         name: message
         required: true
         schema:
-          $ref: '#/definitions/models.Register'
+          $ref: '#/definitions/routers.Register'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/userRoute.UserResponse'
+            $ref: '#/definitions/routers.UserResponse'
         "400":
           description: Bad Request
           schema:
@@ -941,6 +1057,10 @@ paths:
             items:
               $ref: '#/definitions/models.Squad'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Retrieve Squads
       tags:
       - squad
@@ -957,11 +1077,15 @@ paths:
       - application/json
       responses:
         "201":
-          description: ok
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/routers.SquadResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Create new squad
@@ -985,6 +1109,10 @@ paths:
             type: string
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Remove squad
@@ -1013,7 +1141,7 @@ paths:
       tags:
       - squad
     put:
-      description: Get squad by squadId
+      description: Update Squad Info
       parameters:
       - description: Request
         in: body
@@ -1037,7 +1165,11 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
-      summary: Retrieve squad by id
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Update Squad Info
       tags:
       - squad
   /squads/{squadId}/players:
@@ -1056,10 +1188,14 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.SquadPlayer'
+              $ref: '#/definitions/models.SquadPlayerDetails'
             type: array
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Retrieve players by squad
@@ -1088,6 +1224,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       summary: Remove squad player
       tags:
       - squad
@@ -1113,6 +1253,10 @@ paths:
             type: string
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       summary: Approve squad request

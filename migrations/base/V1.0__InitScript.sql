@@ -39,7 +39,7 @@ CREATE TABLE payment_type_ref
 */
 CREATE TABLE venue
 (
-    id			        INTEGER PRIMARY KEY NOT NULL,
+    id			        INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     venue_name   		VARCHAR(100) NOT NULL,
     venue_address      	VARCHAR(100) NOT NULL,
     postcode			VARCHAR(8),
@@ -50,7 +50,7 @@ CREATE TABLE venue
 
 CREATE TABLE pitch
 (
-    id			        INTEGER PRIMARY KEY NOT NULL,
+    id			        INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     venue_id 			INTEGER NOT NULL,
     pitch_name			VARCHAR(50) NOT NULL,
     max_players			INTEGER,
@@ -64,7 +64,7 @@ CREATE TABLE pitch
 */
 CREATE TABLE footpal_user
 (
-    id              INTEGER PRIMARY KEY NOT NULL,
+    id              INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     forename 		VARCHAR(50) NOT NULL,
     surname 		VARCHAR(50) NOT NULL,
     email			VARCHAR(100) NOT NULL
@@ -72,7 +72,7 @@ CREATE TABLE footpal_user
 
 CREATE TABLE player
 (
-    id      		INTEGER PRIMARY KEY NOT NULL,
+    id      		INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     footpal_user_id INTEGER NOT NULL,
     nickname		VARCHAR(16),
     phone_no		VARCHAR(15),
@@ -85,7 +85,7 @@ CREATE TABLE player
 
 CREATE TABLE venue_admin
 (
-    id	            INTEGER PRIMARY KEY NOT NULL,
+    id	            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     footpal_user_id INTEGER NOT NULL,
     venue_id 		INTEGER NOT NULL,
     CONSTRAINT fk_venue_user_id FOREIGN KEY (footpal_user_id)
@@ -99,17 +99,16 @@ CREATE TABLE venue_admin
 /*
 	Squads
 */
-
 CREATE TABLE squad
 (
-    id		        INTEGER PRIMARY KEY NOT NULL,
+    id		        INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     squad_name		VARCHAR(30),
     city			VARCHAR(50)
 );
 
 CREATE TABLE squad_player
 (
-    id	                    INTEGER PRIMARY KEY NOT NULL,
+    id	                    INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     squad_id 		        INTEGER NOT NULL,
     player_id 		        INTEGER NOT NULL,
     user_role               VARCHAR(20),
@@ -127,7 +126,7 @@ CREATE TABLE squad_player
 */
 CREATE TABLE booking
 (
-    id	        		INTEGER PRIMARY KEY NOT NULL,
+    id	        		INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     booking_status_id	INTEGER,
     created_by          INTEGER,
     created 			TIMESTAMP,
@@ -140,7 +139,7 @@ CREATE TABLE booking
 
 CREATE TABLE pitch_time_slot
 (
-    id 	                INTEGER PRIMARY KEY NOT NULL,
+    id 	                INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     pitch_id			INTEGER NOT NULL,
     day_of_week 		VARCHAR(10) NOT NULL,
     start_time			time,
@@ -151,7 +150,7 @@ CREATE TABLE pitch_time_slot
 
 CREATE TABLE pitch_slot
 (
-    id          		INTEGER PRIMARY KEY NOT NULL,
+    id          		INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     booking_id			INTEGER NOT NULL,
     pitch_time_slot_id 	INTEGER NOT NULL,
     match_date			DATE,
@@ -166,7 +165,7 @@ CREATE TABLE pitch_slot
 
 CREATE TABLE match
 (
-    id	        			INTEGER PRIMARY KEY NOT NULL,
+    id	        			INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     booking_id				INTEGER NOT NULL,
     match_access_status_id	INTEGER NOT NULL,
     match_status_id			INTEGER NOT NULL,
@@ -185,7 +184,7 @@ CREATE TABLE match
 
 CREATE TABLE match_player
 (
-    id	            	INTEGER PRIMARY KEY NOT NULL,
+    id	            	INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     match_id			INTEGER NOT NULL,
     player_id			INTEGER NOT NULL,
     amount_to_pay 		DECIMAL,

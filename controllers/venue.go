@@ -1,84 +1,59 @@
-package venueRoute
+package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/service"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
 
-type VenueAdminRequest struct {
-	VenueId int
-	UserId  string
+type VenueController struct {
+	venueService *service.VenueService
 }
 
-type VenueAdminResponse struct {
-	VenueAdminId int
-	Forename     string
-	Surname      string
-	Email        string
+func NewVenueController(venueService *service.VenueService) *VenueController {
+	return &VenueController{venueService: venueService}
 }
 
-func ConfigureVenueHandlers(app *fiber.App) {
-	group := app.Group("/venues")
-
-	group.Get("/", retrieveVenues)
-	group.Post("/", createVenue)
-	group.Get("/:venueId", retrieveVenueById)
-	group.Put("/:venueId", updateVenue)
-	group.Put("/:venueId", deleteVenue)
-	group.Get("/:venueId/admins", retrieveVenueAdmins)
-	group.Post("/:venueId/admins", addAdminToVenue)
-	group.Delete("/:venueId/admins/:adminId", removeAdminFromVenue)
-	group.Get("/:venueId/pitches", retrievePitchesByVenue)
-	group.Post("/:venueId/pitches", addPitchToVenue)
-	group.Get("/:venueId/pitches/:pitchId", retrievePitch)
-	group.Put("/:venueId/pitches/:pitchId", updatePitchInfo)
-	group.Delete("/:venueId/pitches/:pitchId", removePitch)
-	group.Get("/:venueId/pitches/:pitchId/timeslots", retrievePitchTimeSlots)
-	group.Get("/:venueId/timeslots", retrieveVenueTimeSlots)
-
-}
-
-// @Summary      Retrieve Venues
+// RetrieveVenues @Summary      Retrieve Venues
 // @Description  Retrieve all venues
 // @Tags         venue
 // @Produce      json
 // @Success      200  {array}  models.Venue
+// @Success      500  {object}  utils.ErrorResponse
 // @Router       /venues [get]
-func retrieveVenues(c *fiber.Ctx) error {
-	p := MockVenues
+func (controller VenueController) RetrieveVenues(c *fiber.Ctx) error {
+	p, err := controller.venueService.GetVenues()
+
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to retrieve venues")
+	}
 	return c.Status(fiber.StatusOK).JSON(p)
 }
 
-// @Summary      Retrieve Venues by id
+// RetrieveVenueById @Summary      Retrieve Venues by id
 // @Description  Retrieve venue by venueId
 // @Tags         venue
 // @Produce      json
 // @Success      200  {object}  models.Venue
+// @Success      400  {object}  utils.ErrorResponse
 // @Router       /venues/{venueId} [get]
-func retrieveVenueById(c *fiber.Ctx) error {
+func (controller VenueController) RetrieveVenueById(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
 	}
 
-	p := MockVenues
-	result := models.Venue{}
-	for _, s := range p {
-		if s.VenueId == venueId {
-			result = s
-		}
-	}
-
-	if result.VenueId == 0 {
+	result, err := controller.venueService.GetVenueById(&venueId)
+	if result != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Venue does not exist")
 	}
 
 	return c.Status(fiber.StatusOK).JSON(result)
 }
 
-// @Summary      Create new venue
+// CreateVenue @Summary      Create new venue
 // @Description  Create new football venue
 // @Tags         venue
 // @Produce      json
@@ -86,10 +61,8 @@ func retrieveVenueById(c *fiber.Ctx) error {
 // @Success      201 {string} string venueId
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues [post]
-func createVenue(c *fiber.Ctx) error {
-	newVenue := new(models.Venue)
-	newVenue.VenueId = 4
-
+func (controller VenueController) CreateVenue(c *fiber.Ctx) error {
+	newVenue := new(models.VenueRequest)
 	if err := c.BodyParser(&newVenue); err != nil {
 		return err
 	}
@@ -98,10 +71,11 @@ func createVenue(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(newVenue.VenueId)
+	v, _ := controller.venueService.CreateNewVenue(newVenue)
+	return c.Status(fiber.StatusCreated).JSON(v)
 }
 
-// @Summary      Edit venue
+// UpdateVenue @Summary      Edit venue
 // @Description  Edit venue details
 // @Tags         venue
 // @Produce      json
@@ -110,7 +84,7 @@ func createVenue(c *fiber.Ctx) error {
 // @Success      200 {object} models.Venue
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues [put]
-func updateVenue(c *fiber.Ctx) error {
+func (controller VenueController) UpdateVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is not a number")
@@ -130,7 +104,7 @@ func updateVenue(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(venue)
 }
 
-// @Summary      Delete venue
+// DeleteVenue @Summary      Delete venue
 // @Description  Remove venue from Footpal
 // @Tags         venue
 // @Produce      json
@@ -138,7 +112,7 @@ func updateVenue(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId} [delete]
-func deleteVenue(c *fiber.Ctx) error {
+func (controller VenueController) DeleteVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is not a number")
@@ -147,7 +121,7 @@ func deleteVenue(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(venueId)
 }
 
-// @Summary      Get Venue Admins
+// RetrieveVenueAdmins @Summary      Get Venue Admins
 // @Description  Retrieve venue administrators
 // @Tags         venue
 // @Produce      json
@@ -155,8 +129,8 @@ func deleteVenue(c *fiber.Ctx) error {
 // @Success      200 {array} VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/admins [get]
-func retrieveVenueAdmins(c *fiber.Ctx) error {
-	var venueAdmins = []VenueAdminResponse{
+func (controller VenueController) RetrieveVenueAdmins(c *fiber.Ctx) error {
+	var venueAdmins = []models.VenueAdminResponse{
 		{
 			VenueAdminId: 1,
 			Forename:     "Test",
@@ -173,7 +147,7 @@ func retrieveVenueAdmins(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(venueAdmins)
 }
 
-// @Summary      Add Venue Admin
+// AddAdminToVenue @Summary      Add Venue Admin
 // @Description  Add new administrator to venue
 // @Tags         venue
 // @Produce      json
@@ -182,13 +156,13 @@ func retrieveVenueAdmins(c *fiber.Ctx) error {
 // @Success      200 {array} VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/admins [post]
-func addAdminToVenue(c *fiber.Ctx) error {
+func (controller VenueController) AddAdminToVenue(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
 	}
 
-	request := new(VenueAdminRequest)
+	request := new(models.VenueAdminRequest)
 	if err := c.BodyParser(&request); err != nil {
 		return err
 	}
@@ -197,12 +171,12 @@ func addAdminToVenue(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	admin := new(VenueAdminResponse)
+	admin := new(models.VenueAdminResponse)
 	admin.VenueAdminId = 999
 	return c.Status(fiber.StatusCreated).JSON(admin)
 }
 
-// @Summary      Remove Venue Admin
+// RemoveAdminFromVenue @Summary      Remove Venue Admin
 // @Description  Remove administrator from venue
 // @Tags         venue
 // @Produce      json
@@ -210,7 +184,7 @@ func addAdminToVenue(c *fiber.Ctx) error {
 // @Success      204
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/admins [delete]
-func removeAdminFromVenue(c *fiber.Ctx) error {
+func (controller VenueController) RemoveAdminFromVenue(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
@@ -223,7 +197,7 @@ func removeAdminFromVenue(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-// @Summary      Get Pitches by Venue
+// RetrievePitchesByVenue @Summary      Get Pitches by Venue
 // @Description  Get Pitches by Venue
 // @Tags         venue
 // @Produce      json
@@ -231,16 +205,16 @@ func removeAdminFromVenue(c *fiber.Ctx) error {
 // @Success      200 {array} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches [get]
-func retrievePitchesByVenue(c *fiber.Ctx) error {
+func (controller VenueController) RetrievePitchesByVenue(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
 	}
-	p := MockVenuePitches
+	var p []models.Pitch
 	return c.Status(fiber.StatusOK).JSON(p)
 }
 
-// @Summary      Add Venue Pitch
+// AddPitchToVenue @Summary      Add Venue Pitch
 // @Description  Add new pitch to existing venue
 // @Tags         venue
 // @Produce      json
@@ -249,7 +223,7 @@ func retrievePitchesByVenue(c *fiber.Ctx) error {
 // @Success      200 {array} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches [post]
-func addPitchToVenue(c *fiber.Ctx) error {
+func (controller VenueController) AddPitchToVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
@@ -275,7 +249,7 @@ func addPitchToVenue(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-// @Summary      Get Venue Pitch
+// RetrievePitch @Summary      Get Venue Pitch
 // @Description  Get pitch info by venue
 // @Tags         venue
 // @Produce      json
@@ -283,7 +257,7 @@ func addPitchToVenue(c *fiber.Ctx) error {
 // @Success      200 {object} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches/{pitchId} [get]
-func retrievePitch(c *fiber.Ctx) error {
+func (controller VenueController) RetrievePitch(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
@@ -294,7 +268,7 @@ func retrievePitch(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Pitch Id supplied is invalid")
 	}
 
-	p := MockVenuePitches
+	var p []models.Pitch
 
 	result := models.Pitch{}
 	for _, s := range p {
@@ -310,7 +284,7 @@ func retrievePitch(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(result)
 }
 
-// @Summary      Edit Pitch
+// UpdatePitchInfo @Summary      Edit Pitch
 // @Description  Edit pitch details
 // @Tags         venue
 // @Produce      json
@@ -320,7 +294,7 @@ func retrievePitch(c *fiber.Ctx) error {
 // @Success      200 {object} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches/{pitchId} [put]
-func updatePitchInfo(c *fiber.Ctx) error {
+func (controller VenueController) UpdatePitchInfo(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
 	pitchId, err2 := strconv.Atoi(c.Params("pitchId"))
 
@@ -351,7 +325,7 @@ func updatePitchInfo(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-// @Summary      Delete Pitch
+// RemovePitch @Summary      Delete Pitch
 // @Description  Remove pitch from venue
 // @Tags         venue
 // @Produce      json
@@ -360,7 +334,7 @@ func updatePitchInfo(c *fiber.Ctx) error {
 // @Success      204
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches/{pitchId} [delete]
-func removePitch(c *fiber.Ctx) error {
+func (controller VenueController) RemovePitch(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
@@ -373,7 +347,7 @@ func removePitch(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-// @Summary      Retrieve Pitch time slots
+// RetrievePitchTimeSlots @Summary      Retrieve Pitch time slots
 // @Description  Retrieve all time slots by Pitch
 // @Tags         venue
 // @Produce      json
@@ -382,7 +356,7 @@ func removePitch(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches/{pitchId}/timeslots [get]
-func retrievePitchTimeSlots(c *fiber.Ctx) error {
+func (controller VenueController) RetrievePitchTimeSlots(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
@@ -390,7 +364,7 @@ func retrievePitchTimeSlots(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusOK)
 }
 
-// @Summary      Retrieve Venue time slots
+// RetrieveVenueTimeSlots @Summary      Retrieve Venue time slots
 // @Description  Retrieve all time slots by Venue
 // @Tags         venue
 // @Produce      json
@@ -398,7 +372,7 @@ func retrievePitchTimeSlots(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/timeslots [get]
-func retrieveVenueTimeSlots(c *fiber.Ctx) error {
+func (controller VenueController) RetrieveVenueTimeSlots(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")

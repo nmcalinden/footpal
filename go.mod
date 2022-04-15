@@ -7,6 +7,8 @@ require (
 	github.com/go-playground/validator/v10 v10.10.1
 	github.com/gofiber/fiber/v2 v2.31.0
 	github.com/gofiber/helmet/v2 v2.2.11
+	github.com/jmoiron/sqlx v1.3.4
+	github.com/lib/pq v1.2.0
 	github.com/swaggo/swag v1.8.1
 )
 

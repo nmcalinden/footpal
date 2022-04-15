@@ -39,6 +39,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.Booking"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             },
@@ -58,7 +64,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/router.BookingRequest"
                         }
                     }
                 ],
@@ -68,6 +74,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -132,7 +144,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/router.BookingRequest"
                         }
                     }
                 ],
@@ -145,6 +157,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -178,6 +196,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -219,11 +243,17 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             }
         },
-        "/deactivate": {
+        "/deactivate/{userId}": {
             "delete": {
                 "description": "Delete user from Footpal",
                 "produces": [
@@ -233,11 +263,23 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Deactivate User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/userRoute.UserResponse"
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     }
                 }
@@ -260,7 +302,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Login"
+                            "$ref": "#/definitions/router.Login"
                         }
                     }
                 ],
@@ -268,7 +310,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/router.UserResponse"
                         }
                     },
                     "400": {
@@ -298,6 +340,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Match"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     }
                 }
@@ -361,6 +409,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             }
@@ -388,11 +442,20 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Match"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MatchPlayer"
+                            }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -438,6 +501,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             }
@@ -461,295 +530,9 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.Player"
                             }
                         }
-                    }
-                }
-            },
-            "put": {
-                "description": "Edit player information",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Edit Player",
-                "parameters": [
-                    {
-                        "description": "Request",
-                        "name": "message",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.PlayerRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Player"
-                        }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/players/matches": {
-            "get": {
-                "description": "Retrieve a players opted in matches",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Retrieve Matches by player",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Match"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/players/matches/{matchId}": {
-            "get": {
-                "description": "Retrieve a match linked to a player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Retrieve Match by match id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Match"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Request to join match",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Join match",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "202": {
-                        "description": "accepted",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Leave match",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Leave match",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/players/matches/{matchId}/pay": {
-            "post": {
-                "description": "For a match, pay amount owed by player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Match player payment",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "For a match, pay amount owed by player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Update player payment type",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Payment Type",
-                        "name": "paymentType",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/players/squads": {
-            "get": {
-                "description": "Retrieve all squads linked to player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Retrieve Squads",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Squad"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/players/squads/{squadId}": {
-            "get": {
-                "description": "Retrieve squad by squad id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "summary": "Retrieve Squad by squadId",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Squad ID",
-                        "name": "squadId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Player"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -790,6 +573,434 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "Edit player information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Edit Player",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/router.PlayerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Player"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}/matches": {
+            "get": {
+                "description": "Retrieve a players opted in matches",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Matches by player",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Match"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}/matches/{matchId}": {
+            "post": {
+                "description": "Request to join match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Join match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/router.JoinMatchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Leave match",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Leave match",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}/matches/{matchId}/pay": {
+            "post": {
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Match player payment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/router.MatchPaymentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Update player payment type",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Match ID",
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Payment Type ID",
+                        "name": "paymentTypeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}/squads": {
+            "get": {
+                "description": "Retrieve all squads linked to player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Squads",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Squad"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}/squads/{squadId}": {
+            "get": {
+                "description": "Retrieve squad by squad id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Retrieve Squad by squadId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Player"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Request to join squad",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "summary": "Join squad",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Squad ID",
+                        "name": "squadId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/router.JoinMatchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/register": {
@@ -809,7 +1020,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Register"
+                            "$ref": "#/definitions/router.Register"
                         }
                     }
                 ],
@@ -817,7 +1028,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/userRoute.UserResponse"
+                            "$ref": "#/definitions/router.UserResponse"
                         }
                     },
                     "400": {
@@ -848,6 +1059,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.Squad"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             },
@@ -873,13 +1090,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "ok",
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/router.SquadResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -922,14 +1145,14 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Get squad by squadId",
+                "description": "Update Squad Info",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "squad"
                 ],
-                "summary": "Retrieve squad by id",
+                "summary": "Update Squad Info",
                 "parameters": [
                     {
                         "description": "Request",
@@ -957,6 +1180,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -993,6 +1222,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             }
@@ -1022,12 +1257,18 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.SquadPlayer"
+                                "$ref": "#/definitions/models.SquadPlayerDetails"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -1073,6 +1314,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
                     }
                 }
             },
@@ -1107,6 +1354,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -1694,65 +1947,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.BookingRequest": {
-            "type": "object",
-            "required": [
-                "day",
-                "endTime",
-                "matchAccessStatusId",
-                "noOfWeeks",
-                "pitchId",
-                "startTime",
-                "venueId"
-            ],
-            "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 3
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "matchAccessStatusId": {
-                    "type": "integer"
-                },
-                "noOfWeeks": {
-                    "type": "integer"
-                },
-                "pitchId": {
-                    "type": "integer"
-                },
-                "squadId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Login": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 5
-                }
-            }
-        },
         "models.Match": {
             "type": "object",
             "required": [
@@ -1762,6 +1956,7 @@ const docTemplate = `{
                 "isPaid",
                 "lastUpdated",
                 "matchAccessStatusId",
+                "matchDate",
                 "matchStatusId"
             ],
             "properties": {
@@ -1783,6 +1978,9 @@ const docTemplate = `{
                 "matchAccessStatusId": {
                     "type": "integer"
                 },
+                "matchDate": {
+                    "type": "string"
+                },
                 "matchId": {
                     "type": "integer"
                 },
@@ -1791,28 +1989,29 @@ const docTemplate = `{
                 }
             }
         },
-        "models.OpeningHours": {
+        "models.MatchPlayer": {
             "type": "object",
             "required": [
-                "day",
-                "endTime",
-                "startTime"
+                "amountToPay",
+                "matchId",
+                "paymentTypeId",
+                "playerId"
             ],
             "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
+                "amountToPay": {
+                    "type": "number"
                 },
-                "endTime": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 3
+                "matchId": {
+                    "type": "integer"
                 },
-                "startTime": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 3
+                "matchPlayerId": {
+                    "type": "integer"
+                },
+                "paymentTypeId": {
+                    "type": "integer"
+                },
+                "playerId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1896,68 +2095,9 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
-                }
-            }
-        },
-        "models.PlayerRequest": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "nickname",
-                "postcode"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
                 },
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "nickname": {
-                    "type": "string",
-                    "maxLength": 16,
-                    "minLength": 2
-                },
-                "postcode": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                }
-            }
-        },
-        "models.Register": {
-            "type": "object",
-            "required": [
-                "email",
-                "forename",
-                "password",
-                "surname"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                },
-                "forename": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 5
-                },
-                "surname": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1983,23 +2123,17 @@ const docTemplate = `{
                 }
             }
         },
-        "models.SquadPlayer": {
+        "models.SquadPlayerDetails": {
             "type": "object",
             "properties": {
                 "playerId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "role": {
                     "type": "string"
                 },
                 "squadId": {
-                    "type": "integer"
-                },
-                "squadPlayerId": {
-                    "type": "integer"
-                },
-                "squadPlayerStatusId": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -2019,34 +2153,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 2
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "required": [
-                "email",
-                "forename",
-                "surname"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                },
-                "forename": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "surname": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "venueId": {
-                    "type": "integer"
                 }
             }
         },
@@ -2075,12 +2181,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 10
-                },
-                "openingHours": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.OpeningHours"
-                    }
                 },
                 "phoneNo": {
                     "type": "string",
@@ -2145,19 +2245,140 @@ const docTemplate = `{
                 }
             }
         },
-        "userRoute.UserResponse": {
+        "router.BookingRequest": {
             "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "matchAccessStatusId",
+                "noOfWeeks",
+                "pitchId",
+                "startTime",
+                "venueId"
+            ],
             "properties": {
-                "id": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "venueId": {
                     "type": "integer"
                 }
             }
+        },
+        "router.JoinMatchResponse": {
+            "type": "object"
+        },
+        "router.Login": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
+                }
+            }
+        },
+        "router.MatchPaymentRequest": {
+            "type": "object",
+            "required": [
+                "amountToPay"
+            ],
+            "properties": {
+                "amountToPay": {
+                    "type": "number"
+                }
+            }
+        },
+        "router.PlayerRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "nickname",
+                "postcode"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 16,
+                    "minLength": 2
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                }
+            }
+        },
+        "router.Register": {
+            "type": "object",
+            "required": [
+                "email",
+                "forename",
+                "surname"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
+                },
+                "forename": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                }
+            }
+        },
+        "router.SquadResponse": {
+            "type": "object"
+        },
+        "router.UserResponse": {
+            "type": "object"
         },
         "venueRoute.VenueAdminRequest": {
             "type": "object",
             "properties": {
                 "userId": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "venueId": {
                     "type": "integer"
