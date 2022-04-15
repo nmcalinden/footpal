@@ -3,16 +3,16 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
 
 type BookingController struct {
-	bookingService *service.BookingService
+	bookingService *services.BookingService
 }
 
-func NewBookingController(bookingService *service.BookingService) *BookingController {
+func NewBookingController(bookingService *services.BookingService) *BookingController {
 	return &BookingController{bookingService: bookingService}
 }
 
@@ -35,7 +35,7 @@ func (controller BookingController) RetrieveBookings(c *fiber.Ctx) error {
 // @Description  Create new single or recurring booking
 // @Tags         booking
 // @Produce      json
-// @Param 		 message body BookingRequest true "Request"
+// @Param 		 message body models.BookingRequest true "Request"
 // @Success      202
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
@@ -84,7 +84,7 @@ func (controller BookingController) GetBookingById(c *fiber.Ctx) error {
 // @Tags         booking
 // @Produce      json
 // @Param        bookingId   path  int  true  "Booking ID"
-// @Param 		 message body BookingRequest true "Request"
+// @Param 		 message body models.BookingRequest true "Request"
 // @Success      200 {object} models.Booking
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse

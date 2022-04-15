@@ -3,16 +3,16 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
 
 type UserController struct {
-	userService *service.UserService
+	userService *services.UserService
 }
 
-func NewUserController(userService *service.UserService) *UserController {
+func NewUserController(userService *services.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 
@@ -20,8 +20,8 @@ func NewUserController(userService *service.UserService) *UserController {
 // @Description  Login to Footpal
 // @Tags         user
 // @Produce      json
-// @Param 		 message body Login true "Request"
-// @Success      200 {object} UserResponse
+// @Param 		 message body models.Login true "Request"
+// @Success      200 {object} models.UserResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /login [post]
 func (controller UserController) LoginHandler(c *fiber.Ctx) error {
@@ -47,8 +47,8 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 // @Description  Register as new player
 // @Tags         user
 // @Produce      json
-// @Param 		 message body Register true "Request"
-// @Success      200 {object} UserResponse
+// @Param 		 message body models.Register true "Request"
+// @Success      200 {object} models.UserResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /register [post]
 func (controller UserController) RegisterHandler(c *fiber.Ctx) error {

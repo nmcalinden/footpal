@@ -1,16 +1,16 @@
-package router
+package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 )
 
 func ConfigureVenueHandlers(app *fiber.App) {
 	group := app.Group("/venues")
 
-	vService := service.NewVenueService(config.GetConnection())
+	vService := services.NewVenueService(config.GetConnection())
 	venueController := controllers.NewVenueController(vService)
 
 	group.Get("/", venueController.RetrieveVenues)

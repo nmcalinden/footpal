@@ -3,7 +3,7 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
@@ -13,10 +13,10 @@ type SquadResponse struct {
 }
 
 type SquadController struct {
-	squadService *service.SquadService
+	squadService *services.SquadService
 }
 
-func NewSquadController(squadService *service.SquadService) *SquadController {
+func NewSquadController(squadService *services.SquadService) *SquadController {
 	return &SquadController{squadService: squadService}
 }
 

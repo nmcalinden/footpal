@@ -29,7 +29,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Retrieve bookings",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -56,7 +55,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Create new booking",
                 "parameters": [
                     {
                         "description": "Request",
@@ -64,7 +62,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.BookingRequest"
+                            "$ref": "#/definitions/models.BookingRequest"
                         }
                     }
                 ],
@@ -96,7 +94,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Retrieve booking",
                 "parameters": [
                     {
                         "type": "integer",
@@ -129,7 +126,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Edit booking",
                 "parameters": [
                     {
                         "type": "integer",
@@ -144,7 +140,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.BookingRequest"
+                            "$ref": "#/definitions/models.BookingRequest"
                         }
                     }
                 ],
@@ -177,7 +173,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Cancel booking",
                 "parameters": [
                     {
                         "type": "integer",
@@ -218,7 +213,6 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "summary": "Get matches by booking",
                 "parameters": [
                     {
                         "type": "integer",
@@ -262,7 +256,6 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Deactivate User",
                 "parameters": [
                     {
                         "type": "integer",
@@ -294,7 +287,6 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Login",
                 "parameters": [
                     {
                         "description": "Request",
@@ -302,7 +294,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.Login"
+                            "$ref": "#/definitions/models.Login"
                         }
                     }
                 ],
@@ -310,7 +302,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/router.UserResponse"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
@@ -331,7 +323,6 @@ const docTemplate = `{
                 "tags": [
                     "match"
                 ],
-                "summary": "Retrieve Matches",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -360,7 +351,6 @@ const docTemplate = `{
                 "tags": [
                     "match"
                 ],
-                "summary": "Retrieve Match by matchId",
                 "parameters": [
                     {
                         "type": "integer",
@@ -393,7 +383,6 @@ const docTemplate = `{
                 "tags": [
                     "match"
                 ],
-                "summary": "Cancel match",
                 "parameters": [
                     {
                         "type": "integer",
@@ -428,7 +417,6 @@ const docTemplate = `{
                 "tags": [
                     "match"
                 ],
-                "summary": "Retrieve Players by Match",
                 "parameters": [
                     {
                         "type": "integer",
@@ -472,7 +460,6 @@ const docTemplate = `{
                 "tags": [
                     "match"
                 ],
-                "summary": "Remove player from match",
                 "parameters": [
                     {
                         "type": "integer",
@@ -520,7 +507,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Retrieve Players",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -549,7 +535,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Retrieve Player",
                 "parameters": [
                     {
                         "type": "integer",
@@ -582,7 +567,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Edit Player",
                 "parameters": [
                     {
                         "type": "integer",
@@ -597,7 +581,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.PlayerRequest"
+                            "$ref": "#/definitions/models.PlayerRequest"
                         }
                     }
                 ],
@@ -632,7 +616,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Retrieve Matches by player",
                 "parameters": [
                     {
                         "type": "integer",
@@ -676,7 +659,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Join match",
                 "parameters": [
                     {
                         "type": "integer",
@@ -697,7 +679,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/router.JoinMatchResponse"
+                            "$ref": "#/definitions/models.JoinMatchResponse"
                         }
                     },
                     "400": {
@@ -722,7 +704,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Leave match",
                 "parameters": [
                     {
                         "type": "integer",
@@ -767,7 +748,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Match player payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -789,7 +769,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.MatchPaymentRequest"
+                            "$ref": "#/definitions/models.MatchPaymentRequest"
                         }
                     }
                 ],
@@ -819,7 +799,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Update player payment type",
                 "parameters": [
                     {
                         "type": "integer",
@@ -871,7 +850,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Retrieve Squads",
                 "parameters": [
                     {
                         "type": "integer",
@@ -915,7 +893,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Retrieve Squad by squadId",
                 "parameters": [
                     {
                         "type": "integer",
@@ -964,7 +941,6 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
-                "summary": "Join squad",
                 "parameters": [
                     {
                         "type": "integer",
@@ -985,7 +961,7 @@ const docTemplate = `{
                     "202": {
                         "description": "Accepted",
                         "schema": {
-                            "$ref": "#/definitions/router.JoinMatchResponse"
+                            "$ref": "#/definitions/models.JoinMatchResponse"
                         }
                     },
                     "400": {
@@ -1012,7 +988,6 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Register",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1020,7 +995,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/router.Register"
+                            "$ref": "#/definitions/models.Register"
                         }
                     }
                 ],
@@ -1028,7 +1003,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/router.UserResponse"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
@@ -1049,7 +1024,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Retrieve Squads",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1076,7 +1050,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Create new squad",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1092,7 +1065,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/router.SquadResponse"
+                            "$ref": "#/definitions/controllers.SquadResponse"
                         }
                     },
                     "400": {
@@ -1119,7 +1092,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Retrieve squad by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1152,7 +1124,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Update Squad Info",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1200,7 +1171,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Remove squad",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1241,7 +1211,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Retrieve players by squad",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1285,7 +1254,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Approve squad request",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1331,7 +1299,6 @@ const docTemplate = `{
                 "tags": [
                     "squad"
                 ],
-                "summary": "Remove squad player",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1376,7 +1343,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Retrieve Venues",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1385,6 +1351,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Venue"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     }
                 }
@@ -1397,7 +1369,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Edit venue",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1439,7 +1410,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Create new venue",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1476,12 +1446,17 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Retrieve Venues by id",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Venue"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
                         }
                     }
                 }
@@ -1494,7 +1469,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Delete venue",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1526,7 +1500,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Get Venue Admins",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1542,7 +1515,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/venueRoute.VenueAdminResponse"
+                                "$ref": "#/definitions/models.VenueAdminResponse"
                             }
                         }
                     },
@@ -1562,7 +1535,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Add Venue Admin",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1570,7 +1542,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/venueRoute.VenueAdminRequest"
+                            "$ref": "#/definitions/models.VenueAdminRequest"
                         }
                     },
                     {
@@ -1587,7 +1559,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/venueRoute.VenueAdminResponse"
+                                "$ref": "#/definitions/models.VenueAdminResponse"
                             }
                         }
                     },
@@ -1607,7 +1579,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Remove Venue Admin",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1639,7 +1610,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Get Pitches by Venue",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1675,7 +1645,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Add Venue Pitch",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1722,7 +1691,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Get Venue Pitch",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1755,7 +1723,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Edit Pitch",
                 "parameters": [
                     {
                         "description": "Request",
@@ -1804,7 +1771,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Delete Pitch",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1843,7 +1809,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Retrieve Pitch time slots",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1882,7 +1847,6 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
-                "summary": "Retrieve Venue time slots",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1921,6 +1885,9 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.SquadResponse": {
+            "type": "object"
+        },
         "models.Booking": {
             "type": "object",
             "required": [
@@ -1944,6 +1911,67 @@ const docTemplate = `{
                 },
                 "lastUpdated": {
                     "type": "string"
+                }
+            }
+        },
+        "models.BookingRequest": {
+            "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "matchAccessStatusId",
+                "noOfWeeks",
+                "pitchId",
+                "startTime",
+                "venueId"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.JoinMatchResponse": {
+            "type": "object",
+            "properties": {
+                "matchId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Login": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
                 }
             }
         },
@@ -1986,6 +2014,17 @@ const docTemplate = `{
                 },
                 "matchStatusId": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.MatchPaymentRequest": {
+            "type": "object",
+            "required": [
+                "amountToPay"
+            ],
+            "properties": {
+                "amountToPay": {
+                    "type": "number"
                 }
             }
         },
@@ -2101,6 +2140,62 @@ const docTemplate = `{
                 }
             }
         },
+        "models.PlayerRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "nickname",
+                "postcode"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 16,
+                    "minLength": 2
+                },
+                "postcode": {
+                    "type": "string",
+                    "maxLength": 8,
+                    "minLength": 5
+                }
+            }
+        },
+        "models.Register": {
+            "type": "object",
+            "required": [
+                "email",
+                "forename",
+                "surname"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
+                },
+                "forename": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                }
+            }
+        },
         "models.Squad": {
             "type": "object",
             "required": [
@@ -2126,13 +2221,16 @@ const docTemplate = `{
         "models.SquadPlayerDetails": {
             "type": "object",
             "properties": {
+                "forename": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
                 "playerId": {
-                    "type": "string"
+                    "type": "integer"
                 },
-                "role": {
-                    "type": "string"
-                },
-                "squadId": {
+                "surname": {
                     "type": "string"
                 }
             }
@@ -2153,6 +2251,14 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 2
+                }
+            }
+        },
+        "models.UserResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
@@ -2202,6 +2308,34 @@ const docTemplate = `{
                 }
             }
         },
+        "models.VenueAdminRequest": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "integer"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.VenueAdminResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "forename": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "venueAdminId": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.VenueRequest": {
             "type": "object",
             "required": [
@@ -2242,163 +2376,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 3
-                }
-            }
-        },
-        "router.BookingRequest": {
-            "type": "object",
-            "required": [
-                "day",
-                "endTime",
-                "matchAccessStatusId",
-                "noOfWeeks",
-                "pitchId",
-                "startTime",
-                "venueId"
-            ],
-            "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 3
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "matchAccessStatusId": {
-                    "type": "integer"
-                },
-                "noOfWeeks": {
-                    "type": "integer"
-                },
-                "pitchId": {
-                    "type": "integer"
-                },
-                "squadId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "router.JoinMatchResponse": {
-            "type": "object"
-        },
-        "router.Login": {
-            "type": "object",
-            "required": [
-                "email"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5
-                }
-            }
-        },
-        "router.MatchPaymentRequest": {
-            "type": "object",
-            "required": [
-                "amountToPay"
-            ],
-            "properties": {
-                "amountToPay": {
-                    "type": "number"
-                }
-            }
-        },
-        "router.PlayerRequest": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "nickname",
-                "postcode"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
-                },
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "nickname": {
-                    "type": "string",
-                    "maxLength": 16,
-                    "minLength": 2
-                },
-                "postcode": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                }
-            }
-        },
-        "router.Register": {
-            "type": "object",
-            "required": [
-                "email",
-                "forename",
-                "surname"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5
-                },
-                "forename": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "surname": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                }
-            }
-        },
-        "router.SquadResponse": {
-            "type": "object"
-        },
-        "router.UserResponse": {
-            "type": "object"
-        },
-        "venueRoute.VenueAdminRequest": {
-            "type": "object",
-            "properties": {
-                "userId": {
-                    "type": "integer"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "venueRoute.VenueAdminResponse": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "forename": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                },
-                "venueAdminId": {
-                    "type": "integer"
                 }
             }
         }

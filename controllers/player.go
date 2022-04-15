@@ -3,16 +3,16 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
 
 type PlayerController struct {
-	playerService *service.PlayerService
+	playerService *services.PlayerService
 }
 
-func NewPlayerController(playerService *service.PlayerService) *PlayerController {
+func NewPlayerController(playerService *services.PlayerService) *PlayerController {
 	return &PlayerController{playerService: playerService}
 }
 
@@ -36,7 +36,7 @@ func (controller PlayerController) RetrievePlayers(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param        playerId   path  int  true  "Player ID"
-// @Param 		 message body PlayerRequest true "Request"
+// @Param 		 message body models.PlayerRequest true "Request"
 // @Success      200 {object} models.Player
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
@@ -164,7 +164,7 @@ func (controller PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        playerId   path  int  true  "Player ID"
 // @Param        squadId   path  int  true  "Squad ID"
-// @Success      202  {object} JoinMatchResponse
+// @Success      202  {object} models.JoinMatchResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Router       /players/{playerId}/squads/{squadId} [post]
@@ -193,7 +193,7 @@ func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        playerId   path  int  true  "Player ID"
 // @Param        matchId   path  int  true  "Match ID"
-// @Success      200  {object} JoinMatchResponse
+// @Success      200  {object} models.JoinMatchResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Router       /players/{playerId}/matches/{matchId} [post]
@@ -252,7 +252,7 @@ func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        playerId   path  int  true  "Player ID"
 // @Param        matchId   path  int  true  "Match ID"
-// @Param 		 message body MatchPaymentRequest true "Request"
+// @Param 		 message body models.MatchPaymentRequest true "Request"
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse

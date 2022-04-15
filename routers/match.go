@@ -1,16 +1,16 @@
-package router
+package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 )
 
 func ConfigureMatchHandlers(app *fiber.App) {
 	group := app.Group("/matches")
 
-	mService := service.NewMatchService(config.GetConnection())
+	mService := services.NewMatchService(config.GetConnection())
 	matchController := controllers.NewMatchController(mService)
 
 	group.Get("/", matchController.RetrieveMatches)

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
@@ -15,10 +15,10 @@ type MatchRequest struct {
 }
 
 type MatchController struct {
-	matchService *service.MatchService
+	matchService *services.MatchService
 }
 
-func NewMatchController(matchService *service.MatchService) *MatchController {
+func NewMatchController(matchService *services.MatchService) *MatchController {
 	return &MatchController{matchService: matchService}
 }
 

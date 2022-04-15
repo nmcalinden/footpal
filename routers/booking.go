@@ -1,16 +1,16 @@
-package router
+package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 )
 
 func ConfigureBookingHandlers(app *fiber.App) {
 	group := app.Group("/bookings")
 
-	bService := service.NewBookingService(config.GetConnection())
+	bService := services.NewBookingService(config.GetConnection())
 	bookController := controllers.NewBookingController(bService)
 
 	group.Get("/", bookController.RetrieveBookings)

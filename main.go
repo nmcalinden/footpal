@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/helmet/v2"
 	"github.com/nmcalinden/footpal/config"
-	"github.com/nmcalinden/footpal/router"
+	"github.com/nmcalinden/footpal/routers"
 	"github.com/nmcalinden/footpal/utils"
 	"log"
 )
@@ -30,12 +30,12 @@ func main() {
 
 	utils.ConfigureSwagger(app)
 
-	router.ConfigureUserHandlers(app)
-	router.ConfigureVenueHandlers(app)
-	router.ConfigurePlayerHandlers(app)
-	router.ConfigureSquadPlayers(app)
-	router.ConfigureBookingHandlers(app)
-	router.ConfigureMatchHandlers(app)
+	routers.ConfigureUserHandlers(app)
+	routers.ConfigureVenueHandlers(app)
+	routers.ConfigurePlayerHandlers(app)
+	routers.ConfigureSquadPlayers(app)
+	routers.ConfigureBookingHandlers(app)
+	routers.ConfigureMatchHandlers(app)
 
 	log.Fatal(app.Listen(":3000"))
 }

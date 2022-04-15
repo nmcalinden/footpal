@@ -3,16 +3,16 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/models"
-	"github.com/nmcalinden/footpal/service"
+	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
 )
 
 type VenueController struct {
-	venueService *service.VenueService
+	venueService *services.VenueService
 }
 
-func NewVenueController(venueService *service.VenueService) *VenueController {
+func NewVenueController(venueService *services.VenueService) *VenueController {
 	return &VenueController{venueService: venueService}
 }
 
@@ -126,7 +126,7 @@ func (controller VenueController) DeleteVenue(c *fiber.Ctx) error {
 // @Tags         venue
 // @Produce      json
 // @Param        venueId   path  int  true  "Venue ID"
-// @Success      200 {array} VenueAdminResponse
+// @Success      200 {array} models.VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/admins [get]
 func (controller VenueController) RetrieveVenueAdmins(c *fiber.Ctx) error {
@@ -151,9 +151,9 @@ func (controller VenueController) RetrieveVenueAdmins(c *fiber.Ctx) error {
 // @Description  Add new administrator to venue
 // @Tags         venue
 // @Produce      json
-// @Param 		 message body VenueAdminRequest true "Request"
+// @Param 		 message body models.VenueAdminRequest true "Request"
 // @Param        venueId   path  int  true  "Venue ID"
-// @Success      200 {array} VenueAdminResponse
+// @Success      200 {array} models.VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/admins [post]
 func (controller VenueController) AddAdminToVenue(c *fiber.Ctx) error {
