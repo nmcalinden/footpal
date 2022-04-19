@@ -22,6 +22,7 @@ func NewBookingController(bookingService *services.BookingService) *BookingContr
 // @Produce      json
 // @Success      200  {array} models.Booking
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings [get]
 func (controller BookingController) RetrieveBookings(c *fiber.Ctx) error {
 	bookingRecords, err := controller.bookingService.GetBookings()
@@ -32,13 +33,14 @@ func (controller BookingController) RetrieveBookings(c *fiber.Ctx) error {
 }
 
 // CreateBooking @Summary      Create new booking
-// @Description  Create new single or recurring booking
+// @Description  Create new single or recurring booking testing
 // @Tags         booking
 // @Produce      json
 // @Param 		 message body models.BookingRequest true "Request"
 // @Success      202
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings [post]
 func (controller BookingController) CreateBooking(c *fiber.Ctx) error {
 	newBooking := new(models.BookingRequest)
@@ -65,6 +67,7 @@ func (controller BookingController) CreateBooking(c *fiber.Ctx) error {
 // @Param        bookingId   path  int  true  "Booking ID"
 // @Success      200 {object} models.Booking
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [get]
 func (controller BookingController) GetBookingById(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
@@ -88,6 +91,7 @@ func (controller BookingController) GetBookingById(c *fiber.Ctx) error {
 // @Success      200 {object} models.Booking
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [put]
 func (controller BookingController) UpdateBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
@@ -120,6 +124,7 @@ func (controller BookingController) UpdateBooking(c *fiber.Ctx) error {
 // @Success      200 {string} bookingId
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [delete]
 func (controller BookingController) CancelBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
@@ -142,6 +147,7 @@ func (controller BookingController) CancelBooking(c *fiber.Ctx) error {
 // @Success      200 {array} models.Match
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /bookings/{bookingId}/matches [get]
 func (controller BookingController) GetMatchesByBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))

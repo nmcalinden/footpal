@@ -43,6 +43,7 @@ func (controller SquadController) RetrieveSquads(c *fiber.Ctx) error {
 // @Success      201 {object} SquadResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads [post]
 func (controller SquadController) CreateSquadGroup(c *fiber.Ctx) error {
 	s := new(models.SquadRequest)
@@ -94,6 +95,7 @@ func (controller SquadController) RetrieveSquadById(c *fiber.Ctx) error {
 // @Success      200 	{object} models.Squad
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads/{squadId} [put]
 func (controller SquadController) UpdateSquadInfo(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
@@ -121,6 +123,7 @@ func (controller SquadController) UpdateSquadInfo(c *fiber.Ctx) error {
 // @Success      202 {string} string "accepted"
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads/{squadId} [delete]
 func (controller SquadController) RemoveSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
@@ -166,6 +169,7 @@ func (controller SquadController) RetrieveSquadPlayers(c *fiber.Ctx) error {
 // @Success      200 {string} string "ok"
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads/{squadId}/players/{playerId} [put]
 func (controller SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
@@ -194,6 +198,7 @@ func (controller SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
 // @Success      204
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads/{squadId}/players/{playerId} [delete]
 func (controller SquadController) RemovePlayerFromSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))

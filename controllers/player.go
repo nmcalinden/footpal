@@ -22,6 +22,7 @@ func NewPlayerController(playerService *services.PlayerService) *PlayerControlle
 // @Produce      json
 // @Success      200  {array}  models.Player
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players [get]
 func (controller PlayerController) RetrievePlayers(c *fiber.Ctx) error {
 	p, err := controller.playerService.GetPlayers()
@@ -40,6 +41,7 @@ func (controller PlayerController) RetrievePlayers(c *fiber.Ctx) error {
 // @Success      200 {object} models.Player
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId} [put]
 func (controller PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -70,6 +72,7 @@ func (controller PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 // @Param        playerId   path  int  true  "Player ID"
 // @Success      200 {object} models.Player
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId} [get]
 func (controller PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -93,6 +96,7 @@ func (controller PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
 // @Success      200  {array}  models.Squad
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/squads [get]
 func (controller PlayerController) GetSquadsByUser(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -116,6 +120,7 @@ func (controller PlayerController) GetSquadsByUser(c *fiber.Ctx) error {
 // @Success      200  {array}  models.Player
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/squads/{squadId} [get]
 func (controller PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -144,6 +149,7 @@ func (controller PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
 // @Success      200  {array}  models.Match
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/matches [get]
 func (controller PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -167,6 +173,7 @@ func (controller PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
 // @Success      202  {object} models.JoinMatchResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/squads/{squadId} [post]
 func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -196,6 +203,7 @@ func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
 // @Success      200  {object} models.JoinMatchResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/matches/{matchId} [post]
 func (controller PlayerController) JoinMatch(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -226,6 +234,7 @@ func (controller PlayerController) JoinMatch(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/matches/{matchId} [delete]
 func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -256,6 +265,7 @@ func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/matches/{matchId}/pay [post]
 func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
@@ -293,6 +303,7 @@ func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /players/{playerId}/matches/{matchId}/pay [patch]
 func (controller PlayerController) UpdatePlayerPaymentType(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))

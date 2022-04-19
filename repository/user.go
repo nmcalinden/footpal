@@ -22,10 +22,10 @@ func (repository UserRepository) FindByEmail(e *string) (*models.User, error) {
 	return &user, nil
 }
 
-func (repository UserRepository) Save(user *models.User) (*int, error) {
+func (repository UserRepository) Save(user *models.User) (int, error) {
 	_, err := repository.database.NamedExec(`INSERT INTO footpaldb.public.footpal_user(forename, surname, email) 
 					VALUES(:forename, :surname, :email)`, user)
-	return &user.UserId, err
+	return user.UserId, err
 }
 
 func (repository UserRepository) Delete(id *int) error {

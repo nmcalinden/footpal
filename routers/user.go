@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
+	"github.com/nmcalinden/footpal/middleware"
 	"github.com/nmcalinden/footpal/services"
 )
 
@@ -15,5 +16,6 @@ func ConfigureUserHandlers(app *fiber.App) {
 
 	group.Post("/login", userController.LoginHandler)
 	group.Post("/register", userController.RegisterHandler)
-	group.Delete("/deactivate/:userId", userController.DeactivateHandler)
+
+	group.Delete("/deactivate", middleware.IsAuthenticated, userController.DeactivateHandler)
 }

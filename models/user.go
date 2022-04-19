@@ -17,6 +17,10 @@ type Register struct {
 	Email    string `json:"email" validate:"required,min=5,max=100"`
 }
 
-type UserResponse struct {
-	Id *int
+type RegisterResponse struct {
+	Id *int `json:"id"`
+}
+
+type LoginResponse struct {
+	Token *string `json:"token"`
 }
