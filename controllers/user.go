@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
-	"strconv"
 )
 
 type UserController struct {
@@ -21,7 +22,7 @@ func NewUserController(userService *services.UserService) *UserController {
 // @Tags         user
 // @Produce      json
 // @Param 		 message body models.Login true "Request"
-// @Success      200 {object} models.UserResponse
+// @Success      200 {object} models.LoginResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /login [post]
 func (controller UserController) LoginHandler(c *fiber.Ctx) error {
@@ -34,12 +35,12 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	usr, err := controller.userService.Login(l)
+	token, err := controller.userService.Login(l)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "No User found")
 	}
 
-	response := models.UserResponse{Id: usr}
+	response := models.LoginResponse{Token: token}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
@@ -48,7 +49,7 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 // @Tags         user
 // @Produce      json
 // @Param 		 message body models.Register true "Request"
-// @Success      200 {object} models.UserResponse
+// @Success      200 {object} models.RegisterResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /register [post]
 func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
@@ -65,25 +66,26 @@ func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to register user")
 	}
-	response := models.UserResponse{Id: usr}
+	response := models.RegisterResponse{Id: &usr}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // DeactivateHandler @Summary      Deactivate User
 // @Description  Delete user from Footpal
 // @Tags         user
+// @Security ApiKeyAuth
 // @Produce      json
-// @Param        userId   path  int  true  "User ID"
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
-// @Router       /deactivate/{userId} [delete]
+// @Router       /deactivate [delete]
 func (controller UserController) DeactivateHandler(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "UserId supplied is invalid")
-	}
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	name := claims["name"].(string)
+	email := claims["email"].(string)
 
-	err = controller.userService.Deactivate(&userId)
+	fmt.Println(name)
+	err := controller.userService.Deactivate(&email)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to delete user")
 	}

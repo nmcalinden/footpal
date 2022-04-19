@@ -60,6 +60,7 @@ func (controller VenueController) RetrieveVenueById(c *fiber.Ctx) error {
 // @Param 		 message body models.VenueRequest true "Request"
 // @Success      201 {string} string venueId
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues [post]
 func (controller VenueController) CreateVenue(c *fiber.Ctx) error {
 	newVenue := new(models.VenueRequest)
@@ -83,6 +84,7 @@ func (controller VenueController) CreateVenue(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      200 {object} models.Venue
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues [put]
 func (controller VenueController) UpdateVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
@@ -111,6 +113,7 @@ func (controller VenueController) UpdateVenue(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId} [delete]
 func (controller VenueController) DeleteVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
@@ -128,6 +131,7 @@ func (controller VenueController) DeleteVenue(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      200 {array} models.VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/admins [get]
 func (controller VenueController) RetrieveVenueAdmins(c *fiber.Ctx) error {
 	var venueAdmins = []models.VenueAdminResponse{
@@ -155,6 +159,7 @@ func (controller VenueController) RetrieveVenueAdmins(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      200 {array} models.VenueAdminResponse
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/admins [post]
 func (controller VenueController) AddAdminToVenue(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
@@ -183,6 +188,7 @@ func (controller VenueController) AddAdminToVenue(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      204
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/admins [delete]
 func (controller VenueController) RemoveAdminFromVenue(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))
@@ -222,6 +228,7 @@ func (controller VenueController) RetrievePitchesByVenue(c *fiber.Ctx) error {
 // @Param        venueId   path  int  true  "Venue ID"
 // @Success      200 {array} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/pitches [post]
 func (controller VenueController) AddPitchToVenue(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
@@ -293,6 +300,7 @@ func (controller VenueController) RetrievePitch(c *fiber.Ctx) error {
 // @Param        pitchId   path  int  true  "Pitch ID"
 // @Success      200 {object} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/pitches/{pitchId} [put]
 func (controller VenueController) UpdatePitchInfo(c *fiber.Ctx) error {
 	venueId, err := strconv.Atoi(c.Params("venueId"))
@@ -333,6 +341,7 @@ func (controller VenueController) UpdatePitchInfo(c *fiber.Ctx) error {
 // @Param        pitchId   path  int  true  "Pitch ID"
 // @Success      204
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /venues/{venueId}/pitches/{pitchId} [delete]
 func (controller VenueController) RemovePitch(c *fiber.Ctx) error {
 	_, err := strconv.Atoi(c.Params("venueId"))

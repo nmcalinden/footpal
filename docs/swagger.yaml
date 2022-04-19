@@ -72,6 +72,11 @@ definitions:
     required:
     - email
     type: object
+  models.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
   models.Match:
     properties:
       bookingId:
@@ -233,6 +238,11 @@ definitions:
     - forename
     - surname
     type: object
+  models.RegisterResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   models.Squad:
     properties:
       city:
@@ -273,11 +283,6 @@ definitions:
     required:
     - city
     - name
-    type: object
-  models.UserResponse:
-    properties:
-      id:
-        type: integer
     type: object
   models.Venue:
     properties:
@@ -393,10 +398,12 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
     post:
-      description: Create new single or recurring booking
+      description: Create new single or recurring booking testing
       parameters:
       - description: Request
         in: body
@@ -417,6 +424,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
   /bookings/{bookingId}:
@@ -443,6 +452,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
     get:
@@ -464,6 +475,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
     put:
@@ -495,6 +508,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
   /bookings/{bookingId}/matches:
@@ -523,17 +538,13 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - booking
-  /deactivate/{userId}:
+  /deactivate:
     delete:
       description: Delete user from Footpal
-      parameters:
-      - description: User ID
-        in: path
-        name: userId
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
@@ -543,6 +554,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - user
   /login:
@@ -561,7 +574,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.UserResponse'
+            $ref: '#/definitions/models.LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -584,6 +597,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - match
   /matches/{matchId}:
@@ -606,6 +621,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - match
     get:
@@ -627,6 +644,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - match
   /matches/{matchId}/players:
@@ -655,6 +674,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - match
   /matches/{matchId}/players/{playerId}:
@@ -686,6 +707,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - match
   /players:
@@ -704,6 +727,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}:
@@ -726,6 +751,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
     put:
@@ -757,6 +784,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}/matches:
@@ -785,6 +814,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}/matches/{matchId}:
@@ -814,6 +845,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
     post:
@@ -844,6 +877,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}/matches/{matchId}/pay:
@@ -878,6 +913,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
     post:
@@ -912,6 +949,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}/squads:
@@ -940,6 +979,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /players/{playerId}/squads/{squadId}:
@@ -973,6 +1014,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
     post:
@@ -1003,6 +1046,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - player
   /register:
@@ -1021,7 +1066,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.UserResponse'
+            $ref: '#/definitions/models.RegisterResponse'
         "400":
           description: Bad Request
           schema:
@@ -1070,6 +1115,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
   /squads/{squadId}:
@@ -1096,6 +1143,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
     get:
@@ -1148,6 +1197,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
   /squads/{squadId}/players:
@@ -1205,6 +1256,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
     put:
@@ -1235,6 +1288,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
   /venues:
@@ -1275,6 +1330,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
     put:
@@ -1302,6 +1359,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
   /venues/{venueId}:
@@ -1322,6 +1381,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
     get:
@@ -1357,6 +1418,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
     get:
@@ -1380,6 +1443,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
     post:
@@ -1409,6 +1474,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
   /venues/{venueId}/pitches:
@@ -1462,6 +1529,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
   /venues/{venueId}/pitches/{pitchId}:
@@ -1487,6 +1556,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
     get:
@@ -1540,6 +1611,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - venue
   /venues/{venueId}/pitches/{pitchId}/timeslots:
@@ -1587,4 +1660,9 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       tags:
       - venue
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

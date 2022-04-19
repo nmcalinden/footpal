@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
+	"github.com/nmcalinden/footpal/middleware"
 	"github.com/nmcalinden/footpal/services"
 )
 
@@ -18,11 +19,13 @@ func ConfigureSquadPlayers(app *fiber.App) {
 	squadController := controllers.NewSquadController(sService)
 
 	group.Get("/", squadController.RetrieveSquads)
-	group.Post("/", squadController.CreateSquadGroup)
 	group.Get("/:squadId", squadController.RetrieveSquadById)
+	group.Get("/:squadId/players", squadController.RetrieveSquadPlayers)
+
+	group.Use(middleware.IsAuthenticated)
+	group.Post("/", squadController.CreateSquadGroup)
 	group.Put("/:squadId", squadController.UpdateSquadInfo)
 	group.Delete("/:squadId", squadController.RemoveSquad)
-	group.Get("/:squadId/players", squadController.RetrieveSquadPlayers)
 	group.Put("/:squadId/players/:playerId", squadController.ApprovePlayerToSquad)
 	group.Delete("/:squadId/players/:playerId", squadController.RemovePlayerFromSquad)
 }

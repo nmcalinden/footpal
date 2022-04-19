@@ -18,6 +18,9 @@ import (
 // @contact.name Footpal Support
 // @contact.email nathan.mcalinden@unosquare.com
 // @host 127.0.0.1:3000
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 // @BasePath /
 func main() {
 	app := fiber.New()

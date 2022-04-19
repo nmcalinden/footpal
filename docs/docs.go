@@ -22,6 +22,11 @@ const docTemplate = `{
     "paths": {
         "/bookings": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all bookings by user",
                 "produces": [
                     "application/json"
@@ -48,7 +53,12 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create new single or recurring booking",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new single or recurring booking testing",
                 "produces": [
                     "application/json"
                 ],
@@ -87,6 +97,11 @@ const docTemplate = `{
         },
         "/bookings/{bookingId}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve booking by bookingId",
                 "produces": [
                     "application/json"
@@ -119,6 +134,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Edit booking details",
                 "produces": [
                     "application/json"
@@ -166,6 +186,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Cancel active or pending booking",
                 "produces": [
                     "application/json"
@@ -206,6 +231,11 @@ const docTemplate = `{
         },
         "/bookings/{bookingId}/matches": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get all matches linked to booking",
                 "produces": [
                     "application/json"
@@ -247,23 +277,19 @@ const docTemplate = `{
                 }
             }
         },
-        "/deactivate/{userId}": {
+        "/deactivate": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete user from Footpal",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "user"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -302,7 +328,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserResponse"
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     },
                     "400": {
@@ -316,6 +342,11 @@ const docTemplate = `{
         },
         "/matches": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all public matches",
                 "produces": [
                     "application/json"
@@ -344,6 +375,11 @@ const docTemplate = `{
         },
         "/matches/{matchId}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve match details by matchId",
                 "produces": [
                     "application/json"
@@ -376,6 +412,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Cancel match",
                 "produces": [
                     "application/json"
@@ -410,6 +451,11 @@ const docTemplate = `{
         },
         "/matches/{matchId}/players": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all players opted into a match",
                 "produces": [
                     "application/json"
@@ -453,6 +499,11 @@ const docTemplate = `{
         },
         "/matches/{matchId}/players/{playerId}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "As a booking/squad admin, remove player from match",
                 "produces": [
                     "application/json"
@@ -500,6 +551,11 @@ const docTemplate = `{
         },
         "/players": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all players",
                 "produces": [
                     "application/json"
@@ -528,6 +584,11 @@ const docTemplate = `{
         },
         "/players/{playerId}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get Player information",
                 "produces": [
                     "application/json"
@@ -560,6 +621,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Edit player information",
                 "produces": [
                     "application/json"
@@ -609,6 +675,11 @@ const docTemplate = `{
         },
         "/players/{playerId}/matches": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve a players opted in matches",
                 "produces": [
                     "application/json"
@@ -652,6 +723,11 @@ const docTemplate = `{
         },
         "/players/{playerId}/matches/{matchId}": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Request to join match",
                 "produces": [
                     "application/json"
@@ -697,6 +773,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Leave match",
                 "produces": [
                     "application/json"
@@ -741,6 +822,11 @@ const docTemplate = `{
         },
         "/players/{playerId}/matches/{matchId}/pay": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "For a match, pay amount owed by player",
                 "produces": [
                     "application/json"
@@ -792,6 +878,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "For a match, pay amount owed by player",
                 "produces": [
                     "application/json"
@@ -843,6 +934,11 @@ const docTemplate = `{
         },
         "/players/{playerId}/squads": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all squads linked to player",
                 "produces": [
                     "application/json"
@@ -886,6 +982,11 @@ const docTemplate = `{
         },
         "/players/{playerId}/squads/{squadId}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve squad by squad id",
                 "produces": [
                     "application/json"
@@ -934,6 +1035,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Request to join squad",
                 "produces": [
                     "application/json"
@@ -1003,7 +1109,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
@@ -1043,6 +1149,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new squad for building up a team of players",
                 "produces": [
                     "application/json"
@@ -1117,6 +1228,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update Squad Info",
                 "produces": [
                     "application/json"
@@ -1164,6 +1280,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete squad from footpal",
                 "produces": [
                     "application/json"
@@ -1247,6 +1368,11 @@ const docTemplate = `{
         },
         "/squads/{squadId}/players/{playerId}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Approve player to join squad",
                 "produces": [
                     "application/json"
@@ -1292,6 +1418,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Remove player from squad",
                 "produces": [
                     "application/json"
@@ -1362,6 +1493,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Edit venue details",
                 "produces": [
                     "application/json"
@@ -1403,6 +1539,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new football venue",
                 "produces": [
                     "application/json"
@@ -1462,6 +1603,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Remove venue from Footpal",
                 "produces": [
                     "application/json"
@@ -1493,6 +1639,11 @@ const docTemplate = `{
         },
         "/venues/{venueId}/admins": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve venue administrators",
                 "produces": [
                     "application/json"
@@ -1528,6 +1679,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Add new administrator to venue",
                 "produces": [
                     "application/json"
@@ -1572,6 +1728,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Remove administrator from venue",
                 "produces": [
                     "application/json"
@@ -1638,6 +1799,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Add new pitch to existing venue",
                 "produces": [
                     "application/json"
@@ -1716,6 +1882,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Edit pitch details",
                 "produces": [
                     "application/json"
@@ -1764,6 +1935,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Remove pitch from venue",
                 "produces": [
                     "application/json"
@@ -1972,6 +2148,14 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 5
+                }
+            }
+        },
+        "models.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
                 }
             }
         },
@@ -2196,6 +2380,14 @@ const docTemplate = `{
                 }
             }
         },
+        "models.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Squad": {
             "type": "object",
             "required": [
@@ -2251,14 +2443,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 2
-                }
-            }
-        },
-        "models.UserResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
@@ -2378,6 +2562,13 @@ const docTemplate = `{
                     "minLength": 3
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

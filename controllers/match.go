@@ -28,6 +28,7 @@ func NewMatchController(matchService *services.MatchService) *MatchController {
 // @Produce      json
 // @Success      200  {array}  models.Match
 // @Failure      500  {object}  utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /matches [get]
 func (controller MatchController) RetrieveMatches(c *fiber.Ctx) error {
 	m, err := controller.matchService.GetMatches()
@@ -44,6 +45,7 @@ func (controller MatchController) RetrieveMatches(c *fiber.Ctx) error {
 // @Param        matchId   path  int  true  "Match ID"
 // @Success      200  {object}  models.Match
 // @Failure      400 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /matches/{matchId} [get]
 func (controller MatchController) RetrieveMatchById(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
@@ -66,6 +68,7 @@ func (controller MatchController) RetrieveMatchById(c *fiber.Ctx) error {
 // @Param        matchId   path  int  true  "Match ID"
 // @Success      200  {string} string "ok"
 // @Failure      500  {object}  utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /matches/{matchId} [delete]
 func (controller MatchController) CancelMatch(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
@@ -89,6 +92,7 @@ func (controller MatchController) CancelMatch(c *fiber.Ctx) error {
 // @Success      200  {array}  models.MatchPlayer
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /matches/{matchId}/players [get]
 func (controller MatchController) RetrieveMatchPlayers(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
@@ -113,6 +117,7 @@ func (controller MatchController) RetrieveMatchPlayers(c *fiber.Ctx) error {
 // @Success      200  {string} string "ok"
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /matches/{matchId}/players/{playerId} [delete]
 func (controller MatchController) RemovePlayerFromMatch(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
