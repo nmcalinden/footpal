@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
@@ -24,8 +24,8 @@ func NewBookingController(bookingService *services.BookingService) *BookingContr
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings [get]
-func (controller BookingController) RetrieveBookings(c *fiber.Ctx) error {
-	bookingRecords, err := controller.bookingService.GetBookings()
+func (con BookingController) RetrieveBookings(c *fiber.Ctx) error {
+	bookingRecords, err := con.bookingService.GetBookings()
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get bookings")
 	}
@@ -36,14 +36,14 @@ func (controller BookingController) RetrieveBookings(c *fiber.Ctx) error {
 // @Description  Create new single or recurring booking testing
 // @Tags         booking
 // @Produce      json
-// @Param 		 message body models.BookingRequest true "Request"
+// @Param 		 message body payloads.BookingRequest true "Request"
 // @Success      202
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings [post]
-func (controller BookingController) CreateBooking(c *fiber.Ctx) error {
-	newBooking := new(models.BookingRequest)
+func (con BookingController) CreateBooking(c *fiber.Ctx) error {
+	newBooking := new(payloads.BookingRequest)
 	if err := c.BodyParser(&newBooking); err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func (controller BookingController) CreateBooking(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	bookingId, err := controller.bookingService.CreateNewBooking(newBooking)
+	bookingId, err := con.bookingService.CreateNewBooking(newBooking)
 
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to create booking")
@@ -69,13 +69,13 @@ func (controller BookingController) CreateBooking(c *fiber.Ctx) error {
 // @Failure      400 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [get]
-func (controller BookingController) GetBookingById(c *fiber.Ctx) error {
+func (con BookingController) GetBookingById(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "BookingId supplied is invalid")
 	}
 
-	booking, bErr := controller.bookingService.GetBookingById(&bookingId)
+	booking, bErr := con.bookingService.GetBookingById(&bookingId)
 	if bErr != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Booking does not exist")
 	}
@@ -87,19 +87,19 @@ func (controller BookingController) GetBookingById(c *fiber.Ctx) error {
 // @Tags         booking
 // @Produce      json
 // @Param        bookingId   path  int  true  "Booking ID"
-// @Param 		 message body models.BookingRequest true "Request"
+// @Param 		 message body payloads.BookingRequest true "Request"
 // @Success      200 {object} models.Booking
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [put]
-func (controller BookingController) UpdateBooking(c *fiber.Ctx) error {
+func (con BookingController) UpdateBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "BookingId supplied is not a number")
 	}
 
-	b := new(models.BookingRequest)
+	b := new(payloads.BookingRequest)
 
 	if err := c.BodyParser(&b); err != nil {
 		return err
@@ -109,7 +109,7 @@ func (controller BookingController) UpdateBooking(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	response, bErr := controller.bookingService.EditBooking(&bookingId, b)
+	response, bErr := con.bookingService.EditBooking(&bookingId, b)
 	if bErr != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to edit booking")
 	}
@@ -126,13 +126,13 @@ func (controller BookingController) UpdateBooking(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings/{bookingId} [delete]
-func (controller BookingController) CancelBooking(c *fiber.Ctx) error {
+func (con BookingController) CancelBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "BookingId supplied is not a number")
 	}
 
-	response, dErr := controller.bookingService.CancelBooking(&bookingId)
+	response, dErr := con.bookingService.CancelBooking(&bookingId)
 	if dErr != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to cancel booking")
 	}
@@ -149,13 +149,13 @@ func (controller BookingController) CancelBooking(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings/{bookingId}/matches [get]
-func (controller BookingController) GetMatchesByBooking(c *fiber.Ctx) error {
+func (con BookingController) GetMatchesByBooking(c *fiber.Ctx) error {
 	bookingId, err := strconv.Atoi(c.Params("bookingId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "BookingId supplied is not a number")
 	}
 
-	matches, mErr := controller.bookingService.GetMatchesByBooking(&bookingId)
+	matches, mErr := con.bookingService.GetMatchesByBooking(&bookingId)
 	if mErr != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to retrieve matches by booking")
 	}

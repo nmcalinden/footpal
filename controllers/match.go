@@ -7,13 +7,6 @@ import (
 	"strconv"
 )
 
-type MatchRequest struct {
-	MatchAccessStatusId int     `json:"matchAccessStatusId" validate:"required"`
-	MatchStatusId       int     `json:"matchStatusId" validate:"required"`
-	Cost                float32 `json:"cost" validate:"required"`
-	IsPaid              bool    `json:"isPaid" validate:"required"`
-}
-
 type MatchController struct {
 	matchService *services.MatchService
 }
@@ -30,8 +23,8 @@ func NewMatchController(matchService *services.MatchService) *MatchController {
 // @Failure      500  {object}  utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches [get]
-func (controller MatchController) RetrieveMatches(c *fiber.Ctx) error {
-	m, err := controller.matchService.GetMatches()
+func (con MatchController) RetrieveMatches(c *fiber.Ctx) error {
+	m, err := con.matchService.GetMatches()
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to retrieve matches")
 	}
@@ -47,13 +40,13 @@ func (controller MatchController) RetrieveMatches(c *fiber.Ctx) error {
 // @Failure      400 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches/{matchId} [get]
-func (controller MatchController) RetrieveMatchById(c *fiber.Ctx) error {
+func (con MatchController) RetrieveMatchById(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "MatchId supplied is invalid")
 	}
 
-	m, err := controller.matchService.GetMatchById(&matchId)
+	m, err := con.matchService.GetMatchById(&matchId)
 
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Match does not exist")
@@ -70,13 +63,13 @@ func (controller MatchController) RetrieveMatchById(c *fiber.Ctx) error {
 // @Failure      500  {object}  utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches/{matchId} [delete]
-func (controller MatchController) CancelMatch(c *fiber.Ctx) error {
+func (con MatchController) CancelMatch(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "MatchId supplied is invalid")
 	}
 
-	_, err = controller.matchService.CancelMatch(&matchId)
+	_, err = con.matchService.CancelMatch(&matchId)
 
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to cancel match")
@@ -94,13 +87,13 @@ func (controller MatchController) CancelMatch(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches/{matchId}/players [get]
-func (controller MatchController) RetrieveMatchPlayers(c *fiber.Ctx) error {
+func (con MatchController) RetrieveMatchPlayers(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "MatchId supplied is invalid")
 	}
 
-	m, err := controller.matchService.GetMatchPlayers(&matchId)
+	m, err := con.matchService.GetMatchPlayers(&matchId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get match players")
 	}
@@ -119,7 +112,7 @@ func (controller MatchController) RetrieveMatchPlayers(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches/{matchId}/players/{playerId} [delete]
-func (controller MatchController) RemovePlayerFromMatch(c *fiber.Ctx) error {
+func (con MatchController) RemovePlayerFromMatch(c *fiber.Ctx) error {
 	matchId, err := strconv.Atoi(c.Params("matchId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "MatchId supplied is invalid")
@@ -130,7 +123,7 @@ func (controller MatchController) RemovePlayerFromMatch(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "PlayerId supplied is invalid")
 	}
 
-	err = controller.matchService.RemovePlayer(&matchId, &playerId)
+	err = con.matchService.RemovePlayer(&matchId, &playerId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to remove player from match")
 	}

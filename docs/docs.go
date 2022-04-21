@@ -72,7 +72,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/payloads.BookingRequest"
                         }
                     }
                 ],
@@ -160,7 +160,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/payloads.BookingRequest"
                         }
                     }
                 ],
@@ -320,7 +320,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Login"
+                            "$ref": "#/definitions/payloads.Login"
                         }
                     }
                 ],
@@ -328,7 +328,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -601,7 +601,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PlayerRequest"
+                            "$ref": "#/definitions/payloads.PlayerRequest"
                         }
                     }
                 ],
@@ -693,7 +693,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.JoinMatchResponse"
+                            "$ref": "#/definitions/payloads.JoinMatchResponse"
                         }
                     },
                     "400": {
@@ -826,7 +826,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.MatchPaymentRequest"
+                            "$ref": "#/definitions/payloads.PlayerPaymentRequest"
                         }
                     }
                 ],
@@ -966,10 +966,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "202": {
-                        "description": "Accepted",
-                        "schema": {
-                            "$ref": "#/definitions/models.JoinMatchResponse"
-                        }
+                        "description": ""
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1041,7 +1038,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Refresh"
+                            "$ref": "#/definitions/payloads.Refresh"
                         }
                     }
                 ],
@@ -1049,7 +1046,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -1077,7 +1074,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Register"
+                            "$ref": "#/definitions/payloads.Register"
                         }
                     }
                 ],
@@ -1085,7 +1082,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.RegisterResponse"
+                            "$ref": "#/definitions/payloads.RegisterResponse"
                         }
                     },
                     "400": {
@@ -1144,7 +1141,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SquadRequest"
+                            "$ref": "#/definitions/payloads.SquadRequest"
                         }
                     }
                 ],
@@ -1223,7 +1220,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SquadRequest"
+                            "$ref": "#/definitions/payloads.SquadRequest"
                         }
                     },
                     {
@@ -1456,7 +1453,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Venue"
+                                "$ref": "#/definitions/views.Venue"
                             }
                         }
                     },
@@ -1488,7 +1485,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueRequest"
+                            "$ref": "#/definitions/payloads.VenueRequest"
                         }
                     },
                     {
@@ -1534,7 +1531,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueRequest"
+                            "$ref": "#/definitions/payloads.VenueRequest"
                         }
                     }
                 ],
@@ -1563,11 +1560,20 @@ const docTemplate = `{
                 "tags": [
                     "venue"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Venue"
+                            "$ref": "#/definitions/views.Venue"
                         }
                     },
                     "400": {
@@ -1642,7 +1648,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VenueAdminResponse"
+                                "$ref": "#/definitions/payloads.VenueAdminResponse"
                             }
                         }
                     },
@@ -1674,7 +1680,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueAdminRequest"
+                            "$ref": "#/definitions/payloads.VenueAdminRequest"
                         }
                     },
                     {
@@ -1691,7 +1697,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VenueAdminResponse"
+                                "$ref": "#/definitions/payloads.VenueAdminResponse"
                             }
                         }
                     },
@@ -1794,7 +1800,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PitchRequest"
+                            "$ref": "#/definitions/payloads.PitchRequest"
                         }
                     },
                     {
@@ -1877,7 +1883,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PitchRequest"
+                            "$ref": "#/definitions/payloads.PitchRequest"
                         }
                     },
                     {
@@ -2066,73 +2072,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.BookingRequest": {
-            "type": "object",
-            "required": [
-                "day",
-                "endTime",
-                "matchAccessStatusId",
-                "noOfWeeks",
-                "pitchId",
-                "startTime",
-                "venueId"
-            ],
-            "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 3
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "matchAccessStatusId": {
-                    "type": "integer"
-                },
-                "noOfWeeks": {
-                    "type": "integer"
-                },
-                "pitchId": {
-                    "type": "integer"
-                },
-                "squadId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.JoinMatchResponse": {
-            "type": "object",
-            "properties": {
-                "matchId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Login": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 25,
-                    "minLength": 5
-                }
-            }
-        },
         "models.Match": {
             "type": "object",
             "required": [
@@ -2172,17 +2111,6 @@ const docTemplate = `{
                 },
                 "matchStatusId": {
                     "type": "integer"
-                }
-            }
-        },
-        "models.MatchPaymentRequest": {
-            "type": "object",
-            "required": [
-                "amountToPay"
-            ],
-            "properties": {
-                "amountToPay": {
-                    "type": "number"
                 }
             }
         },
@@ -2240,27 +2168,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.PitchRequest": {
-            "type": "object",
-            "required": [
-                "cost",
-                "maxPlayers",
-                "name"
-            ],
-            "properties": {
-                "cost": {
-                    "type": "number"
-                },
-                "maxPlayers": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                }
-            }
-        },
         "models.Player": {
             "type": "object",
             "required": [
@@ -2298,12 +2205,169 @@ const docTemplate = `{
                 }
             }
         },
-        "models.PlayerRequest": {
+        "models.Squad": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "squadId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SquadPlayerDetails": {
+            "type": "object",
+            "properties": {
+                "forename": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "playerId": {
+                    "type": "integer"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Venue": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.BookingRequest": {
+            "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "matchAccessStatusId",
+                "noOfWeeks",
+                "pitchId",
+                "startTime",
+                "venueId"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payloads.JoinMatchResponse": {
+            "type": "object",
+            "properties": {
+                "matchId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payloads.Login": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
+                }
+            }
+        },
+        "payloads.PitchRequest": {
+            "type": "object",
+            "required": [
+                "cost",
+                "maxPlayers",
+                "name"
+            ],
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "maxPlayers": {
+                    "type": "integer",
+                    "maximum": 22
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "payloads.PlayerPaymentRequest": {
+            "type": "object",
+            "required": [
+                "amountToPay"
+            ],
+            "properties": {
+                "amountToPay": {
+                    "type": "number"
+                }
+            }
+        },
+        "payloads.PlayerRequest": {
             "type": "object",
             "required": [
                 "city",
                 "nickname",
-                "phone_no",
+                "phoneNo",
                 "postcode"
             ],
             "properties": {
@@ -2317,7 +2381,7 @@ const docTemplate = `{
                     "maxLength": 16,
                     "minLength": 2
                 },
-                "phone_no": {
+                "phoneNo": {
                     "type": "string",
                     "maxLength": 15,
                     "minLength": 11
@@ -2329,7 +2393,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Refresh": {
+        "payloads.Refresh": {
             "type": "object",
             "required": [
                 "refresh_token"
@@ -2340,7 +2404,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Register": {
+        "payloads.Register": {
             "type": "object",
             "required": [
                 "email",
@@ -2371,7 +2435,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.RegisterResponse": {
+        "payloads.RegisterResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -2379,46 +2443,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Squad": {
-            "type": "object",
-            "required": [
-                "city",
-                "name"
-            ],
-            "properties": {
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 2
-                },
-                "squadId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.SquadPlayerDetails": {
-            "type": "object",
-            "properties": {
-                "forename": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "playerId": {
-                    "type": "integer"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.SquadRequest": {
+        "payloads.SquadRequest": {
             "type": "object",
             "required": [
                 "city",
@@ -2437,7 +2462,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.TokenPairResponse": {
+        "payloads.TokenPairResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -2448,53 +2473,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Venue": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "email",
-                "phoneNo",
-                "postcode",
-                "venueName"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                },
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 10
-                },
-                "phoneNo": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
-                },
-                "postcode": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                },
-                "venueId": {
-                    "type": "integer"
-                },
-                "venueName": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                }
-            }
-        },
-        "models.VenueAdminRequest": {
+        "payloads.VenueAdminRequest": {
             "type": "object",
             "properties": {
                 "userId": {
@@ -2505,7 +2484,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VenueAdminResponse": {
+        "payloads.VenueAdminResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -2522,15 +2501,15 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VenueRequest": {
+        "payloads.VenueRequest": {
             "type": "object",
             "required": [
                 "address",
                 "city",
                 "email",
+                "name",
                 "phoneNo",
-                "postcode",
-                "venueName"
+                "postcode"
             ],
             "properties": {
                 "address": {
@@ -2548,6 +2527,11 @@ const docTemplate = `{
                     "maxLength": 100,
                     "minLength": 10
                 },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
                 "phoneNo": {
                     "type": "string",
                     "maxLength": 15,
@@ -2557,11 +2541,52 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
+                }
+            }
+        },
+        "views.Venue": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
                 },
-                "venueName": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "pitches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.VenuePitchSummary"
+                    }
+                },
+                "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.VenuePitchSummary": {
+            "type": "object",
+            "properties": {
+                "href": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         }

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
@@ -24,8 +24,8 @@ func NewPlayerController(playerService *services.PlayerService) *PlayerControlle
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players [get]
-func (controller PlayerController) RetrievePlayers(c *fiber.Ctx) error {
-	p, err := controller.playerService.GetPlayers()
+func (con PlayerController) RetrievePlayers(c *fiber.Ctx) error {
+	p, err := con.playerService.GetPlayers()
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get Players")
 	}
@@ -36,17 +36,17 @@ func (controller PlayerController) RetrievePlayers(c *fiber.Ctx) error {
 // @Description  Edit player information
 // @Tags         player
 // @Produce      json
-// @Param 		 message body models.PlayerRequest true "Request"
+// @Param 		 message body payloads.PlayerRequest true "Request"
 // @Success      200 {object} models.Player
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players [put]
-func (controller PlayerController) UpdatePlayer(c *fiber.Ctx) error {
+func (con PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
-	p := new(models.PlayerRequest)
+	p := new(payloads.PlayerRequest)
 	if err := c.BodyParser(&p); err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func (controller PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	res, err := controller.playerService.EditPlayer(&userId, p)
+	res, err := con.playerService.EditPlayer(&userId, p)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to edit player")
 	}
@@ -71,13 +71,13 @@ func (controller PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 // @Failure      400 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/{playerId} [get]
-func (controller PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
+func (con PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
 	playerId, err := strconv.Atoi(c.Params("playerId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Player Id supplied is invalid")
 	}
 
-	p, err := controller.playerService.GetPlayerById(&playerId)
+	p, err := con.playerService.GetPlayerById(&playerId)
 
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Player does not exist")
@@ -94,11 +94,11 @@ func (controller PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/squads [get]
-func (controller PlayerController) GetSquadsByUser(c *fiber.Ctx) error {
+func (con PlayerController) GetSquadsByUser(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
-	p, err := controller.playerService.GetAllSquadsByPlayer(&userId)
+	p, err := con.playerService.GetAllSquadsByPlayer(&userId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get squads by player")
 	}
@@ -116,7 +116,7 @@ func (controller PlayerController) GetSquadsByUser(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/squads/{squadId} [get]
-func (controller PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
+func (con PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -125,7 +125,7 @@ func (controller PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Squad Id supplied is invalid")
 	}
 
-	p, err := controller.playerService.GetSquadByPlayer(&userId, &squadId)
+	p, err := con.playerService.GetSquadByPlayer(&userId, &squadId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get squad")
 	}
@@ -142,11 +142,11 @@ func (controller PlayerController) GetSquadByPlayer(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/matches [get]
-func (controller PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
+func (con PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
-	m, err := controller.playerService.GetMatchesByPlayer(&userId)
+	m, err := con.playerService.GetMatchesByPlayer(&userId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get player matches")
 	}
@@ -158,12 +158,12 @@ func (controller PlayerController) GetPlayerMatches(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param        squadId   path  int  true  "Squad ID"
-// @Success      202  {object} models.JoinMatchResponse
+// @Success      202
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/squads/{squadId} [post]
-func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
+func (con PlayerController) JoinSquad(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -172,7 +172,7 @@ func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Match Id supplied is invalid")
 	}
 
-	err = controller.playerService.JoinSquad(&userId, &squadId)
+	err = con.playerService.JoinSquad(&userId, &squadId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed request to join match")
 	}
@@ -185,12 +185,12 @@ func (controller PlayerController) JoinSquad(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param        matchId   path  int  true  "Match ID"
-// @Success      200  {object} models.JoinMatchResponse
+// @Success      200  {object} payloads.JoinMatchResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/matches/{matchId} [post]
-func (controller PlayerController) JoinMatch(c *fiber.Ctx) error {
+func (con PlayerController) JoinMatch(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -199,12 +199,12 @@ func (controller PlayerController) JoinMatch(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Match Id supplied is invalid")
 	}
 
-	res, err := controller.playerService.JoinMatch(&userId, &matchId)
+	res, err := con.playerService.JoinMatch(&userId, &matchId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed request to join match")
 	}
 
-	response := models.JoinMatchResponse{MatchId: res}
+	response := payloads.JoinMatchResponse{MatchId: res}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
@@ -218,7 +218,7 @@ func (controller PlayerController) JoinMatch(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/matches/{matchId} [delete]
-func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
+func (con PlayerController) LeaveMatch(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -227,7 +227,7 @@ func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Match Id supplied is invalid")
 	}
 
-	err = controller.playerService.LeaveMatch(&userId, &matchId)
+	err = con.playerService.LeaveMatch(&userId, &matchId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed request to leave match")
 	}
@@ -240,13 +240,13 @@ func (controller PlayerController) LeaveMatch(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param        matchId   path  int  true  "Match ID"
-// @Param 		 message body models.MatchPaymentRequest true "Request"
+// @Param 		 message body payloads.PlayerPaymentRequest true "Request"
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/matches/{matchId}/pay [post]
-func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
+func (con PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -255,7 +255,7 @@ func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Match Id supplied is invalid")
 	}
 
-	pay := new(models.MatchPaymentRequest)
+	pay := new(payloads.PlayerPaymentRequest)
 	if err := c.BodyParser(&pay); err != nil {
 		return err
 	}
@@ -263,7 +263,7 @@ func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	err = controller.playerService.Pay(&userId, &matchId, &pay.AmountToPay)
+	err = con.playerService.Pay(&userId, &matchId, &pay.AmountToPay)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to make payment for match")
 	}
@@ -281,7 +281,7 @@ func (controller PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/matches/{matchId}/pay [put]
-func (controller PlayerController) UpdatePlayerPaymentType(c *fiber.Ctx) error {
+func (con PlayerController) UpdatePlayerPaymentType(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
@@ -295,7 +295,7 @@ func (controller PlayerController) UpdatePlayerPaymentType(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Payment Type Id supplied is invalid")
 	}
 
-	err = controller.playerService.UpdatePaymentMethod(&matchId, &userId, &paymentTypeId)
+	err = con.playerService.UpdatePaymentMethod(&matchId, &userId, &paymentTypeId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to update payment type")
 	}

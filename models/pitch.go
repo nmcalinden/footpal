@@ -3,17 +3,11 @@ package models
 import "time"
 
 type Pitch struct {
-	PitchId    int     `json:"pitchId,omitempty" db:"id"`
+	PitchId    *int    `json:"pitchId,omitempty" db:"id"`
 	VenueId    int     `json:"venueId" validate:"required" db:"venue_id"`
 	Name       string  `json:"name" validate:"required,min=3,max=100" db:"pitch_name"`
 	MaxPlayers int     `json:"maxPlayers" validate:"required" db:"max_players"`
 	Cost       float32 `json:"cost" validate:"required" db:"cost"`
-}
-
-type PitchRequest struct {
-	Name       string  `json:"name" validate:"required,min=3,max=100"`
-	MaxPlayers int     `json:"maxPlayers" validate:"required"`
-	Cost       float32 `json:"cost" validate:"required"`
 }
 
 type PitchSlot struct {

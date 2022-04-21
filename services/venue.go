@@ -2,8 +2,12 @@ package services
 
 import (
 	"github.com/jmoiron/sqlx"
+	"github.com/nmcalinden/footpal/mappers"
 	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/views"
+	"log"
 )
 
 type VenueService struct {
@@ -14,37 +18,54 @@ func NewVenueService(database *sqlx.DB) *VenueService {
 	return &VenueService{venueRepo: repository.NewVenueRepository(database)}
 }
 
-func (service *VenueService) GetVenues() (*[]models.Venue, error) {
-	return service.venueRepo.FindAll()
+func (s *VenueService) GetVenues() (*[]views.Venue, error) {
+	venues, err := s.venueRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var res []views.Venue
+	for _, v := range *venues {
+		m, err := s.getVenueResponse(v)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, *m)
+	}
+
+	return &res, nil
 }
 
-func (service *VenueService) GetVenueById(venueId *int) (*models.Venue, error) {
-	return service.venueRepo.FindById(venueId)
+func (s *VenueService) GetVenueById(venueId *int) (*views.Venue, error) {
+	v, err := s.venueRepo.FindById(venueId)
+	if err != nil {
+		return nil, err
+	}
+	return s.getVenueResponse(*v)
 }
 
-func (service *VenueService) GetVenueAdmins(venueId *int) (*[]models.VenueAdmin, error) {
-	return service.venueRepo.FindAdminsByVenue(venueId)
+func (s *VenueService) GetVenueAdmins(venueId *int) (*[]models.VenueAdmin, error) {
+	return s.venueRepo.FindAdminsByVenue(venueId)
 }
 
-func (service *VenueService) GetVenuePitches(venueId *int) (*[]models.Pitch, error) {
-	return service.venueRepo.FindPitchesByVenue(venueId)
+func (s *VenueService) GetVenuePitches(venueId *int) (*[]models.Pitch, error) {
+	return s.venueRepo.FindPitchesByVenue(venueId)
 }
 
-func (service *VenueService) GetVenuePitch(venueId *int, pitchId *int) (*models.Pitch, error) {
-	return service.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
+func (s *VenueService) GetVenuePitch(venueId *int, pitchId *int) (*models.Pitch, error) {
+	return s.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
 }
 
-func (service *VenueService) GetVenueTimeslots(venueId *int) (*[]models.VenueTimeSlot, error) {
-	return service.venueRepo.FindTimeslotsByVenueId(venueId)
+func (s *VenueService) GetVenueTimeslots(venueId *int) (*[]models.VenueTimeSlot, error) {
+	return s.venueRepo.FindTimeslotsByVenueId(venueId)
 }
 
-func (service *VenueService) GetVenuePitchTimeslots(venueId *int, pitchId *int) (*[]models.PitchTimeSlot, error) {
-	return service.venueRepo.FindPitchTimeslots(pitchId)
+func (s *VenueService) GetVenuePitchTimeslots(venueId *int, pitchId *int) (*[]models.PitchTimeSlot, error) {
+	return s.venueRepo.FindPitchTimeslots(pitchId)
 }
 
-func (service *VenueService) CreateNewVenue(venueRequest *models.VenueRequest) (*int, error) {
+func (s *VenueService) CreateNewVenue(venueRequest *payloads.VenueRequest) (*int, error) {
 	newVenue := models.Venue{
-		VenueId:  0,
 		Name:     venueRequest.Name,
 		Address:  venueRequest.Address,
 		Postcode: venueRequest.Postcode,
@@ -52,11 +73,11 @@ func (service *VenueService) CreateNewVenue(venueRequest *models.VenueRequest) (
 		PhoneNo:  venueRequest.PhoneNo,
 		Email:    venueRequest.Email,
 	}
-	return service.venueRepo.Save(&newVenue)
+	return s.venueRepo.Save(&newVenue)
 }
 
-func (service *VenueService) EditVenue(venueId *int, venueRequest *models.VenueRequest) (*models.Venue, error) {
-	v, err := service.venueRepo.FindById(venueId)
+func (s *VenueService) EditVenue(venueId *int, venueRequest *payloads.VenueRequest) (*models.Venue, error) {
+	v, err := s.venueRepo.FindById(venueId)
 	if err != nil {
 		return nil, err
 	}
@@ -67,49 +88,47 @@ func (service *VenueService) EditVenue(venueId *int, venueRequest *models.VenueR
 	v.City = venueRequest.City
 	v.PhoneNo = venueRequest.PhoneNo
 	v.Email = venueRequest.Email
-	return service.venueRepo.Update(v)
+	return s.venueRepo.Update(v)
 }
 
-func (service *VenueService) RemoveVenue(venueId *int) error {
-	v, err := service.venueRepo.FindById(venueId)
+func (s *VenueService) RemoveVenue(venueId *int) error {
+	v, err := s.venueRepo.FindById(venueId)
 	if err != nil {
 		return err
 	}
 
-	return service.venueRepo.Delete(&v.VenueId)
+	return s.venueRepo.Delete(v.VenueId)
 }
 
-func (service *VenueService) CreateNewVenueAdmin(venueRequest *models.VenueAdminRequest) (*int, error) {
+func (s *VenueService) CreateNewVenueAdmin(venueRequest *payloads.VenueAdminRequest) (*int, error) {
 	newAdmin := models.VenueAdmin{
-		VenueAdminId: 0,
-		UserId:       venueRequest.UserId,
-		VenueId:      venueRequest.VenueId,
+		UserId:  venueRequest.UserId,
+		VenueId: venueRequest.VenueId,
 	}
-	return service.venueRepo.SaveAdmin(&newAdmin)
+	return s.venueRepo.SaveAdmin(&newAdmin)
 }
 
-func (service *VenueService) RemoveVenueAdmin(venueId *int, adminId *int) error {
-	v, err := service.venueRepo.FindAdminByVenue(venueId, adminId)
+func (s *VenueService) RemoveVenueAdmin(venueId *int, adminId *int) error {
+	v, err := s.venueRepo.FindAdminByVenue(venueId, adminId)
 	if err != nil {
 		return err
 	}
 
-	return service.venueRepo.DeleteAdmin(&v.VenueAdminId)
+	return s.venueRepo.DeleteAdmin(v.VenueAdminId)
 }
 
-func (service *VenueService) CreateNewVenuePitch(venueId *int, pitchRequest *models.PitchRequest) (*int, error) {
+func (s *VenueService) CreateNewVenuePitch(venueId *int, pitchRequest *payloads.PitchRequest) (*int, error) {
 	newPitch := models.Pitch{
-		PitchId:    0,
 		VenueId:    *venueId,
 		Name:       pitchRequest.Name,
 		MaxPlayers: pitchRequest.MaxPlayers,
 		Cost:       pitchRequest.Cost,
 	}
-	return service.venueRepo.SavePitch(&newPitch)
+	return s.venueRepo.SavePitch(&newPitch)
 }
 
-func (service *VenueService) EditVenuePitch(venueId *int, pitchId *int, pitchRequest *models.PitchRequest) (*models.Pitch, error) {
-	p, err := service.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
+func (s *VenueService) EditVenuePitch(venueId *int, pitchId *int, pitchRequest *payloads.PitchRequest) (*models.Pitch, error) {
+	p, err := s.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
 	if err != nil {
 		return nil, err
 	}
@@ -117,14 +136,28 @@ func (service *VenueService) EditVenuePitch(venueId *int, pitchId *int, pitchReq
 	p.Name = pitchRequest.Name
 	p.MaxPlayers = pitchRequest.MaxPlayers
 	p.Cost = pitchRequest.Cost
-	return service.venueRepo.UpdatePitch(p)
+	return s.venueRepo.UpdatePitch(p)
 }
 
-func (service *VenueService) RemoveVenuePitch(venueId *int, pitchId *int) error {
-	p, err := service.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
+func (s *VenueService) RemoveVenuePitch(venueId *int, pitchId *int) error {
+	p, err := s.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
 	if err != nil {
 		return err
 	}
 
-	return service.venueRepo.DeletePitch(&p.PitchId)
+	return s.venueRepo.DeletePitch(p.PitchId)
+}
+
+func (s *VenueService) getVenueResponse(v models.Venue) (*views.Venue, error) {
+	p, err := s.venueRepo.FindPitchesByVenue(v.VenueId)
+	if err != nil {
+		return nil, err
+	}
+	m, errs := mappers.MapToVenueView(v, *p)
+
+	if errs != nil {
+		log.Println(errs.Error())
+		return nil, errs
+	}
+	return m, nil
 }

@@ -14,27 +14,27 @@ func NewMatchPlayerRepository(database *sqlx.DB) *MatchPlayerRepository {
 	return &MatchPlayerRepository{database: database}
 }
 
-func (repository MatchPlayerRepository) FindByMatchId(matchId *int) (*[]models.MatchPlayer, error) {
+func (r MatchPlayerRepository) FindByMatchId(matchId *int) (*[]models.MatchPlayer, error) {
 	var matchPlayers []models.MatchPlayer
-	err := repository.database.Select(&matchPlayers, "SELECT * FROM footpaldb.public.match_player WHERE match_id = $1", matchId)
+	err := r.database.Select(&matchPlayers, "SELECT * FROM footpaldb.public.match_player WHERE match_id = $1", matchId)
 	if err != nil {
 		return nil, err
 	}
 	return &matchPlayers, nil
 }
 
-func (repository MatchPlayerRepository) FindMatchesByPlayer(playerId *int) (*[]models.Match, error) {
+func (r MatchPlayerRepository) FindMatchesByPlayer(playerId *int) (*[]models.Match, error) {
 	var matches []models.Match
-	err := repository.database.Select(&matches, getFindMatchesByPlayerQuery(), playerId)
+	err := r.database.Select(&matches, getFindMatchesByPlayerQuery(), playerId)
 	if err != nil {
 		return nil, err
 	}
 	return &matches, nil
 }
 
-func (repository MatchPlayerRepository) FindByMatchIdAndPlayerId(matchId *int, playerId *int) (*models.MatchPlayer, error) {
+func (r MatchPlayerRepository) FindByMatchIdAndPlayerId(matchId *int, playerId *int) (*models.MatchPlayer, error) {
 	var matchPlayer models.MatchPlayer
-	err := repository.database.Get(&matchPlayer, "SELECT * FROM footpaldb.public.match_player WHERE match_id = $1 AND player_id = $2", matchId, playerId)
+	err := r.database.Get(&matchPlayer, "SELECT * FROM footpaldb.public.match_player WHERE match_id = $1 AND player_id = $2", matchId, playerId)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +42,8 @@ func (repository MatchPlayerRepository) FindByMatchIdAndPlayerId(matchId *int, p
 	return &matchPlayer, nil
 }
 
-func (repository MatchPlayerRepository) Update(matchPlayer *models.MatchPlayer) (*models.MatchPlayer, error) {
-	_, err := repository.database.NamedExec(`UPDATE footpaldb.public.match_player SET amount_to_pay=:amount_to_pay, 
+func (r MatchPlayerRepository) Update(matchPlayer *models.MatchPlayer) (*models.MatchPlayer, error) {
+	_, err := r.database.NamedExec(`UPDATE footpaldb.public.match_player SET amount_to_pay=:amount_to_pay, 
                                    payment_type_id=:payment_type_id WHERE id=:id`, matchPlayer)
 
 	if err != nil {
@@ -52,8 +52,8 @@ func (repository MatchPlayerRepository) Update(matchPlayer *models.MatchPlayer) 
 	return matchPlayer, nil
 }
 
-func (repository MatchPlayerRepository) Delete(matchId *int, playerId *int) error {
-	res, err := repository.database.Exec("DELETE FROM footpaldb.public.match_player WHERE match_id=$1 AND player_id=$2", matchId, playerId)
+func (r MatchPlayerRepository) Delete(matchId *int, playerId *int) error {
+	res, err := r.database.Exec("DELETE FROM footpaldb.public.match_player WHERE match_id=$1 AND player_id=$2", matchId, playerId)
 
 	if err != nil {
 		return err
@@ -67,8 +67,8 @@ func (repository MatchPlayerRepository) Delete(matchId *int, playerId *int) erro
 	return err
 }
 
-func (repository MatchPlayerRepository) Save(player models.MatchPlayer) (*int, error) {
-	_, err := repository.database.NamedExec(`INSERT INTO footpaldb.public.match_player(match_id, player_id, amount_to_pay, payment_type_id)
+func (r MatchPlayerRepository) Save(player models.MatchPlayer) (*int, error) {
+	_, err := r.database.NamedExec(`INSERT INTO footpaldb.public.match_player(match_id, player_id, amount_to_pay, payment_type_id)
  						VALUES(:match_id, :player_id, :amount_to_pay, :payment_type_id)`, player)
 	if err != nil {
 		return nil, err

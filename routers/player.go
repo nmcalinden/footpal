@@ -14,14 +14,14 @@ func ConfigurePlayerHandlers(app *fiber.App) {
 	pService := services.NewPlayerService(config.GetConnection())
 	playerController := controllers.NewPlayerController(pService)
 
-	roles := []middleware.UserRole{{R: "player"}, {R: "venueAdmin"}}
+	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Get("/", playerController.RetrievePlayers)
 	group.Get("/:playerId", playerController.RetrievePlayerById)
 	group.Get("/:playerId/matches", playerController.GetPlayerMatches)
 
-	roles = []middleware.UserRole{{R: "player"}}
+	roles = []middleware.UserRole{{Role: "player"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Put("/:playerId", playerController.UpdatePlayer)

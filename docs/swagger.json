@@ -65,7 +65,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/payloads.BookingRequest"
                         }
                     }
                 ],
@@ -153,7 +153,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookingRequest"
+                            "$ref": "#/definitions/payloads.BookingRequest"
                         }
                     }
                 ],
@@ -313,7 +313,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Login"
+                            "$ref": "#/definitions/payloads.Login"
                         }
                     }
                 ],
@@ -321,7 +321,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -594,7 +594,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PlayerRequest"
+                            "$ref": "#/definitions/payloads.PlayerRequest"
                         }
                     }
                 ],
@@ -686,7 +686,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.JoinMatchResponse"
+                            "$ref": "#/definitions/payloads.JoinMatchResponse"
                         }
                     },
                     "400": {
@@ -819,7 +819,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.MatchPaymentRequest"
+                            "$ref": "#/definitions/payloads.PlayerPaymentRequest"
                         }
                     }
                 ],
@@ -959,10 +959,7 @@
                 ],
                 "responses": {
                     "202": {
-                        "description": "Accepted",
-                        "schema": {
-                            "$ref": "#/definitions/models.JoinMatchResponse"
-                        }
+                        "description": ""
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1034,7 +1031,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Refresh"
+                            "$ref": "#/definitions/payloads.Refresh"
                         }
                     }
                 ],
@@ -1042,7 +1039,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -1070,7 +1067,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Register"
+                            "$ref": "#/definitions/payloads.Register"
                         }
                     }
                 ],
@@ -1078,7 +1075,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.RegisterResponse"
+                            "$ref": "#/definitions/payloads.RegisterResponse"
                         }
                     },
                     "400": {
@@ -1137,7 +1134,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SquadRequest"
+                            "$ref": "#/definitions/payloads.SquadRequest"
                         }
                     }
                 ],
@@ -1216,7 +1213,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SquadRequest"
+                            "$ref": "#/definitions/payloads.SquadRequest"
                         }
                     },
                     {
@@ -1449,7 +1446,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Venue"
+                                "$ref": "#/definitions/views.Venue"
                             }
                         }
                     },
@@ -1481,7 +1478,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueRequest"
+                            "$ref": "#/definitions/payloads.VenueRequest"
                         }
                     },
                     {
@@ -1527,7 +1524,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueRequest"
+                            "$ref": "#/definitions/payloads.VenueRequest"
                         }
                     }
                 ],
@@ -1556,11 +1553,20 @@
                 "tags": [
                     "venue"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Venue"
+                            "$ref": "#/definitions/views.Venue"
                         }
                     },
                     "400": {
@@ -1635,7 +1641,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VenueAdminResponse"
+                                "$ref": "#/definitions/payloads.VenueAdminResponse"
                             }
                         }
                     },
@@ -1667,7 +1673,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VenueAdminRequest"
+                            "$ref": "#/definitions/payloads.VenueAdminRequest"
                         }
                     },
                     {
@@ -1684,7 +1690,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VenueAdminResponse"
+                                "$ref": "#/definitions/payloads.VenueAdminResponse"
                             }
                         }
                     },
@@ -1787,7 +1793,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PitchRequest"
+                            "$ref": "#/definitions/payloads.PitchRequest"
                         }
                     },
                     {
@@ -1870,7 +1876,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.PitchRequest"
+                            "$ref": "#/definitions/payloads.PitchRequest"
                         }
                     },
                     {
@@ -2059,73 +2065,6 @@
                 }
             }
         },
-        "models.BookingRequest": {
-            "type": "object",
-            "required": [
-                "day",
-                "endTime",
-                "matchAccessStatusId",
-                "noOfWeeks",
-                "pitchId",
-                "startTime",
-                "venueId"
-            ],
-            "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 3
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "matchAccessStatusId": {
-                    "type": "integer"
-                },
-                "noOfWeeks": {
-                    "type": "integer"
-                },
-                "pitchId": {
-                    "type": "integer"
-                },
-                "squadId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "venueId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.JoinMatchResponse": {
-            "type": "object",
-            "properties": {
-                "matchId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Login": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 5
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 25,
-                    "minLength": 5
-                }
-            }
-        },
         "models.Match": {
             "type": "object",
             "required": [
@@ -2165,17 +2104,6 @@
                 },
                 "matchStatusId": {
                     "type": "integer"
-                }
-            }
-        },
-        "models.MatchPaymentRequest": {
-            "type": "object",
-            "required": [
-                "amountToPay"
-            ],
-            "properties": {
-                "amountToPay": {
-                    "type": "number"
                 }
             }
         },
@@ -2233,27 +2161,6 @@
                 }
             }
         },
-        "models.PitchRequest": {
-            "type": "object",
-            "required": [
-                "cost",
-                "maxPlayers",
-                "name"
-            ],
-            "properties": {
-                "cost": {
-                    "type": "number"
-                },
-                "maxPlayers": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                }
-            }
-        },
         "models.Player": {
             "type": "object",
             "required": [
@@ -2291,12 +2198,169 @@
                 }
             }
         },
-        "models.PlayerRequest": {
+        "models.Squad": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "squadId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SquadPlayerDetails": {
+            "type": "object",
+            "properties": {
+                "forename": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "playerId": {
+                    "type": "integer"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Venue": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.BookingRequest": {
+            "type": "object",
+            "required": [
+                "day",
+                "endTime",
+                "matchAccessStatusId",
+                "noOfWeeks",
+                "pitchId",
+                "startTime",
+                "venueId"
+            ],
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 3
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "matchAccessStatusId": {
+                    "type": "integer"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payloads.JoinMatchResponse": {
+            "type": "object",
+            "properties": {
+                "matchId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payloads.Login": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 5
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
+                }
+            }
+        },
+        "payloads.PitchRequest": {
+            "type": "object",
+            "required": [
+                "cost",
+                "maxPlayers",
+                "name"
+            ],
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "maxPlayers": {
+                    "type": "integer",
+                    "maximum": 22
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "payloads.PlayerPaymentRequest": {
+            "type": "object",
+            "required": [
+                "amountToPay"
+            ],
+            "properties": {
+                "amountToPay": {
+                    "type": "number"
+                }
+            }
+        },
+        "payloads.PlayerRequest": {
             "type": "object",
             "required": [
                 "city",
                 "nickname",
-                "phone_no",
+                "phoneNo",
                 "postcode"
             ],
             "properties": {
@@ -2310,7 +2374,7 @@
                     "maxLength": 16,
                     "minLength": 2
                 },
-                "phone_no": {
+                "phoneNo": {
                     "type": "string",
                     "maxLength": 15,
                     "minLength": 11
@@ -2322,7 +2386,7 @@
                 }
             }
         },
-        "models.Refresh": {
+        "payloads.Refresh": {
             "type": "object",
             "required": [
                 "refresh_token"
@@ -2333,7 +2397,7 @@
                 }
             }
         },
-        "models.Register": {
+        "payloads.Register": {
             "type": "object",
             "required": [
                 "email",
@@ -2364,7 +2428,7 @@
                 }
             }
         },
-        "models.RegisterResponse": {
+        "payloads.RegisterResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -2372,46 +2436,7 @@
                 }
             }
         },
-        "models.Squad": {
-            "type": "object",
-            "required": [
-                "city",
-                "name"
-            ],
-            "properties": {
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 2
-                },
-                "squadId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.SquadPlayerDetails": {
-            "type": "object",
-            "properties": {
-                "forename": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "playerId": {
-                    "type": "integer"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.SquadRequest": {
+        "payloads.SquadRequest": {
             "type": "object",
             "required": [
                 "city",
@@ -2430,7 +2455,7 @@
                 }
             }
         },
-        "models.TokenPairResponse": {
+        "payloads.TokenPairResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -2441,53 +2466,7 @@
                 }
             }
         },
-        "models.Venue": {
-            "type": "object",
-            "required": [
-                "address",
-                "city",
-                "email",
-                "phoneNo",
-                "postcode",
-                "venueName"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                },
-                "city": {
-                    "type": "string",
-                    "maxLength": 50,
-                    "minLength": 3
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 10
-                },
-                "phoneNo": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
-                },
-                "postcode": {
-                    "type": "string",
-                    "maxLength": 8,
-                    "minLength": 5
-                },
-                "venueId": {
-                    "type": "integer"
-                },
-                "venueName": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
-                }
-            }
-        },
-        "models.VenueAdminRequest": {
+        "payloads.VenueAdminRequest": {
             "type": "object",
             "properties": {
                 "userId": {
@@ -2498,7 +2477,7 @@
                 }
             }
         },
-        "models.VenueAdminResponse": {
+        "payloads.VenueAdminResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -2515,15 +2494,15 @@
                 }
             }
         },
-        "models.VenueRequest": {
+        "payloads.VenueRequest": {
             "type": "object",
             "required": [
                 "address",
                 "city",
                 "email",
+                "name",
                 "phoneNo",
-                "postcode",
-                "venueName"
+                "postcode"
             ],
             "properties": {
                 "address": {
@@ -2541,6 +2520,11 @@
                     "maxLength": 100,
                     "minLength": 10
                 },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
                 "phoneNo": {
                     "type": "string",
                     "maxLength": 15,
@@ -2550,11 +2534,52 @@
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
+                }
+            }
+        },
+        "views.Venue": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
                 },
-                "venueName": {
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 3
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "pitches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.VenuePitchSummary"
+                    }
+                },
+                "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.VenuePitchSummary": {
+            "type": "object",
+            "properties": {
+                "href": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         }

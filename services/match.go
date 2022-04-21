@@ -18,29 +18,29 @@ func NewMatchService(database *sqlx.DB) *MatchService {
 	}
 }
 
-func (service *MatchService) GetMatches() (*[]models.Match, error) {
-	return service.matchRepo.FindAll()
+func (s *MatchService) GetMatches() (*[]models.Match, error) {
+	return s.matchRepo.FindAll()
 }
 
-func (service *MatchService) GetMatchById(matchId *int) (*models.Match, error) {
-	return service.matchRepo.FindById(matchId)
+func (s *MatchService) GetMatchById(matchId *int) (*models.Match, error) {
+	return s.matchRepo.FindById(matchId)
 }
 
-func (service *MatchService) GetMatchPlayers(matchId *int) (*[]models.MatchPlayer, error) {
-	return service.matchPlayerRepo.FindByMatchId(matchId)
+func (s *MatchService) GetMatchPlayers(matchId *int) (*[]models.MatchPlayer, error) {
+	return s.matchPlayerRepo.FindByMatchId(matchId)
 }
 
-func (service *MatchService) CancelMatch(matchId *int) (*int, error) {
-	m, err := service.matchRepo.FindById(matchId)
+func (s *MatchService) CancelMatch(matchId *int) (*int, error) {
+	m, err := s.matchRepo.FindById(matchId)
 	if err != nil {
 		return nil, err
 	}
 
 	m.MatchStatusId = 2
-	response, dErr := service.matchRepo.Update(m)
-	return &response.MatchId, dErr
+	response, dErr := s.matchRepo.Update(m)
+	return response.MatchId, dErr
 }
 
-func (service *MatchService) RemovePlayer(matchId *int, playerId *int) error {
-	return service.matchPlayerRepo.Delete(matchId, playerId)
+func (s *MatchService) RemovePlayer(matchId *int, playerId *int) error {
+	return s.matchPlayerRepo.Delete(matchId, playerId)
 }

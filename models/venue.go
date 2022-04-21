@@ -1,34 +1,25 @@
 package models
 
-type VenueRequest struct {
-	Name     string `json:"venueName" validate:"required,min=3,max=100"`
-	Address  string `json:"address" validate:"required,min=3,max=100"`
-	Postcode string `json:"postcode" validate:"required,min=5,max=8"`
-	City     string `json:"city" validate:"required,min=3,max=50"`
-	PhoneNo  string `json:"phoneNo" validate:"required,min=11,max=15"`
-	Email    string `json:"email" validate:"required,min=10,max=100"`
-}
-
 type Venue struct {
-	VenueId  int    `json:"venueId,omitempty" db:"id"`
-	Name     string `json:"venueName" validate:"required,min=3,max=100" db:"venue_name"`
-	Address  string `json:"address" validate:"required,min=3,max=100" db:"venue_address"`
-	Postcode string `json:"postcode" validate:"required,min=5,max=8" db:"postcode"`
-	City     string `json:"city" validate:"required,min=3,max=50" db:"city"`
-	PhoneNo  string `json:"phoneNo" validate:"required,min=11,max=15" db:"phone_no"`
-	Email    string `json:"email" validate:"required,min=10,max=100" db:"email"`
+	VenueId  *int   `json:"id,omitempty" db:"id"`
+	Name     string `json:"name" db:"venue_name"`
+	Address  string `json:"address" db:"venue_address"`
+	Postcode string `json:"postcode" db:"postcode"`
+	City     string `json:"city" db:"city"`
+	PhoneNo  string `json:"phoneNo" db:"phone_no"`
+	Email    string `json:"email" db:"email"`
 }
 
 type VenueAdmin struct {
-	VenueAdminId int `json:"venueAdminId,omitempty" db:"id"`
-	UserId       int `json:"userId,omitempty" db:"footpal_user_id"`
-	VenueId      int `json:"venueId,omitempty" db:"venue_id"`
+	VenueAdminId *int `json:"venueAdminId,omitempty" db:"id"`
+	UserId       int  `json:"userId,omitempty" db:"footpal_user_id"`
+	VenueId      int  `json:"venueId,omitempty" db:"venue_id"`
 }
 
 type OpeningHours struct {
-	Day       string `json:"day" validate:"required,min=3,max=100"`
-	StartTime string `json:"startTime" validate:"required,min=3,max=15"`
-	EndTime   string `json:"endTime" validate:"required,min=3,max=15"`
+	Day       string `json:"day"`
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
 }
 
 type VenueTimeSlot struct {
@@ -37,23 +28,11 @@ type VenueTimeSlot struct {
 }
 
 type TimeSlots struct {
-	DayOfWeek string  `json:"day" validate:"required,min=3,max=100"`
+	DayOfWeek string  `json:"day"`
 	Slots     []Times `json:"slots"`
 }
 
 type Times struct {
-	StartTime string `json:"startTime" validate:"required,min=3,max=15"`
-	EndTime   string `json:"endTime" validate:"required,min=3,max=15"`
-}
-
-type VenueAdminRequest struct {
-	VenueId int
-	UserId  int
-}
-
-type VenueAdminResponse struct {
-	VenueAdminId int
-	Forename     string
-	Surname      string
-	Email        string
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
 }

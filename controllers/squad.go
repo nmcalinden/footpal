@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 	"strconv"
@@ -27,8 +27,8 @@ func NewSquadController(squadService *services.SquadService) *SquadController {
 // @Success      200  {array}  models.Squad
 // @Failure      500  {object}  utils.ErrorResponse
 // @Router       /squads [get]
-func (controller SquadController) RetrieveSquads(c *fiber.Ctx) error {
-	s, err := controller.squadService.GetSquads()
+func (con SquadController) RetrieveSquads(c *fiber.Ctx) error {
+	s, err := con.squadService.GetSquads()
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get squads")
 	}
@@ -39,14 +39,14 @@ func (controller SquadController) RetrieveSquads(c *fiber.Ctx) error {
 // @Description  Create new squad for building up a team of players
 // @Tags         squad
 // @Produce      json
-// @Param 		 message body models.SquadRequest true "Request"
+// @Param 		 message body payloads.SquadRequest true "Request"
 // @Success      201 {object} SquadResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /squads [post]
-func (controller SquadController) CreateSquadGroup(c *fiber.Ctx) error {
-	s := new(models.SquadRequest)
+func (con SquadController) CreateSquadGroup(c *fiber.Ctx) error {
+	s := new(payloads.SquadRequest)
 	if err := c.BodyParser(&s); err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func (controller SquadController) CreateSquadGroup(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	res, err := controller.squadService.CreateNewSquad(s)
+	res, err := con.squadService.CreateNewSquad(s)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get squads")
 	}
@@ -72,13 +72,13 @@ func (controller SquadController) CreateSquadGroup(c *fiber.Ctx) error {
 // @Success      200 	{object} models.Squad
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /squads/{squadId} [get]
-func (controller SquadController) RetrieveSquadById(c *fiber.Ctx) error {
+func (con SquadController) RetrieveSquadById(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Squad Id supplied is invalid")
 	}
 
-	s, err := controller.squadService.GetSquadById(&squadId)
+	s, err := con.squadService.GetSquadById(&squadId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Squad does not exist")
 	}
@@ -90,25 +90,25 @@ func (controller SquadController) RetrieveSquadById(c *fiber.Ctx) error {
 // @Description  Update Squad Info
 // @Tags         squad
 // @Produce      json
-// @Param 		 message body models.SquadRequest true "Request"
+// @Param 		 message body payloads.SquadRequest true "Request"
 // @Param        squadId   path  int  true  "Squad ID"
 // @Success      200 	{object} models.Squad
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /squads/{squadId} [put]
-func (controller SquadController) UpdateSquadInfo(c *fiber.Ctx) error {
+func (con SquadController) UpdateSquadInfo(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "SquadId supplied is invalid")
 	}
 
-	s := new(models.SquadRequest)
+	s := new(payloads.SquadRequest)
 	if err := c.BodyParser(&s); err != nil {
 		return err
 	}
 
-	res, err := controller.squadService.EditSquad(&squadId, s)
+	res, err := con.squadService.EditSquad(&squadId, s)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to update squad info")
 	}
@@ -125,13 +125,13 @@ func (controller SquadController) UpdateSquadInfo(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /squads/{squadId} [delete]
-func (controller SquadController) RemoveSquad(c *fiber.Ctx) error {
+func (con SquadController) RemoveSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "SquadId supplied is invalid")
 	}
 
-	err = controller.squadService.DeleteSquad(&squadId)
+	err = con.squadService.DeleteSquad(&squadId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to delete squad")
 	}
@@ -147,13 +147,13 @@ func (controller SquadController) RemoveSquad(c *fiber.Ctx) error {
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Router       /squads/{squadId}/players [get]
-func (controller SquadController) RetrieveSquadPlayers(c *fiber.Ctx) error {
+func (con SquadController) RetrieveSquadPlayers(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "SquadId supplied is invalid")
 	}
 
-	p, err := controller.squadService.GetAllPlayersBySquad(&squadId)
+	p, err := con.squadService.GetAllPlayersBySquad(&squadId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to delete squad")
 	}
@@ -171,7 +171,7 @@ func (controller SquadController) RetrieveSquadPlayers(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /squads/{squadId}/players/{playerId} [put]
-func (controller SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
+func (con SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "SquadId supplied is invalid")
@@ -182,7 +182,7 @@ func (controller SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "PlayerId supplied is invalid")
 	}
 
-	err = controller.squadService.ApprovePlayer(&squadId, &playerId)
+	err = con.squadService.ApprovePlayer(&squadId, &playerId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to approve player to squad")
 	}
@@ -200,7 +200,7 @@ func (controller SquadController) ApprovePlayerToSquad(c *fiber.Ctx) error {
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /squads/{squadId}/players/{playerId} [delete]
-func (controller SquadController) RemovePlayerFromSquad(c *fiber.Ctx) error {
+func (con SquadController) RemovePlayerFromSquad(c *fiber.Ctx) error {
 	squadId, err := strconv.Atoi(c.Params("squadId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "SquadId supplied is invalid")
@@ -211,7 +211,7 @@ func (controller SquadController) RemovePlayerFromSquad(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "PlayerId supplied is invalid")
 	}
 
-	err = controller.squadService.RemovePlayer(&squadId, &playerId)
+	err = con.squadService.RemovePlayer(&squadId, &playerId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to approve player to squad")
 	}

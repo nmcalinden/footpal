@@ -14,7 +14,7 @@ func ConfigureMatchHandlers(app *fiber.App) {
 	mService := services.NewMatchService(config.GetConnection())
 	matchController := controllers.NewMatchController(mService)
 
-	roles := []middleware.UserRole{{R: "player"}, {R: "venueAdmin"}}
+	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Get("/", matchController.RetrieveMatches)

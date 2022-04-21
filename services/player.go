@@ -2,8 +2,10 @@ package services
 
 import (
 	"database/sql"
+	"github.com/hashicorp/go-multierror"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
 	"sync"
 )
@@ -24,40 +26,40 @@ func NewPlayerService(database *sqlx.DB) *PlayerService {
 	}
 }
 
-func (service *PlayerService) GetPlayers() (*[]models.Player, error) {
-	return service.playerRepo.FindAll()
+func (s *PlayerService) GetPlayers() (*[]models.Player, error) {
+	return s.playerRepo.FindAll()
 }
 
-func (service *PlayerService) GetPlayerById(playerId *int) (*models.Player, error) {
-	return service.playerRepo.FindById(playerId)
+func (s *PlayerService) GetPlayerById(playerId *int) (*models.Player, error) {
+	return s.playerRepo.FindById(playerId)
 }
 
-func (service *PlayerService) GetAllSquadsByPlayer(userId *int) (*[]models.Squad, error) {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) GetAllSquadsByPlayer(userId *int) (*[]models.Squad, error) {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
-	return service.squadRepo.FindAllByPlayerId(&p.PlayerId)
+	return s.squadRepo.FindAllByPlayerId(p.PlayerId)
 }
 
-func (service *PlayerService) GetSquadByPlayer(userId *int, squadId *int) (*models.Squad, error) {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) GetSquadByPlayer(userId *int, squadId *int) (*models.Squad, error) {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
-	return service.squadRepo.FindSquadByPlayerId(squadId, &p.PlayerId)
+	return s.squadRepo.FindSquadByPlayerId(squadId, p.PlayerId)
 }
 
-func (service *PlayerService) GetMatchesByPlayer(userId *int) (*[]models.Match, error) {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) GetMatchesByPlayer(userId *int) (*[]models.Match, error) {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
-	return service.matchPlayerRepo.FindMatchesByPlayer(&p.PlayerId)
+	return s.matchPlayerRepo.FindMatchesByPlayer(p.PlayerId)
 }
 
-func (service *PlayerService) EditPlayer(userId *int, playerRequest *models.PlayerRequest) (*models.Player, error) {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRequest) (*models.Player, error) {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
@@ -70,28 +72,27 @@ func (service *PlayerService) EditPlayer(userId *int, playerRequest *models.Play
 	p.Postcode = playerRequest.Postcode
 	p.City = playerRequest.City
 
-	return service.playerRepo.Update(p)
+	return s.playerRepo.Update(p)
 }
 
-func (service *PlayerService) JoinSquad(userId *int, squadId *int) error {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) JoinSquad(userId *int, squadId *int) error {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
 
-	s, err := service.squadRepo.FindById(squadId)
+	sq, err := s.squadRepo.FindById(squadId)
 	if err != nil {
 		return err
 	}
 
 	squadPlayer := models.SquadPlayer{
-		SquadPlayerId:       0,
-		SquadId:             s.SquadId,
-		PlayerId:            p.PlayerId,
+		SquadId:             *sq.SquadId,
+		PlayerId:            *p.PlayerId,
 		Role:                "player",
 		SquadPlayerStatusId: 4,
 	}
-	err = service.squadRepo.AddPlayer(squadPlayer)
+	err = s.squadRepo.AddPlayer(squadPlayer)
 	if err != nil {
 		return err
 	}
@@ -99,13 +100,13 @@ func (service *PlayerService) JoinSquad(userId *int, squadId *int) error {
 	return nil
 }
 
-func (service *PlayerService) JoinMatch(userId *int, matchId *int) (*int, error) {
+func (s *PlayerService) JoinMatch(userId *int, matchId *int) (*int, error) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	playerChan, matchChan, errsChan := make(chan int), make(chan int), make(chan error)
-	go getId(service.getPlayerId, userId, &wg, playerChan, errsChan)
-	go getId(service.getMatchId, matchId, &wg, matchChan, errsChan)
+	go getId(s.getPlayerId, userId, &wg, playerChan, errsChan)
+	go getId(s.getMatchId, matchId, &wg, matchChan, errsChan)
 
 	go func() {
 		wg.Wait()
@@ -123,7 +124,7 @@ func (service *PlayerService) JoinMatch(userId *int, matchId *int) (*int, error)
 		AmountToPay:   0,
 		PaymentTypeId: 1,
 	}
-	res, dErr := service.matchPlayerRepo.Save(matchPlayer)
+	res, dErr := s.matchPlayerRepo.Save(matchPlayer)
 	if dErr != nil {
 		return nil, dErr
 	}
@@ -131,7 +132,7 @@ func (service *PlayerService) JoinMatch(userId *int, matchId *int) (*int, error)
 	return res, nil
 }
 
-func (service *PlayerService) LeaveMatch(userId *int, matchId *int) error {
+func (s *PlayerService) LeaveMatch(userId *int, matchId *int) error {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
@@ -141,42 +142,43 @@ func (service *PlayerService) LeaveMatch(userId *int, matchId *int) error {
 	var pId int
 	go func() {
 		defer wg.Done()
-		player, err := service.playerRepo.FindByUserId(userId)
+		player, err := s.playerRepo.FindByUserId(userId)
 		if err != nil {
 			errs = append(errs, err)
 		}
-		pId = player.PlayerId
+		pId = *player.PlayerId
 	}()
 
 	var mId int
 	go func() {
 		defer wg.Done()
-		match, err := service.matchRepo.FindById(matchId)
+		match, err := s.matchRepo.FindById(matchId)
 		if err != nil {
 			errs = append(errs, err)
 		}
-		mId = match.MatchId
+		mId = *match.MatchId
 	}()
 
 	wg.Wait()
 	if len(errs) != 0 {
-		return errs[0]
+		var err error
+		return multierror.Append(err, errs...)
 	}
 
-	dErr := service.matchPlayerRepo.Delete(&mId, &pId)
+	dErr := s.matchPlayerRepo.Delete(&mId, &pId)
 	if dErr != nil {
 		return dErr
 	}
 	return nil
 }
 
-func (service *PlayerService) Pay(userId *int, matchId *int, amountToPay *float32) error {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) Pay(userId *int, matchId *int, amountToPay *float32) error {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
 
-	res, dErr := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, &p.PlayerId)
+	res, dErr := s.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, p.PlayerId)
 	if dErr != nil {
 		return dErr
 	}
@@ -185,7 +187,7 @@ func (service *PlayerService) Pay(userId *int, matchId *int, amountToPay *float3
 		newAmount := res.AmountToPay - *amountToPay
 		res.AmountToPay = newAmount
 
-		_, err := service.matchPlayerRepo.Update(res)
+		_, err := s.matchPlayerRepo.Update(res)
 		if err != nil {
 			return err
 		}
@@ -193,19 +195,19 @@ func (service *PlayerService) Pay(userId *int, matchId *int, amountToPay *float3
 	return nil
 }
 
-func (service *PlayerService) UpdatePaymentMethod(matchId *int, userId *int, paymentTypeId *int) error {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s *PlayerService) UpdatePaymentMethod(matchId *int, userId *int, paymentTypeId *int) error {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
 
-	res, err := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, &p.PlayerId)
+	res, err := s.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, p.PlayerId)
 	if err != nil {
 		return err
 	}
 
 	res.PaymentTypeId = *paymentTypeId
-	_, dErr := service.matchPlayerRepo.Update(res)
+	_, dErr := s.matchPlayerRepo.Update(res)
 	if dErr != nil {
 		return dErr
 	}
@@ -222,20 +224,20 @@ func getId(f func(*int, chan<- int) error, id *int, wg *sync.WaitGroup, ch chan<
 	}
 }
 
-func (service PlayerService) getPlayerId(userId *int, ch chan<- int) error {
-	p, err := service.playerRepo.FindByUserId(userId)
+func (s PlayerService) getPlayerId(userId *int, ch chan<- int) error {
+	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
-	ch <- p.PlayerId
+	ch <- *p.PlayerId
 	return nil
 }
 
-func (service *PlayerService) getMatchId(matchId *int, ch chan<- int) error {
-	m, err := service.matchRepo.FindById(matchId)
+func (s *PlayerService) getMatchId(matchId *int, ch chan<- int) error {
+	m, err := s.matchRepo.FindById(matchId)
 	if err != nil {
 		return err
 	}
-	ch <- m.MatchId
+	ch <- *m.MatchId
 	return nil
 }

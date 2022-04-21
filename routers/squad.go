@@ -23,14 +23,14 @@ func ConfigureSquadPlayers(app *fiber.App) {
 	group.Get("/:squadId/players", squadController.RetrieveSquadPlayers)
 
 	group.Use(middleware.IsAuthenticated)
-	roles := []middleware.UserRole{{R: "player"}}
+	roles := []middleware.UserRole{{Role: "player"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Post("/", squadController.CreateSquadGroup)
 	group.Put("/:squadId", squadController.UpdateSquadInfo)
 	group.Put("/:squadId/players/:playerId", squadController.ApprovePlayerToSquad)
 
-	roles = []middleware.UserRole{{R: "player"}, {R: "venueAdmin"}}
+	roles = []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Delete("/:squadId", squadController.RemoveSquad)

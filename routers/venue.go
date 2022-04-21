@@ -22,7 +22,7 @@ func ConfigureVenueHandlers(app *fiber.App) {
 	group.Get("/:venueId/timeslots", venueController.RetrieveVenueTimeSlots)
 
 	group.Use(middleware.IsAuthenticated)
-	roles := []middleware.UserRole{{R: "venueAdmin"}}
+	roles := []middleware.UserRole{{Role: "venueAdmin"}}
 	group.Use(middleware.NewRoles(roles).HasRole)
 
 	group.Post("/", venueController.CreateVenue)

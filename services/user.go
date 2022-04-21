@@ -4,12 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
 	"github.com/nmcalinden/footpal/utils"
 	"sync"
-	"time"
 )
 
 const (
@@ -18,20 +17,21 @@ const (
 )
 
 type UserService struct {
-	userRepo   *repository.UserRepository
-	playerRepo *repository.PlayerRepository
-	venueRepo  *repository.VenueRepository
+	userRepo   repository.UserRepositoryI
+	playerRepo repository.PlayerRepositoryI
+	venueRepo  repository.VenueRepositoryI
 }
 
-func NewUserService(database *sqlx.DB) *UserService {
+func NewUserService(usrRepo repository.UserRepositoryI, pRepo repository.PlayerRepositoryI,
+	vRepo repository.VenueRepositoryI) *UserService {
 	return &UserService{
-		userRepo:   repository.NewUserRepository(database),
-		playerRepo: repository.NewPlayerRepository(database),
-		venueRepo:  repository.NewVenueRepository(database),
+		userRepo:   usrRepo,
+		playerRepo: pRepo,
+		venueRepo:  vRepo,
 	}
 }
 
-func (s *UserService) Login(login *models.Login) (*models.TokenPairResponse, error) {
+func (s *UserService) Login(login *payloads.Login) (*payloads.TokenPairResponse, error) {
 	res, err := s.userRepo.FindByEmail(&login.Email)
 	if err != nil {
 		return nil, err
@@ -51,13 +51,12 @@ func (s *UserService) Login(login *models.Login) (*models.TokenPairResponse, err
 	return response, nil
 }
 
-func (s *UserService) Register(register *models.Register) (*int, error) {
+func (s *UserService) Register(register *payloads.Register) (*int, error) {
 	pw, err := utils.HashPassword(register.Password)
 	if err != nil {
 		return nil, err
 	}
 	newUser := models.User{
-		UserId:   0,
 		Forename: register.Forename,
 		Surname:  register.Surname,
 		Email:    register.Email,
@@ -66,8 +65,8 @@ func (s *UserService) Register(register *models.Register) (*int, error) {
 	return s.userRepo.Save(&newUser)
 }
 
-func (s *UserService) Refresh(refreshToken *string) (*models.TokenPairResponse, error) {
-	t, err := parseRefreshToken(refreshToken)
+func (s *UserService) Refresh(refreshToken *string) (*payloads.TokenPairResponse, error) {
+	t, err := utils.ParseRefreshToken(refreshToken)
 	if err != nil {
 		return nil, err
 	}
@@ -90,87 +89,48 @@ func (s *UserService) Deactivate(userId *int) error {
 	if err != nil {
 		return err
 	}
-	return s.userRepo.Delete(&res.UserId)
+	return s.userRepo.Delete(res.UserId)
 }
 
-func (s *UserService) getTokenPair(res *models.User) (*models.TokenPairResponse, error) {
+func (s *UserService) getTokenPair(res *models.User) (*payloads.TokenPairResponse, error) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	var isAdmin bool
-	go func() {
-		defer wg.Done()
-		_, err := s.venueRepo.FindAdminByUserId(&res.UserId)
-		isAdmin = err == nil
-	}()
+	adminChan, playerChan := make(chan bool), make(chan bool)
+	go s.doesAdminExist(*res.UserId, &wg, adminChan)
+	go s.doesPlayerExist(*res.UserId, &wg, playerChan)
 
-	var isPlayer bool
-	go func() {
-		defer wg.Done()
-		_, err := s.playerRepo.FindByUserId(&res.UserId)
-		isPlayer = err == nil
-	}()
+	go func() { wg.Wait() }()
 
-	wg.Wait()
+	isAdmin, isPlayer := <-adminChan, <-playerChan
 
-	access, err := getAccessToken(res, isAdmin, isPlayer)
+	at, err := utils.GetAccessToken(res, isAdmin, isPlayer, access)
 	if err != nil {
 		return nil, err
 	}
 
-	refresh, err := getRefreshToken(res)
+	rt, err := utils.GetRefreshToken(res, refresh)
 	if err != nil {
 		return nil, err
 	}
 
-	bearerToken := fmt.Sprintf("Bearer %s", access)
-	response := models.TokenPairResponse{AccessToken: &bearerToken, RefreshToken: &refresh}
+	bearerToken := fmt.Sprintf("Bearer %s", at)
+	response := payloads.TokenPairResponse{AccessToken: &bearerToken, RefreshToken: &rt}
 	return &response, nil
 }
 
-func getAccessToken(user *models.User, isAdmin bool, isPlayer bool) (string, error) {
-	roles := buildRoles(isAdmin, isPlayer)
-
-	claims := jwt.MapClaims{
-		"sub":   user.UserId,
-		"name":  fmt.Sprintf("%s %s", user.Forename, user.Surname),
-		"email": user.Email,
-		"roles": roles,
-		"exp":   time.Now().Add(time.Minute * 60).Unix(),
-		"iat":   time.Now().Unix(),
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(access))
+func (s *UserService) doesAdminExist(userId int, wg *sync.WaitGroup, ch chan<- bool) {
+	defer wg.Done()
+	defer close(ch)
+	_, err := s.venueRepo.FindAdminByUserId(&userId)
+	res := err == nil
+	ch <- res
 }
 
-func getRefreshToken(user *models.User) (string, error) {
-	rtClaims := jwt.MapClaims{
-		"sub": user.UserId,
-		"exp": time.Now().Add(time.Hour * 24).Unix(),
-		"iat": time.Now().Unix(),
-	}
-	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
-	return refreshToken.SignedString([]byte(refresh))
-}
-
-func buildRoles(isAdmin bool, isPlayer bool) []string {
-	var roles []string
-	if isAdmin {
-		roles = append(roles, "venueAdmin")
-	}
-	if isPlayer {
-		roles = append(roles, "player")
-	}
-	return roles
-}
-
-func parseRefreshToken(refreshToken *string) (*jwt.Token, error) {
-	return jwt.Parse(*refreshToken, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-
-		return []byte("refreshSecret"), nil
-	})
+func (s *UserService) doesPlayerExist(userId int, wg *sync.WaitGroup, ch chan<- bool) {
+	defer wg.Done()
+	defer close(ch)
+	_, err := s.playerRepo.FindByUserId(&userId)
+	res := err == nil
+	ch <- res
 }

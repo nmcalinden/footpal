@@ -14,53 +14,53 @@ func NewSquadRepository(database *sqlx.DB) *SquadRepository {
 	return &SquadRepository{database: database}
 }
 
-func (repository SquadRepository) FindAll() (*[]models.Squad, error) {
+func (r SquadRepository) FindAll() (*[]models.Squad, error) {
 	var squads []models.Squad
-	err := repository.database.Select(&squads, "SELECT * FROM footpaldb.public.squad")
+	err := r.database.Select(&squads, "SELECT * FROM footpaldb.public.squad")
 	if err != nil || len(squads) == 0 {
 		return nil, err
 	}
 	return &squads, nil
 }
 
-func (repository SquadRepository) FindById(id *int) (*models.Squad, error) {
+func (r SquadRepository) FindById(id *int) (*models.Squad, error) {
 	var squad models.Squad
-	err := repository.database.Get(&squad, "SELECT * FROM footpaldb.public.squad WHERE id = $1", id)
+	err := r.database.Get(&squad, "SELECT * FROM footpaldb.public.squad WHERE id = $1", id)
 	if err != nil {
 		return nil, err
 	}
 	return &squad, nil
 }
 
-func (repository SquadRepository) FindAllByPlayerId(playerId *int) (*[]models.Squad, error) {
+func (r SquadRepository) FindAllByPlayerId(playerId *int) (*[]models.Squad, error) {
 	var squads []models.Squad
-	err := repository.database.Select(&squads, getFindAllByPlayerIdQuery(), playerId)
+	err := r.database.Select(&squads, getFindAllByPlayerIdQuery(), playerId)
 	if err != nil {
 		return nil, err
 	}
 	return &squads, nil
 }
 
-func (repository SquadRepository) FindSquadByPlayerId(squadId *int, playerId *int) (*models.Squad, error) {
+func (r SquadRepository) FindSquadByPlayerId(squadId *int, playerId *int) (*models.Squad, error) {
 	var squads models.Squad
-	err := repository.database.Get(&squads, getFindBySquadIdAndPlayerIdQuery(), squadId, playerId)
+	err := r.database.Get(&squads, getFindBySquadIdAndPlayerIdQuery(), squadId, playerId)
 	if err != nil {
 		return nil, err
 	}
 	return &squads, nil
 }
 
-func (repository SquadRepository) FindPlayersBySquadId(squadId *int) (*[]models.SquadPlayerDetails, error) {
+func (r SquadRepository) FindPlayersBySquadId(squadId *int) (*[]models.SquadPlayerDetails, error) {
 	var players []models.SquadPlayerDetails
-	err := repository.database.Select(&players, getFindPlayersBySquadIdQuery(), squadId)
+	err := r.database.Select(&players, getFindPlayersBySquadIdQuery(), squadId)
 	if err != nil {
 		return nil, err
 	}
 	return &players, nil
 }
 
-func (repository SquadRepository) Update(squad *models.Squad) (*models.Squad, error) {
-	_, err := repository.database.NamedExec(`UPDATE footpaldb.public.squad SET squad_name=:squad_name, 
+func (r SquadRepository) Update(squad *models.Squad) (*models.Squad, error) {
+	_, err := r.database.NamedExec(`UPDATE footpaldb.public.squad SET squad_name=:squad_name, 
                                     city=:city WHERE id=:id`, squad)
 
 	if err != nil {
@@ -69,17 +69,17 @@ func (repository SquadRepository) Update(squad *models.Squad) (*models.Squad, er
 	return squad, nil
 }
 
-func (repository SquadRepository) Save(squad *models.Squad) (*int, error) {
-	_, err := repository.database.NamedExec(`INSERT INTO footpaldb.public.squad(squad_name, city) VALUES(:squad_name, :city)`, squad)
+func (r SquadRepository) Save(squad *models.Squad) (*int, error) {
+	_, err := r.database.NamedExec(`INSERT INTO footpaldb.public.squad(squad_name, city) VALUES(:squad_name, :city)`, squad)
 
 	if err != nil {
 		return nil, err
 	}
-	return &squad.SquadId, nil
+	return squad.SquadId, nil
 }
 
-func (repository SquadRepository) AddPlayer(squadPlayer models.SquadPlayer) error {
-	_, err := repository.database.NamedExec(`INSERT INTO footpaldb.public.squad_player(squad_id, player_id, user_role, squad_player_status_id)
+func (r SquadRepository) AddPlayer(squadPlayer models.SquadPlayer) error {
+	_, err := r.database.NamedExec(`INSERT INTO footpaldb.public.squad_player(squad_id, player_id, user_role, squad_player_status_id)
 					VALUES(:squad_id, :player_id, :user_role, :squad_player_status_id)`, squadPlayer)
 
 	if err != nil {
@@ -103,8 +103,8 @@ func getFindBySquadIdAndPlayerIdQuery() string {
 	return fmt.Sprintf("SELECT sq.* FROM squad sq JOIN squad_player sp on sq.id = sp.squad_id WHERE sp.squad_id = $1 AND sp.player_id = $2")
 }
 
-func (repository SquadRepository) Delete(id *int) error {
-	res, err := repository.database.Exec("DELETE FROM footpaldb.public.squad WHERE id=$1", id)
+func (r SquadRepository) Delete(id *int) error {
+	res, err := r.database.Exec("DELETE FROM footpaldb.public.squad WHERE id=$1", id)
 
 	if err != nil {
 		return err
@@ -118,8 +118,8 @@ func (repository SquadRepository) Delete(id *int) error {
 	return err
 }
 
-func (repository SquadRepository) UpdatePlayerStatus(squadId *int, playerId *int, status int) error {
-	_, err := repository.database.Query("UPDATE footpaldb.public.squad_player SET squad_player_status_id=$1 WHERE squad_id=$2 AND player_id=$3", status, squadId, playerId)
+func (r SquadRepository) UpdatePlayerStatus(squadId *int, playerId *int, status int) error {
+	_, err := r.database.Query("UPDATE footpaldb.public.squad_player SET squad_player_status_id=$1 WHERE squad_id=$2 AND player_id=$3", status, squadId, playerId)
 	if err != nil {
 		return err
 	}

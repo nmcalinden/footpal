@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
 )
@@ -19,12 +19,12 @@ func NewUserController(userService *services.UserService) *UserController {
 // @Description  Login to Footpal
 // @Tags         user
 // @Produce      json
-// @Param 		 message body models.Login true "Request"
-// @Success      200 {object} models.TokenPairResponse
+// @Param 		 message body payloads.Login true "Request"
+// @Success      200 {object} payloads.TokenPairResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /login [post]
-func (controller UserController) LoginHandler(c *fiber.Ctx) error {
-	l := new(models.Login)
+func (con UserController) LoginHandler(c *fiber.Ctx) error {
+	l := new(payloads.Login)
 	if err := c.BodyParser(&l); err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	token, err := controller.userService.Login(l)
+	token, err := con.userService.Login(l)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusUnauthorized, "Failed to login - Check username and password")
 	}
@@ -44,12 +44,12 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 // @Description  Register as new player
 // @Tags         user
 // @Produce      json
-// @Param 		 message body models.Register true "Request"
-// @Success      200 {object} models.RegisterResponse
+// @Param 		 message body payloads.Register true "Request"
+// @Success      200 {object} payloads.RegisterResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /register [post]
-func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
-	r := new(models.Register)
+func (con UserController) RegisterHandler(c *fiber.Ctx) error {
+	r := new(payloads.Register)
 	if err := c.BodyParser(&r); err != nil {
 		return err
 	}
@@ -58,11 +58,11 @@ func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	usr, err := controller.userService.Register(r)
+	usr, err := con.userService.Register(r)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to register user")
 	}
-	response := models.RegisterResponse{Id: usr}
+	response := payloads.RegisterResponse{Id: usr}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
@@ -70,17 +70,17 @@ func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
 // @Description  Refresh token
 // @Tags         user
 // @Produce      json
-// @Param 		 message body models.Refresh true "Request"
-// @Success      200 {object} models.TokenPairResponse
+// @Param 		 message body payloads.Refresh true "Request"
+// @Success      200 {object} payloads.TokenPairResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /refresh [post]
-func (controller UserController) RefreshToken(c *fiber.Ctx) error {
-	r := new(models.Refresh)
+func (con UserController) RefreshToken(c *fiber.Ctx) error {
+	r := new(payloads.Refresh)
 	if err := c.BodyParser(&r); err != nil {
 		return err
 	}
 
-	token, err := controller.userService.Refresh(r.RefreshToken)
+	token, err := con.userService.Refresh(r.RefreshToken)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to refresh token")
 	}
@@ -95,11 +95,11 @@ func (controller UserController) RefreshToken(c *fiber.Ctx) error {
 // @Success      200
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /deactivate [delete]
-func (controller UserController) DeactivateHandler(c *fiber.Ctx) error {
+func (con UserController) DeactivateHandler(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
 	userId := claims["id"].(int)
 
-	err := controller.userService.Deactivate(&userId)
+	err := con.userService.Deactivate(&userId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to delete user")
 	}

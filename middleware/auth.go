@@ -14,7 +14,7 @@ type Roles struct {
 }
 
 type UserRole struct {
-	R string
+	Role string
 }
 
 func NewRoles(roles []UserRole) Roles {
@@ -37,7 +37,7 @@ func isValid(roles []interface{}, expectedRoles []UserRole) bool {
 
 	var isValid bool
 	for _, r := range roles {
-		i := slices.IndexFunc(expectedRoles, func(uR UserRole) bool { return uR.R == r })
+		i := slices.IndexFunc(expectedRoles, func(uR UserRole) bool { return uR.Role == r })
 		if i != -1 {
 			isValid = true
 			break
