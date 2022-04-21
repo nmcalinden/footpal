@@ -14,6 +14,8 @@ func ConfigureBookingHandlers(app *fiber.App) {
 	bService := services.NewBookingService(config.GetConnection())
 	bookController := controllers.NewBookingController(bService)
 
+	roles := []middleware.UserRole{{R: "player"}, {R: "venueAdmin"}}
+	group.Use(middleware.NewRoles(roles).HasRole)
 	group.Get("/", bookController.RetrieveBookings)
 	group.Post("/", bookController.CreateBooking)
 	group.Get("/:bookingId", bookController.GetBookingById)

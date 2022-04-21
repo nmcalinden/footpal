@@ -73,7 +73,7 @@ func (repository MatchPlayerRepository) Save(player models.MatchPlayer) (*int, e
 	if err != nil {
 		return nil, err
 	}
-	return &player.MatchId, nil
+	return player.MatchId, nil
 }
 
 func getFindMatchesByPlayerQuery() string {

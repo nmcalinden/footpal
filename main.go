@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/helmet/v2"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/routers"
@@ -23,11 +24,16 @@ import (
 // @name Authorization
 // @BasePath /
 func main() {
-	app := fiber.New()
+
+	fiberConfig := fiber.Config{
+		ErrorHandler: defaultErrorHandler,
+	}
+	app := fiber.New(fiberConfig)
 
 	app.Use(cors.New())
 	app.Use(helmet.New())
 	app.Use(logger.New())
+	app.Use(recover.New(recover.Config{EnableStackTrace: true}))
 
 	config.InitializeDatabase()
 
@@ -41,4 +47,16 @@ func main() {
 	routers.ConfigureMatchHandlers(app)
 
 	log.Fatal(app.Listen(":3000"))
+}
+
+func defaultErrorHandler(ctx *fiber.Ctx, err error) error {
+	code := fiber.StatusInternalServerError
+	message := err.Error()
+
+	if e, ok := err.(*fiber.Error); ok {
+		code = e.Code
+	}
+
+	errors := map[string]string{"reason": message}
+	return utils.BuildMultipleErrorResponse(ctx, code, "Something has gone wrong", errors)
 }

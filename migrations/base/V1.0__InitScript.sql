@@ -67,7 +67,8 @@ CREATE TABLE footpal_user
     id              INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     forename 		VARCHAR(50) NOT NULL,
     surname 		VARCHAR(50) NOT NULL,
-    email			VARCHAR(100) NOT NULL
+    email			VARCHAR(100) NOT NULL,
+    password        text
 );
 
 CREATE TABLE player

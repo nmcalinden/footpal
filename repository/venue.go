@@ -50,6 +50,15 @@ func (repository VenueRepository) FindAdminByVenue(venueId *int, adminId *int) (
 	return &admin, nil
 }
 
+func (repository VenueRepository) FindAdminByUserId(userId *int) (*models.VenueAdmin, error) {
+	var admin models.VenueAdmin
+	err := repository.database.Get(&admin, "SELECT * FROM footpaldb.public.venue_admin WHERE footpal_user_id = $1", userId)
+	if err != nil {
+		return nil, err
+	}
+	return &admin, nil
+}
+
 func (repository VenueRepository) FindPitchesByVenue(venueId *int) (*[]models.Pitch, error) {
 	var pitches []models.Pitch
 	err := repository.database.Select(&pitches, "SELECT * FROM footpaldb.public.pitch WHERE venue_id = $1", venueId)

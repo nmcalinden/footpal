@@ -321,7 +321,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.LoginResponse"
+                            "$ref": "#/definitions/models.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -573,45 +573,6 @@
                         }
                     }
                 }
-            }
-        },
-        "/players/{playerId}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get Player information",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Player"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
             },
             "put": {
                 "security": [
@@ -627,13 +588,6 @@
                     "player"
                 ],
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "Request",
                         "name": "message",
@@ -666,7 +620,7 @@
                 }
             }
         },
-        "/players/{playerId}/matches": {
+        "/players/matches": {
             "get": {
                 "security": [
                     {
@@ -679,15 +633,6 @@
                 ],
                 "tags": [
                     "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -714,7 +659,7 @@
                 }
             }
         },
-        "/players/{playerId}/matches/{matchId}": {
+        "/players/matches/{matchId}": {
             "post": {
                 "security": [
                     {
@@ -729,13 +674,6 @@
                     "player"
                 ],
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Match ID",
@@ -781,13 +719,6 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "Match ID",
                         "name": "matchId",
                         "in": "path",
@@ -813,8 +744,8 @@
                 }
             }
         },
-        "/players/{playerId}/matches/{matchId}/pay": {
-            "post": {
+        "/players/matches/{matchId}/pay": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -830,11 +761,51 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
+                        "description": "Match ID",
+                        "name": "matchId",
                         "in": "path",
                         "required": true
                     },
+                    {
+                        "type": "integer",
+                        "description": "Payment Type ID",
+                        "name": "paymentTypeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "parameters": [
                     {
                         "type": "integer",
                         "description": "Match ID",
@@ -869,63 +840,9 @@
                         }
                     }
                 }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "For a match, pay amount owed by player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Payment Type ID",
-                        "name": "paymentTypeId",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
             }
         },
-        "/players/{playerId}/squads": {
+        "/players/squads": {
             "get": {
                 "security": [
                     {
@@ -938,15 +855,6 @@
                 ],
                 "tags": [
                     "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -973,7 +881,7 @@
                 }
             }
         },
-        "/players/{playerId}/squads/{squadId}": {
+        "/players/squads/{squadId}": {
             "get": {
                 "security": [
                     {
@@ -1043,13 +951,6 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "Squad ID",
                         "name": "squadId",
                         "in": "path",
@@ -1071,6 +972,81 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Player information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Player"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "description": "Refresh token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Refresh"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TokenPairResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -2134,21 +2110,19 @@
         "models.Login": {
             "type": "object",
             "required": [
-                "email"
+                "email",
+                "password"
             ],
             "properties": {
                 "email": {
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 5
-                }
-            }
-        },
-        "models.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
                 }
             }
         },
@@ -2320,17 +2294,12 @@
         "models.PlayerRequest": {
             "type": "object",
             "required": [
-                "address",
                 "city",
                 "nickname",
+                "phone_no",
                 "postcode"
             ],
             "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
-                },
                 "city": {
                     "type": "string",
                     "maxLength": 50,
@@ -2341,10 +2310,26 @@
                     "maxLength": 16,
                     "minLength": 2
                 },
+                "phone_no": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
                 "postcode": {
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
+                }
+            }
+        },
+        "models.Refresh": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -2353,6 +2338,7 @@
             "required": [
                 "email",
                 "forename",
+                "password",
                 "surname"
             ],
             "properties": {
@@ -2365,6 +2351,11 @@
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
                 },
                 "surname": {
                     "type": "string",
@@ -2436,6 +2427,17 @@
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 2
+                }
+            }
+        },
+        "models.TokenPairResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },

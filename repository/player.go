@@ -23,8 +23,18 @@ func (repository PlayerRepository) FindAll() (*[]models.Player, error) {
 }
 
 func (repository PlayerRepository) FindById(id *int) (*models.Player, error) {
+	query := "SELECT * FROM footpaldb.public.player WHERE id = $1"
+	return repository.findByInt(id, query)
+}
+
+func (repository PlayerRepository) FindByUserId(userId *int) (*models.Player, error) {
+	query := "SELECT * FROM footpaldb.public.player WHERE footpal_user_id = $1"
+	return repository.findByInt(userId, query)
+}
+
+func (repository PlayerRepository) findByInt(id *int, query string) (*models.Player, error) {
 	var player models.Player
-	err := repository.database.Get(&player, "SELECT * FROM footpaldb.public.player WHERE id = $1", id)
+	err := repository.database.Get(&player, query, id)
 	if err != nil {
 		return nil, err
 	}

@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
@@ -22,7 +20,7 @@ func NewUserController(userService *services.UserService) *UserController {
 // @Tags         user
 // @Produce      json
 // @Param 		 message body models.Login true "Request"
-// @Success      200 {object} models.LoginResponse
+// @Success      200 {object} models.TokenPairResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /login [post]
 func (controller UserController) LoginHandler(c *fiber.Ctx) error {
@@ -37,11 +35,9 @@ func (controller UserController) LoginHandler(c *fiber.Ctx) error {
 
 	token, err := controller.userService.Login(l)
 	if err != nil {
-		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "No User found")
+		return utils.BuildErrorResponse(c, fiber.StatusUnauthorized, "Failed to login - Check username and password")
 	}
-
-	response := models.LoginResponse{Token: token}
-	return c.Status(fiber.StatusOK).JSON(response)
+	return c.Status(fiber.StatusOK).JSON(token)
 }
 
 // RegisterHandler @Summary      Register
@@ -66,8 +62,29 @@ func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to register user")
 	}
-	response := models.RegisterResponse{Id: &usr}
+	response := models.RegisterResponse{Id: usr}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+// RefreshToken @Summary      Refresh Token
+// @Description  Refresh token
+// @Tags         user
+// @Produce      json
+// @Param 		 message body models.Refresh true "Request"
+// @Success      200 {object} models.TokenPairResponse
+// @Failure      400 {object} utils.ErrorResponse
+// @Router       /refresh [post]
+func (controller UserController) RefreshToken(c *fiber.Ctx) error {
+	r := new(models.Refresh)
+	if err := c.BodyParser(&r); err != nil {
+		return err
+	}
+
+	token, err := controller.userService.Refresh(r.RefreshToken)
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to refresh token")
+	}
+	return c.Status(fiber.StatusOK).JSON(token)
 }
 
 // DeactivateHandler @Summary      Deactivate User
@@ -79,13 +96,10 @@ func (controller UserController) RegisterHandler(c *fiber.Ctx) error {
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /deactivate [delete]
 func (controller UserController) DeactivateHandler(c *fiber.Ctx) error {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
-	email := claims["email"].(string)
+	claims := utils.GetClaims(c.Locals("user"))
+	userId := claims["id"].(int)
 
-	fmt.Println(name)
-	err := controller.userService.Deactivate(&email)
+	err := controller.userService.Deactivate(&userId)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to delete user")
 	}

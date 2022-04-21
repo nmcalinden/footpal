@@ -328,7 +328,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.LoginResponse"
+                            "$ref": "#/definitions/models.TokenPairResponse"
                         }
                     },
                     "400": {
@@ -580,45 +580,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/players/{playerId}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get Player information",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Player"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
             },
             "put": {
                 "security": [
@@ -634,13 +595,6 @@ const docTemplate = `{
                     "player"
                 ],
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "Request",
                         "name": "message",
@@ -673,7 +627,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/players/{playerId}/matches": {
+        "/players/matches": {
             "get": {
                 "security": [
                     {
@@ -686,15 +640,6 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -721,7 +666,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/players/{playerId}/matches/{matchId}": {
+        "/players/matches/{matchId}": {
             "post": {
                 "security": [
                     {
@@ -736,13 +681,6 @@ const docTemplate = `{
                     "player"
                 ],
                 "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Match ID",
@@ -788,13 +726,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "Match ID",
                         "name": "matchId",
                         "in": "path",
@@ -820,8 +751,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/players/{playerId}/matches/{matchId}/pay": {
-            "post": {
+        "/players/matches/{matchId}/pay": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -837,11 +768,51 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
+                        "description": "Match ID",
+                        "name": "matchId",
                         "in": "path",
                         "required": true
                     },
+                    {
+                        "type": "integer",
+                        "description": "Payment Type ID",
+                        "name": "paymentTypeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "For a match, pay amount owed by player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "parameters": [
                     {
                         "type": "integer",
                         "description": "Match ID",
@@ -876,63 +847,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "patch": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "For a match, pay amount owed by player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Match ID",
-                        "name": "matchId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Payment Type ID",
-                        "name": "paymentTypeId",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorResponse"
-                        }
-                    }
-                }
             }
         },
-        "/players/{playerId}/squads": {
+        "/players/squads": {
             "get": {
                 "security": [
                     {
@@ -945,15 +862,6 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "player"
-                ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -980,7 +888,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/players/{playerId}/squads/{squadId}": {
+        "/players/squads/{squadId}": {
             "get": {
                 "security": [
                     {
@@ -1050,13 +958,6 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Player ID",
-                        "name": "playerId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "Squad ID",
                         "name": "squadId",
                         "in": "path",
@@ -1078,6 +979,81 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players/{playerId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Player information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "player"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Player ID",
+                        "name": "playerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Player"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh": {
+            "post": {
+                "description": "Refresh token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Refresh"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TokenPairResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -2141,21 +2117,19 @@ const docTemplate = `{
         "models.Login": {
             "type": "object",
             "required": [
-                "email"
+                "email",
+                "password"
             ],
             "properties": {
                 "email": {
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 5
-                }
-            }
-        },
-        "models.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
                 }
             }
         },
@@ -2327,17 +2301,12 @@ const docTemplate = `{
         "models.PlayerRequest": {
             "type": "object",
             "required": [
-                "address",
                 "city",
                 "nickname",
+                "phone_no",
                 "postcode"
             ],
             "properties": {
-                "address": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "minLength": 11
-                },
                 "city": {
                     "type": "string",
                     "maxLength": 50,
@@ -2348,10 +2317,26 @@ const docTemplate = `{
                     "maxLength": 16,
                     "minLength": 2
                 },
+                "phone_no": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 11
+                },
                 "postcode": {
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
+                }
+            }
+        },
+        "models.Refresh": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -2360,6 +2345,7 @@ const docTemplate = `{
             "required": [
                 "email",
                 "forename",
+                "password",
                 "surname"
             ],
             "properties": {
@@ -2372,6 +2358,11 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 5
                 },
                 "surname": {
                     "type": "string",
@@ -2443,6 +2434,17 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 30,
                     "minLength": 2
+                }
+            }
+        },
+        "models.TokenPairResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },

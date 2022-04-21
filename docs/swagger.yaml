@@ -69,13 +69,13 @@ definitions:
         maxLength: 100
         minLength: 5
         type: string
+      password:
+        maxLength: 25
+        minLength: 5
+        type: string
     required:
     - email
-    type: object
-  models.LoginResponse:
-    properties:
-      token:
-        type: string
+    - password
     type: object
   models.Match:
     properties:
@@ -197,10 +197,6 @@ definitions:
     type: object
   models.PlayerRequest:
     properties:
-      address:
-        maxLength: 15
-        minLength: 11
-        type: string
       city:
         maxLength: 50
         minLength: 3
@@ -209,15 +205,26 @@ definitions:
         maxLength: 16
         minLength: 2
         type: string
+      phone_no:
+        maxLength: 15
+        minLength: 11
+        type: string
       postcode:
         maxLength: 8
         minLength: 5
         type: string
     required:
-    - address
     - city
     - nickname
+    - phone_no
     - postcode
+    type: object
+  models.Refresh:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
     type: object
   models.Register:
     properties:
@@ -229,6 +236,10 @@ definitions:
         maxLength: 50
         minLength: 3
         type: string
+      password:
+        maxLength: 25
+        minLength: 5
+        type: string
       surname:
         maxLength: 50
         minLength: 3
@@ -236,6 +247,7 @@ definitions:
     required:
     - email
     - forename
+    - password
     - surname
     type: object
   models.RegisterResponse:
@@ -283,6 +295,13 @@ definitions:
     required:
     - city
     - name
+    type: object
+  models.TokenPairResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     type: object
   models.Venue:
     properties:
@@ -574,7 +593,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.LoginResponse'
+            $ref: '#/definitions/models.TokenPairResponse'
         "400":
           description: Bad Request
           schema:
@@ -731,38 +750,9 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}:
-    get:
-      description: Get Player information
-      parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Player'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      security:
-      - ApiKeyAuth: []
-      tags:
-      - player
     put:
       description: Edit player information
       parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
       - description: Request
         in: body
         name: message
@@ -788,15 +778,33 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}/matches:
+  /players/{playerId}:
     get:
-      description: Retrieve a players opted in matches
+      description: Get Player information
       parameters:
       - description: Player ID
         in: path
         name: playerId
         required: true
         type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/matches:
+    get:
+      description: Retrieve a players opted in matches
       produces:
       - application/json
       responses:
@@ -818,15 +826,10 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}/matches/{matchId}:
+  /players/matches/{matchId}:
     delete:
       description: Leave match
       parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
       - description: Match ID
         in: path
         name: matchId
@@ -852,11 +855,6 @@ paths:
     post:
       description: Request to join match
       parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
       - description: Match ID
         in: path
         name: matchId
@@ -881,50 +879,10 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}/matches/{matchId}/pay:
-    patch:
-      description: For a match, pay amount owed by player
-      parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
-      - description: Match ID
-        in: path
-        name: matchId
-        required: true
-        type: integer
-      - description: Payment Type ID
-        in: query
-        name: paymentTypeId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      security:
-      - ApiKeyAuth: []
-      tags:
-      - player
+  /players/matches/{matchId}/pay:
     post:
       description: For a match, pay amount owed by player
       parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
       - description: Match ID
         in: path
         name: matchId
@@ -953,15 +911,39 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}/squads:
-    get:
-      description: Retrieve all squads linked to player
+    put:
+      description: For a match, pay amount owed by player
       parameters:
-      - description: Player ID
+      - description: Match ID
         in: path
-        name: playerId
+        name: matchId
         required: true
         type: integer
+      - description: Payment Type ID
+        in: query
+        name: paymentTypeId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/squads:
+    get:
+      description: Retrieve all squads linked to player
       produces:
       - application/json
       responses:
@@ -983,7 +965,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
-  /players/{playerId}/squads/{squadId}:
+  /players/squads/{squadId}:
     get:
       description: Retrieve squad by squad id
       parameters:
@@ -1021,11 +1003,6 @@ paths:
     post:
       description: Request to join squad
       parameters:
-      - description: Player ID
-        in: path
-        name: playerId
-        required: true
-        type: integer
       - description: Squad ID
         in: path
         name: squadId
@@ -1050,6 +1027,29 @@ paths:
       - ApiKeyAuth: []
       tags:
       - player
+  /refresh:
+    post:
+      description: Refresh token
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Refresh'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenPairResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - user
   /register:
     post:
       description: Register as new player

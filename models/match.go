@@ -16,8 +16,8 @@ type Match struct {
 
 type MatchPlayer struct {
 	MatchPlayerId int     `json:"matchPlayerId,omitempty" db:"id"`
-	MatchId       int     `json:"matchId" validate:"required" db:"match_id"`
-	PlayerId      int     `json:"playerId" validate:"required" db:"player_id"`
+	MatchId       *int    `json:"matchId" validate:"required" db:"match_id"`
+	PlayerId      *int    `json:"playerId" validate:"required" db:"player_id"`
 	AmountToPay   float32 `json:"amountToPay" validate:"required" db:"amount_to_pay"`
 	PaymentTypeId int     `json:"paymentTypeId" validate:"required" db:"payment_type_id"`
 }

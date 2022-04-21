@@ -1,9 +1,11 @@
 package services
 
 import (
+	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/repository"
+	"sync"
 )
 
 type PlayerService struct {
@@ -30,25 +32,40 @@ func (service *PlayerService) GetPlayerById(playerId *int) (*models.Player, erro
 	return service.playerRepo.FindById(playerId)
 }
 
-func (service *PlayerService) GetAllSquadsByPlayer(playerId *int) (*[]models.Squad, error) {
-	return service.squadRepo.FindAllByPlayerId(playerId)
+func (service *PlayerService) GetAllSquadsByPlayer(userId *int) (*[]models.Squad, error) {
+	p, err := service.playerRepo.FindByUserId(userId)
+	if err != nil {
+		return nil, err
+	}
+	return service.squadRepo.FindAllByPlayerId(&p.PlayerId)
 }
 
-func (service *PlayerService) GetSquadByPlayer(playerId *int, squadId *int) (*models.Squad, error) {
-	return service.squadRepo.FindSquadByPlayerId(squadId, playerId)
+func (service *PlayerService) GetSquadByPlayer(userId *int, squadId *int) (*models.Squad, error) {
+	p, err := service.playerRepo.FindByUserId(userId)
+	if err != nil {
+		return nil, err
+	}
+	return service.squadRepo.FindSquadByPlayerId(squadId, &p.PlayerId)
 }
 
-func (service *PlayerService) GetMatchesByPlayer(playerId *int) (*[]models.Match, error) {
-	return service.matchPlayerRepo.FindMatchesByPlayer(playerId)
+func (service *PlayerService) GetMatchesByPlayer(userId *int) (*[]models.Match, error) {
+	p, err := service.playerRepo.FindByUserId(userId)
+	if err != nil {
+		return nil, err
+	}
+	return service.matchPlayerRepo.FindMatchesByPlayer(&p.PlayerId)
 }
 
-func (service *PlayerService) EditPlayer(playerId *int, playerRequest *models.PlayerRequest) (*models.Player, error) {
-	p, err := service.playerRepo.FindById(playerId)
+func (service *PlayerService) EditPlayer(userId *int, playerRequest *models.PlayerRequest) (*models.Player, error) {
+	p, err := service.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	p.Nickname = playerRequest.Nickname
+	p.Nickname = sql.NullString{
+		String: playerRequest.Nickname,
+		Valid:  true,
+	}
 	p.PhoneNo = playerRequest.PhoneNo
 	p.Postcode = playerRequest.Postcode
 	p.City = playerRequest.City
@@ -56,8 +73,8 @@ func (service *PlayerService) EditPlayer(playerId *int, playerRequest *models.Pl
 	return service.playerRepo.Update(p)
 }
 
-func (service *PlayerService) JoinSquad(playerId *int, squadId *int) error {
-	p, err := service.playerRepo.FindById(playerId)
+func (service *PlayerService) JoinSquad(userId *int, squadId *int) error {
+	p, err := service.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
@@ -82,21 +99,27 @@ func (service *PlayerService) JoinSquad(playerId *int, squadId *int) error {
 	return nil
 }
 
-func (service *PlayerService) JoinMatch(playerId *int, matchId *int) (*int, error) {
-	p, err := service.playerRepo.FindById(playerId)
-	if err != nil {
-		return nil, err
-	}
+func (service *PlayerService) JoinMatch(userId *int, matchId *int) (*int, error) {
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	m, err := service.matchRepo.FindById(matchId)
-	if err != nil {
-		return nil, err
+	playerChan, matchChan, errsChan := make(chan int), make(chan int), make(chan error)
+	go getId(service.getPlayerId, userId, &wg, playerChan, errsChan)
+	go getId(service.getMatchId, matchId, &wg, matchChan, errsChan)
+
+	go func() {
+		wg.Wait()
+		close(errsChan)
+	}()
+
+	pId, mId, gErrs := <-playerChan, <-matchChan, <-errsChan
+	if gErrs != nil {
+		return nil, gErrs
 	}
 
 	matchPlayer := models.MatchPlayer{
-		MatchPlayerId: 0,
-		MatchId:       m.MatchId,
-		PlayerId:      p.PlayerId,
+		MatchId:       &mId,
+		PlayerId:      &pId,
 		AmountToPay:   0,
 		PaymentTypeId: 1,
 	}
@@ -108,27 +131,52 @@ func (service *PlayerService) JoinMatch(playerId *int, matchId *int) (*int, erro
 	return res, nil
 }
 
-func (service *PlayerService) LeaveMatch(playerId *int, matchId *int) error {
-	// Go Routines wait groups and goroutines
-	p, err := service.playerRepo.FindById(playerId)
-	if err != nil {
-		return err
+func (service *PlayerService) LeaveMatch(userId *int, matchId *int) error {
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// Go routines example
+	var errs []error
+
+	var pId int
+	go func() {
+		defer wg.Done()
+		player, err := service.playerRepo.FindByUserId(userId)
+		if err != nil {
+			errs = append(errs, err)
+		}
+		pId = player.PlayerId
+	}()
+
+	var mId int
+	go func() {
+		defer wg.Done()
+		match, err := service.matchRepo.FindById(matchId)
+		if err != nil {
+			errs = append(errs, err)
+		}
+		mId = match.MatchId
+	}()
+
+	wg.Wait()
+	if len(errs) != 0 {
+		return errs[0]
 	}
 
-	m, err := service.matchRepo.FindById(matchId)
-	if err != nil {
-		return err
-	}
-
-	dErr := service.matchPlayerRepo.Delete(&m.MatchId, &p.PlayerId)
+	dErr := service.matchPlayerRepo.Delete(&mId, &pId)
 	if dErr != nil {
 		return dErr
 	}
 	return nil
 }
 
-func (service *PlayerService) Pay(playerId *int, matchId *int, amountToPay *float32) error {
-	res, dErr := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, playerId)
+func (service *PlayerService) Pay(userId *int, matchId *int, amountToPay *float32) error {
+	p, err := service.playerRepo.FindByUserId(userId)
+	if err != nil {
+		return err
+	}
+
+	res, dErr := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, &p.PlayerId)
 	if dErr != nil {
 		return dErr
 	}
@@ -145,16 +193,49 @@ func (service *PlayerService) Pay(playerId *int, matchId *int, amountToPay *floa
 	return nil
 }
 
-func (service *PlayerService) UpdatePaymentMethod(matchId *int, playerId *int, paymentTypeId *int) error {
-	p, err := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, playerId)
+func (service *PlayerService) UpdatePaymentMethod(matchId *int, userId *int, paymentTypeId *int) error {
+	p, err := service.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return err
 	}
 
-	p.PaymentTypeId = *paymentTypeId
-	_, dErr := service.matchPlayerRepo.Update(p)
+	res, err := service.matchPlayerRepo.FindByMatchIdAndPlayerId(matchId, &p.PlayerId)
+	if err != nil {
+		return err
+	}
+
+	res.PaymentTypeId = *paymentTypeId
+	_, dErr := service.matchPlayerRepo.Update(res)
 	if dErr != nil {
 		return dErr
 	}
+	return nil
+}
+
+func getId(f func(*int, chan<- int) error, id *int, wg *sync.WaitGroup, ch chan<- int, errs chan error) {
+	defer wg.Done()
+	defer close(ch)
+	err := f(id, ch)
+	if err != nil {
+		ch <- 0
+		errs <- err
+	}
+}
+
+func (service PlayerService) getPlayerId(userId *int, ch chan<- int) error {
+	p, err := service.playerRepo.FindByUserId(userId)
+	if err != nil {
+		return err
+	}
+	ch <- p.PlayerId
+	return nil
+}
+
+func (service *PlayerService) getMatchId(matchId *int, ch chan<- int) error {
+	m, err := service.matchRepo.FindById(matchId)
+	if err != nil {
+		return err
+	}
+	ch <- m.MatchId
 	return nil
 }

@@ -14,15 +14,22 @@ func ConfigurePlayerHandlers(app *fiber.App) {
 	pService := services.NewPlayerService(config.GetConnection())
 	playerController := controllers.NewPlayerController(pService)
 
+	roles := []middleware.UserRole{{R: "player"}, {R: "venueAdmin"}}
+	group.Use(middleware.NewRoles(roles).HasRole)
+
 	group.Get("/", playerController.RetrievePlayers)
-	group.Put("/:playerId", playerController.UpdatePlayer)
 	group.Get("/:playerId", playerController.RetrievePlayerById)
+	group.Get("/:playerId/matches", playerController.GetPlayerMatches)
+
+	roles = []middleware.UserRole{{R: "player"}}
+	group.Use(middleware.NewRoles(roles).HasRole)
+
+	group.Put("/:playerId", playerController.UpdatePlayer)
 	group.Get("/:playerId/squads", playerController.GetSquadsByUser)
 	group.Get("/:playerId/squads/:squadId", playerController.GetSquadByPlayer)
 	group.Post("/:playerId/squads/:squadId", playerController.JoinSquad)
-	group.Get("/:playerId/matches", playerController.GetPlayerMatches)
 	group.Post("/:playerId/matches/:matchId", playerController.JoinMatch)
 	group.Delete("/:playerId/matches/:matchId", playerController.LeaveMatch)
 	group.Post("/:playerId/matches/:matchId/pay", playerController.MakePlayerPayment)
-	group.Patch("/:playerId/matches/:matchId/pay", playerController.UpdatePlayerPaymentType)
+	group.Put("/:playerId/matches/:matchId/pay", playerController.UpdatePlayerPaymentType)
 }

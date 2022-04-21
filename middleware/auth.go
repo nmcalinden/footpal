@@ -3,39 +3,46 @@ package middleware
 import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
-	"github.com/golang-jwt/jwt/v4"
-	"time"
+	"github.com/nmcalinden/footpal/utils"
+	"golang.org/x/exp/slices"
 )
 
-func IsAuthenticated(c *fiber.Ctx) error {
-	err := jwtware.New(jwtware.Config{SigningKey: []byte("secret")})
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).SendString("Valid JWT required")
-	}
-	return nil
+var IsAuthenticated = jwtware.New(jwtware.Config{SigningKey: []byte("accessSecret")})
+
+type Roles struct {
+	Roles []UserRole
 }
 
-func CreateToken(name *string, email *string, isAdmin bool, isPlayer bool) (string, error) {
-	roles := buildRoles(isAdmin, isPlayer)
-
-	claims := jwt.MapClaims{
-		"name":  name,
-		"email": email,
-		"roles": roles,
-		"exp":   time.Now().Add(time.Minute * 60).Unix(),
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte("secret"))
+type UserRole struct {
+	R string
 }
 
-func buildRoles(isAdmin bool, isPlayer bool) []string {
-	var roles []string
-	if isAdmin {
-		roles = append(roles, "venueAdmin")
+func NewRoles(roles []UserRole) Roles {
+	return Roles{Roles: roles}
+}
+
+func (r Roles) HasRole(c *fiber.Ctx) error {
+	claims := utils.GetClaims(c.Locals("user"))
+	roles := claims["roles"].([]interface{})
+	if ok := isValid(roles, r.Roles); !ok {
+		return utils.BuildErrorResponse(c, fiber.StatusForbidden, "User does not have correct permissions")
 	}
-	if isPlayer {
-		roles = append(roles, "player")
+	return c.Next()
+}
+
+func isValid(roles []interface{}, expectedRoles []UserRole) bool {
+	if len(roles) == 0 {
+		return false
 	}
-	return roles
+
+	var isValid bool
+	for _, r := range roles {
+		i := slices.IndexFunc(expectedRoles, func(uR UserRole) bool { return uR.R == r })
+		if i != -1 {
+			isValid = true
+			break
+		}
+	}
+
+	return isValid
 }
