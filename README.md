@@ -1,5 +1,5 @@
 # footpal
-Footpal 
+Footpal API
 
 5 a side booking app!
 
