@@ -61,6 +61,7 @@ func CheckPasswordHash(password, hash string) bool {
 
 func buildRoles(isAdmin bool, isPlayer bool) []string {
 	var roles []string
+	roles = append(roles, "everyone")
 	if isAdmin {
 		roles = append(roles, "venueAdmin")
 	}

@@ -62,7 +62,21 @@ func (s *UserService) Register(register *payloads.Register) (*int, error) {
 		Email:    register.Email,
 		Password: pw,
 	}
-	return s.userRepo.Save(&newUser)
+
+	id, err := s.userRepo.Save(&newUser)
+	if err != nil {
+		return nil, err
+	}
+
+	if register.IsPlayer {
+		_, err := s.playerRepo.Save(&models.Player{UserId: *id})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return id, nil
+
 }
 
 func (s *UserService) Refresh(refreshToken *string) (*payloads.TokenPairResponse, error) {
@@ -96,11 +110,11 @@ func (s *UserService) getTokenPair(res *models.User) (*payloads.TokenPairRespons
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	adminChan, playerChan := make(chan bool), make(chan bool)
+	adminChan, playerChan := make(chan bool, 1), make(chan bool, 1)
 	go s.doesAdminExist(*res.UserId, &wg, adminChan)
 	go s.doesPlayerExist(*res.UserId, &wg, playerChan)
 
-	go func() { wg.Wait() }()
+	wg.Wait()
 
 	isAdmin, isPlayer := <-adminChan, <-playerChan
 

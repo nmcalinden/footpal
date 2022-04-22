@@ -10,6 +10,9 @@ type Register struct {
 	Surname  string `json:"surname" validate:"required,min=3,max=50"`
 	Email    string `json:"email" validate:"required,min=5,max=100"`
 	Password string `json:"password" validate:"required,min=5,max=25"`
+
+	//default: true
+	IsPlayer bool `json:"isPlayer" validate:"required"`
 }
 
 type Refresh struct {

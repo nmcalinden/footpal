@@ -1,17 +1,26 @@
 package services
 
 import (
-	"database/sql"
 	"github.com/hashicorp/go-multierror"
 	"github.com/jmoiron/sqlx"
+	"github.com/nmcalinden/footpal/mappers"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/utils"
+	"github.com/nmcalinden/footpal/views"
+	"gopkg.in/guregu/null.v4"
+	"sort"
 	"sync"
+)
+
+const (
+	playersQuery = "/players?limit=%d&after_id=%d"
 )
 
 type PlayerService struct {
 	playerRepo      *repository.PlayerRepository
+	userRepo        *repository.UserRepository
 	matchRepo       *repository.MatchRepository
 	matchPlayerRepo *repository.MatchPlayerRepository
 	squadRepo       *repository.SquadRepository
@@ -20,14 +29,93 @@ type PlayerService struct {
 func NewPlayerService(database *sqlx.DB) *PlayerService {
 	return &PlayerService{
 		playerRepo:      repository.NewPlayerRepository(database),
+		userRepo:        repository.NewUserRepository(database),
 		matchRepo:       repository.NewMatchRepository(database),
 		matchPlayerRepo: repository.NewMatchPlayerRepository(database),
 		squadRepo:       repository.NewSquadRepository(database),
 	}
 }
 
-func (s *PlayerService) GetPlayers() (*[]models.Player, error) {
-	return s.playerRepo.FindAll()
+func (s *PlayerService) GetPlayers(limit int, after int) (*views.Players, error) {
+	t, err := s.playerRepo.GetTotal()
+	if err != nil {
+		return nil, err
+	}
+
+	players, err := s.playerRepo.FindAll(limit, after)
+	if err != nil {
+		return nil, err
+	}
+
+	ps, err := s.buildPlayers(players)
+	if err != nil {
+		return nil, err
+	}
+
+	response := buildPlayersResponse(limit, after, *ps, t)
+	return &response, nil
+}
+
+func (s *PlayerService) buildPlayers(players *[]models.Player) (*[]views.Player, error) {
+	var ps []views.Player
+
+	numP := len(*players)
+	playerChan, errorChan := make(chan views.Player, numP), make(chan error)
+	var wg sync.WaitGroup
+	wg.Add(numP)
+	for _, player := range *players {
+		go s.createPlayerView(player, &wg, playerChan, errorChan)
+	}
+
+	wg.Wait()
+	close(errorChan)
+	close(playerChan)
+
+	var mErr error
+	for e := range errorChan {
+		mErr = multierror.Append(mErr, e)
+	}
+	if mErr != nil {
+		return nil, mErr
+	}
+
+	for pC := range playerChan {
+		ps = append(ps, pC)
+	}
+	sort.Slice(ps[:], func(i, j int) bool {
+		return *ps[i].PlayerId < *ps[j].PlayerId
+	})
+	return &ps, nil
+}
+
+func (s PlayerService) createPlayerView(player models.Player, wg *sync.WaitGroup, pChan chan views.Player, errorChan chan<- error) {
+	defer wg.Done()
+	u, err := s.userRepo.FindById(&player.UserId)
+	if err != nil {
+		pChan <- views.Player{}
+		errorChan <- err
+		return
+	}
+
+	var p views.Player
+	err = mappers.MapToPlayerView(&p, player, *u)
+	if err != nil {
+		pChan <- views.Player{}
+		errorChan <- err
+		return
+	}
+
+	pChan <- p
+}
+
+func buildPlayersResponse(limit int, after int, ps []views.Player, t *int) views.Players {
+	lastId := ps[len(ps)-1].PlayerId
+	pag := utils.BuildPagination(*t, limit, len(ps), after, *lastId, playersQuery)
+	response := views.Players{
+		Pagination: pag,
+		Data:       ps,
+	}
+	return response
 }
 
 func (s *PlayerService) GetPlayerById(playerId *int) (*models.Player, error) {
@@ -64,10 +152,8 @@ func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRe
 		return nil, err
 	}
 
-	p.Nickname = sql.NullString{
-		String: playerRequest.Nickname,
-		Valid:  true,
-	}
+	test := null.StringFromPtr(&playerRequest.Nickname).Ptr()
+	p.Nickname = test
 	p.PhoneNo = playerRequest.PhoneNo
 	p.Postcode = playerRequest.Postcode
 	p.City = playerRequest.City

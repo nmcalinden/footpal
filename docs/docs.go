@@ -563,14 +563,29 @@ const docTemplate = `{
                 "tags": [
                     "player"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "After ID",
+                        "name": "after_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Player"
-                            }
+                            "$ref": "#/definitions/views.Players"
                         }
                     },
                     "500": {
@@ -2409,6 +2424,7 @@ const docTemplate = `{
             "required": [
                 "email",
                 "forename",
+                "isPlayer",
                 "password",
                 "surname"
             ],
@@ -2422,6 +2438,10 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 50,
                     "minLength": 3
+                },
+                "isPlayer": {
+                    "description": "default: true",
+                    "type": "boolean"
                 },
                 "password": {
                     "type": "string",
@@ -2541,6 +2561,68 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 8,
                     "minLength": 5
+                }
+            }
+        },
+        "views.Pagination": {
+            "type": "object",
+            "properties": {
+                "_links": {
+                    "$ref": "#/definitions/views.PaginationLinks"
+                },
+                "lastId": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "views.PaginationLinks": {
+            "type": "object",
+            "properties": {
+                "next": {
+                    "type": "string"
+                },
+                "previous": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.Player": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "playerId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "views.Players": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.Player"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/views.Pagination"
                 }
             }
         },

@@ -20,12 +20,24 @@ func NewPlayerController(playerService *services.PlayerService) *PlayerControlle
 // @Description  Retrieve all players
 // @Tags         player
 // @Produce      json
-// @Success      200  {array}  models.Player
+// @Param        limit   query  int  true  "Limit" default(10)
+// @Param        after_id   query  int  true  "After ID" default(0)
+// @Success      200  {object}  views.Players
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players [get]
 func (con PlayerController) RetrievePlayers(c *fiber.Ctx) error {
-	p, err := con.playerService.GetPlayers()
+	limit, err := strconv.Atoi(c.Query("limit"))
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Limit supplied is invalid")
+	}
+
+	after, err := strconv.Atoi(c.Query("after_id"))
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "ID supplied is invalid")
+	}
+
+	p, err := con.playerService.GetPlayers(limit, after)
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get Players")
 	}

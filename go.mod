@@ -9,11 +9,14 @@ require (
 	github.com/gofiber/helmet/v2 v2.2.11
 	github.com/gofiber/jwt/v3 v3.2.11
 	github.com/golang-jwt/jwt/v4 v4.4.1
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/lib/pq v1.2.0
 	github.com/swaggo/swag v1.8.1
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	golang.org/x/exp v0.0.0-20220414153411-bcd21879b8fd
+	gopkg.in/guregu/null.v4 v4.0.0
+	gopkg.in/jeevatkm/go-model.v1 v1.1.0
 )
 
 require (
@@ -26,7 +29,6 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -41,6 +43,5 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.10 // indirect
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
-	gopkg.in/jeevatkm/go-model.v1 v1.1.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

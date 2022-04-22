@@ -16,13 +16,13 @@ func ConfigureUserHandlers(app *fiber.App) {
 	usrRepo := repository.NewUserRepository(db)
 	pRepo := repository.NewPlayerRepository(db)
 	vRepo := repository.NewVenueRepository(db)
-	uService := services.NewUserService(usrRepo, pRepo, vRepo)
+	uService := services.NewUserService(*usrRepo, *pRepo, *vRepo)
 	userController := controllers.NewUserController(uService)
 
 	group.Post("/login", userController.LoginHandler)
 	group.Post("/register", userController.RegisterHandler)
 	group.Post("/refresh", userController.RefreshToken)
 
-	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
+	roles := []middleware.UserRole{{Role: "everyone"}}
 	group.Delete("/deactivate", middleware.IsAuthenticated, middleware.NewRoles(roles).HasRole, userController.DeactivateHandler)
 }

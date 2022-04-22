@@ -274,6 +274,9 @@ definitions:
         maxLength: 50
         minLength: 3
         type: string
+      isPlayer:
+        description: 'default: true'
+        type: boolean
       password:
         maxLength: 25
         minLength: 5
@@ -285,6 +288,7 @@ definitions:
     required:
     - email
     - forename
+    - isPlayer
     - password
     - surname
     type: object
@@ -365,6 +369,46 @@ definitions:
     - name
     - phoneNo
     - postcode
+    type: object
+  views.Pagination:
+    properties:
+      _links:
+        $ref: '#/definitions/views.PaginationLinks'
+      lastId:
+        type: integer
+      limit:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  views.PaginationLinks:
+    properties:
+      next:
+        type: string
+      previous:
+        type: string
+    type: object
+  views.Player:
+    properties:
+      city:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      playerId:
+        type: integer
+    type: object
+  views.Players:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/views.Player'
+        type: array
+      pagination:
+        $ref: '#/definitions/views.Pagination'
     type: object
   views.Venue:
     properties:
@@ -738,15 +782,26 @@ paths:
   /players:
     get:
       description: Retrieve all players
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: After ID
+        in: query
+        name: after_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Player'
-            type: array
+            $ref: '#/definitions/views.Players'
         "500":
           description: Internal Server Error
           schema:
