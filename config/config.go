@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"os"
 	"time"
 )
 
@@ -16,6 +17,9 @@ const (
 )
 
 var conn *sqlx.DB
+
+var AccessSecret = os.Getenv("ACCESS_SECRET")
+var RefreshSecret = os.Getenv("REFRESH_SECRET")
 
 func InitializeDatabase() {
 	db, err := sqlx.Open("postgres", getDSN())

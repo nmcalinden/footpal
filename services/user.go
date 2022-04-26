@@ -4,16 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
 	"github.com/nmcalinden/footpal/utils"
 	"sync"
-)
-
-const (
-	access  = "accessSecret"
-	refresh = "refreshSecret"
 )
 
 type UserService struct {
@@ -118,12 +114,12 @@ func (s *UserService) getTokenPair(res *models.User) (*payloads.TokenPairRespons
 
 	isAdmin, isPlayer := <-adminChan, <-playerChan
 
-	at, err := utils.GetAccessToken(res, isAdmin, isPlayer, access)
+	at, err := utils.GetAccessToken(res, isAdmin, isPlayer, config.AccessSecret)
 	if err != nil {
 		return nil, err
 	}
 
-	rt, err := utils.GetRefreshToken(res, refresh)
+	rt, err := utils.GetRefreshToken(res, config.RefreshSecret)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
@@ -21,6 +22,8 @@ type PlayerRepository struct {
 func NewPlayerRepository(database *sqlx.DB) *PlayerRepository {
 	return &PlayerRepository{database: database}
 }
+
+var PlayerRepoSet = wire.NewSet(NewPlayerRepository, wire.Bind(new(PlayerRepositoryI), new(*PlayerRepository)))
 
 func (r PlayerRepository) FindAll(limit int, after int) (*[]models.Player, error) {
 	var players []models.Player

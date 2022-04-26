@@ -1,8 +1,9 @@
 package services
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"github.com/hashicorp/go-multierror"
-	"github.com/jmoiron/sqlx"
+	"github.com/nmcalinden/footpal/errors"
 	"github.com/nmcalinden/footpal/mappers"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
@@ -10,6 +11,7 @@ import (
 	"github.com/nmcalinden/footpal/utils"
 	"github.com/nmcalinden/footpal/views"
 	"gopkg.in/guregu/null.v4"
+	"log"
 	"sort"
 	"sync"
 )
@@ -19,20 +21,22 @@ const (
 )
 
 type PlayerService struct {
-	playerRepo      *repository.PlayerRepository
-	userRepo        *repository.UserRepository
-	matchRepo       *repository.MatchRepository
-	matchPlayerRepo *repository.MatchPlayerRepository
-	squadRepo       *repository.SquadRepository
+	playerRepo      repository.PlayerRepositoryI
+	userRepo        repository.UserRepositoryI
+	matchRepo       repository.MatchRepositoryI
+	matchPlayerRepo repository.MatchPlayerRepositoryI
+	squadRepo       repository.SquadRepositoryI
 }
 
-func NewPlayerService(database *sqlx.DB) *PlayerService {
+func NewPlayerService(playerRepo repository.PlayerRepositoryI, userRepo repository.UserRepositoryI,
+	matchRepo repository.MatchRepositoryI, matchPlayerRepo repository.MatchPlayerRepositoryI,
+	squadRepo repository.SquadRepositoryI) *PlayerService {
 	return &PlayerService{
-		playerRepo:      repository.NewPlayerRepository(database),
-		userRepo:        repository.NewUserRepository(database),
-		matchRepo:       repository.NewMatchRepository(database),
-		matchPlayerRepo: repository.NewMatchPlayerRepository(database),
-		squadRepo:       repository.NewSquadRepository(database),
+		playerRepo:      playerRepo,
+		userRepo:        userRepo,
+		matchRepo:       matchRepo,
+		matchPlayerRepo: matchPlayerRepo,
+		squadRepo:       squadRepo,
 	}
 }
 
@@ -118,8 +122,27 @@ func buildPlayersResponse(limit int, after int, ps []views.Player, t *int) views
 	return response
 }
 
-func (s *PlayerService) GetPlayerById(playerId *int) (*models.Player, error) {
-	return s.playerRepo.FindById(playerId)
+func (s *PlayerService) GetPlayerById(playerId *int) (*views.Player, error) {
+	p, err := s.playerRepo.FindById(playerId)
+	if err != nil {
+		log.Println(err)
+		return nil, errors.GetError(errors.RecordNotFound, fiber.StatusNotFound, "Player does not exist")
+	}
+
+	u, err := s.userRepo.FindById(&p.UserId)
+	if err != nil {
+		log.Println(err)
+		return nil, errors.GetError(errors.RecordNotFound, fiber.StatusNotFound, "User does not exist")
+	}
+
+	var player views.Player
+	err = mappers.MapToPlayerView(&player, *p, *u)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &player, nil
 }
 
 func (s *PlayerService) GetAllSquadsByPlayer(userId *int) (*[]models.Squad, error) {

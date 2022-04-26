@@ -1,13 +1,24 @@
 package repository
 
 import (
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
 
+type BookingRepositoryI interface {
+	FindAll() (*[]models.Booking, error)
+	FindById(id *int) (*models.Booking, error)
+	FindMatchesByBookingId(id *int) (*[]models.Match, error)
+	Save(booking *models.Booking) (*int, error)
+	Update(booking *models.Booking) (*models.Booking, error)
+}
+
 type BookingRepository struct {
 	database *sqlx.DB
 }
+
+var BookingRepoSet = wire.NewSet(NewBookingRepository, wire.Bind(new(BookingRepositoryI), new(*BookingRepository)))
 
 func NewBookingRepository(database *sqlx.DB) *BookingRepository {
 	return &BookingRepository{database: database}

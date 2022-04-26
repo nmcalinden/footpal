@@ -2,9 +2,23 @@ package repository
 
 import (
 	"fmt"
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+type SquadRepositoryI interface {
+	FindAll() (*[]models.Squad, error)
+	FindById(id *int) (*models.Squad, error)
+	FindAllByPlayerId(playerId *int) (*[]models.Squad, error)
+	FindSquadByPlayerId(squadId *int, playerId *int) (*models.Squad, error)
+	FindPlayersBySquadId(squadId *int) (*[]models.SquadPlayerDetails, error)
+	Update(squad *models.Squad) (*models.Squad, error)
+	Save(squad *models.Squad) (*int, error)
+	AddPlayer(squadPlayer models.SquadPlayer) error
+	Delete(id *int) error
+	UpdatePlayerStatus(squadId *int, playerId *int, status int) error
+}
 
 type SquadRepository struct {
 	database *sqlx.DB
@@ -13,6 +27,8 @@ type SquadRepository struct {
 func NewSquadRepository(database *sqlx.DB) *SquadRepository {
 	return &SquadRepository{database: database}
 }
+
+var SquadRepoSet = wire.NewSet(NewSquadRepository, wire.Bind(new(SquadRepositoryI), new(*SquadRepository)))
 
 func (r SquadRepository) FindAll() (*[]models.Squad, error) {
 	var squads []models.Squad
@@ -88,21 +104,6 @@ func (r SquadRepository) AddPlayer(squadPlayer models.SquadPlayer) error {
 	return nil
 }
 
-func getFindAllByPlayerIdQuery() string {
-	return fmt.Sprintf("SELECT sq.* FROM squad sq JOIN squad_player sp on sq.id = sp.squad_id WHERE sp.player_id = $1")
-}
-
-func getFindPlayersBySquadIdQuery() string {
-	return fmt.Sprintf("SELECT p.id, p.nickname, fu.forename, fu.surname FROM squad_player sp " +
-		"JOIN player p on sp.player_id = p.id " +
-		"JOIN footpal_user fu on p.footpal_user_id = fu.id " +
-		"WHERE sp.squad_id = $1")
-}
-
-func getFindBySquadIdAndPlayerIdQuery() string {
-	return fmt.Sprintf("SELECT sq.* FROM squad sq JOIN squad_player sp on sq.id = sp.squad_id WHERE sp.squad_id = $1 AND sp.player_id = $2")
-}
-
 func (r SquadRepository) Delete(id *int) error {
 	res, err := r.database.Exec("DELETE FROM footpaldb.public.squad WHERE id=$1", id)
 
@@ -125,4 +126,19 @@ func (r SquadRepository) UpdatePlayerStatus(squadId *int, playerId *int, status 
 	}
 
 	return nil
+}
+
+func getFindAllByPlayerIdQuery() string {
+	return fmt.Sprintf("SELECT sq.* FROM squad sq JOIN squad_player sp on sq.id = sp.squad_id WHERE sp.player_id = $1")
+}
+
+func getFindPlayersBySquadIdQuery() string {
+	return fmt.Sprintf("SELECT p.id, p.nickname, fu.forename, fu.surname FROM squad_player sp " +
+		"JOIN player p on sp.player_id = p.id " +
+		"JOIN footpal_user fu on p.footpal_user_id = fu.id " +
+		"WHERE sp.squad_id = $1")
+}
+
+func getFindBySquadIdAndPlayerIdQuery() string {
+	return fmt.Sprintf("SELECT sq.* FROM squad sq JOIN squad_player sp on sq.id = sp.squad_id WHERE sp.squad_id = $1 AND sp.player_id = $2")
 }

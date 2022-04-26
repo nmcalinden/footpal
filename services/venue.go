@@ -1,7 +1,6 @@
 package services
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/mappers"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
@@ -11,11 +10,11 @@ import (
 )
 
 type VenueService struct {
-	venueRepo *repository.VenueRepository
+	venueRepo repository.VenueRepositoryI
 }
 
-func NewVenueService(database *sqlx.DB) *VenueService {
-	return &VenueService{venueRepo: repository.NewVenueRepository(database)}
+func NewVenueService(venueRepo repository.VenueRepositoryI) *VenueService {
+	return &VenueService{venueRepo: venueRepo}
 }
 
 func (s *VenueService) GetVenues() (*[]views.Venue, error) {

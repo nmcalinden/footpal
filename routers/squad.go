@@ -2,10 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/config"
-	"github.com/nmcalinden/footpal/controllers"
 	"github.com/nmcalinden/footpal/middleware"
-	"github.com/nmcalinden/footpal/services"
 )
 
 type SquadResponse struct {
@@ -15,8 +12,7 @@ type SquadResponse struct {
 func ConfigureSquadPlayers(app *fiber.App) {
 	group := app.Group("/squads")
 
-	sService := services.NewSquadService(config.GetConnection())
-	squadController := controllers.NewSquadController(sService)
+	squadController := InitializeSquadController()
 
 	group.Get("/", squadController.RetrieveSquads)
 	group.Get("/:squadId", squadController.RetrieveSquadById)

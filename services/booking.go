@@ -1,7 +1,6 @@
 package services
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
@@ -12,8 +11,8 @@ type BookingService struct {
 	bookingRepo *repository.BookingRepository
 }
 
-func NewBookingService(database *sqlx.DB) *BookingService {
-	return &BookingService{bookingRepo: repository.NewBookingRepository(database)}
+func NewBookingService(bookingRepo *repository.BookingRepository) *BookingService {
+	return &BookingService{bookingRepo: bookingRepo}
 }
 
 func (s *BookingService) GetBookings() (*[]models.Booking, error) {

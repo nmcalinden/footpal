@@ -2,17 +2,13 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/config"
-	"github.com/nmcalinden/footpal/controllers"
 	"github.com/nmcalinden/footpal/middleware"
-	"github.com/nmcalinden/footpal/services"
 )
 
 func ConfigureBookingHandlers(app *fiber.App) {
 	group := app.Group("/bookings", middleware.IsAuthenticated)
 
-	bService := services.NewBookingService(config.GetConnection())
-	bookController := controllers.NewBookingController(bService)
+	bookController := InitializeBookingController()
 
 	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
 	group.Use(middleware.NewRoles(roles).HasRole)

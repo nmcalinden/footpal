@@ -1,21 +1,20 @@
 package services
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/repository"
 )
 
 type SquadService struct {
-	playerRepo *repository.PlayerRepository
-	squadRepo  *repository.SquadRepository
+	playerRepo repository.PlayerRepositoryI
+	squadRepo  repository.SquadRepositoryI
 }
 
-func NewSquadService(database *sqlx.DB) *SquadService {
+func NewSquadService(playerRepo repository.PlayerRepositoryI, squadRepo repository.SquadRepositoryI) *SquadService {
 	return &SquadService{
-		playerRepo: repository.NewPlayerRepository(database),
-		squadRepo:  repository.NewSquadRepository(database),
+		playerRepo: playerRepo,
+		squadRepo:  squadRepo,
 	}
 }
 

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/errors"
 	"github.com/nmcalinden/footpal/payloads"
 	"github.com/nmcalinden/footpal/services"
 	"github.com/nmcalinden/footpal/utils"
@@ -63,8 +64,8 @@ func (con PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 		return err
 	}
 
-	if errors := utils.ValidateStruct(*p); errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if e := utils.ValidateStruct(*p); e != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(e)
 	}
 
 	res, err := con.playerService.EditPlayer(&userId, p)
@@ -79,8 +80,10 @@ func (con PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param        playerId   path  int  true  "Player ID"
-// @Success      200 {object} models.Player
+// @Success      200 {object} views.Player
 // @Failure      400 {object} utils.ErrorResponse
+// @Failure      404 {object} utils.ErrorResponse
+// @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players/{playerId} [get]
 func (con PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
@@ -90,9 +93,12 @@ func (con PlayerController) RetrievePlayerById(c *fiber.Ctx) error {
 	}
 
 	p, err := con.playerService.GetPlayerById(&playerId)
-
 	if err != nil {
-		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Player does not exist")
+		e, ok := err.(*errors.FpError)
+		if ok {
+			return utils.BuildErrorResponse(c, e.Status, e.Error())
+		}
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to retrieve player")
 	}
 	return c.Status(fiber.StatusOK).JSON(p)
 }
@@ -271,8 +277,8 @@ func (con PlayerController) MakePlayerPayment(c *fiber.Ctx) error {
 	if err := c.BodyParser(&pay); err != nil {
 		return err
 	}
-	if errors := utils.ValidateStruct(*pay); errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if e := utils.ValidateStruct(*pay); e != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(e)
 	}
 
 	err = con.playerService.Pay(&userId, &matchId, &pay.AmountToPay)

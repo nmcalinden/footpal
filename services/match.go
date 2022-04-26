@@ -1,20 +1,19 @@
 package services
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 	"github.com/nmcalinden/footpal/repository"
 )
 
 type MatchService struct {
-	matchRepo       *repository.MatchRepository
-	matchPlayerRepo *repository.MatchPlayerRepository
+	matchRepo       repository.MatchRepositoryI
+	matchPlayerRepo repository.MatchPlayerRepositoryI
 }
 
-func NewMatchService(database *sqlx.DB) *MatchService {
+func NewMatchService(matchRepo repository.MatchRepositoryI, matchPlayerRepo repository.MatchPlayerRepositoryI) *MatchService {
 	return &MatchService{
-		matchRepo:       repository.NewMatchRepository(database),
-		matchPlayerRepo: repository.NewMatchPlayerRepository(database),
+		matchRepo:       matchRepo,
+		matchPlayerRepo: matchPlayerRepo,
 	}
 }
 

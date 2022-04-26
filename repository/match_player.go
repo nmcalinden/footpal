@@ -2,9 +2,19 @@ package repository
 
 import (
 	"fmt"
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+type MatchPlayerRepositoryI interface {
+	FindByMatchId(matchId *int) (*[]models.MatchPlayer, error)
+	FindMatchesByPlayer(playerId *int) (*[]models.Match, error)
+	FindByMatchIdAndPlayerId(matchId *int, playerId *int) (*models.MatchPlayer, error)
+	Update(matchPlayer *models.MatchPlayer) (*models.MatchPlayer, error)
+	Delete(matchId *int, playerId *int) error
+	Save(player models.MatchPlayer) (*int, error)
+}
 
 type MatchPlayerRepository struct {
 	database *sqlx.DB
@@ -13,6 +23,8 @@ type MatchPlayerRepository struct {
 func NewMatchPlayerRepository(database *sqlx.DB) *MatchPlayerRepository {
 	return &MatchPlayerRepository{database: database}
 }
+
+var MatchPlayerRepoSet = wire.NewSet(NewMatchPlayerRepository, wire.Bind(new(MatchPlayerRepositoryI), new(*MatchPlayerRepository)))
 
 func (r MatchPlayerRepository) FindByMatchId(matchId *int) (*[]models.MatchPlayer, error) {
 	var matchPlayers []models.MatchPlayer

@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/models"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -45,7 +46,7 @@ func ParseRefreshToken(refreshToken *string) (*jwt.Token, error) {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte("refreshSecret"), nil
+		return []byte(config.RefreshSecret), nil
 	})
 }
 

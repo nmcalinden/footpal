@@ -1,9 +1,17 @@
 package repository
 
 import (
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+type MatchRepositoryI interface {
+	FindAll() (*[]models.Match, error)
+	FindById(id *int) (*models.Match, error)
+	Update(match *models.Match) (*models.Match, error)
+	DeletePlayerByMatch(matchId *int, playerId *int) error
+}
 
 type MatchRepository struct {
 	database *sqlx.DB
@@ -12,6 +20,8 @@ type MatchRepository struct {
 func NewMatchRepository(database *sqlx.DB) *MatchRepository {
 	return &MatchRepository{database: database}
 }
+
+var MatchRepoSet = wire.NewSet(NewMatchRepository, wire.Bind(new(MatchRepositoryI), new(*MatchRepository)))
 
 func (r MatchRepository) FindAll() (*[]models.Match, error) {
 	var matchRecords []models.Match
