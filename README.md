@@ -1,5 +1,4 @@
-# footpal
-Footpal 
+# Footpal API
 
 5 a side booking app!
 
@@ -7,3 +6,5 @@ Footpal
 - Join Football groups
 - Opt in to games
 - Connect with your local football community
+
+Written in Go
