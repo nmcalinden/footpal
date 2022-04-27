@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/middleware"
 )
 
@@ -10,8 +11,7 @@ func ConfigureBookingHandlers(app *fiber.App) {
 
 	bookController := InitializeBookingController()
 
-	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
-	group.Use(middleware.NewRoles(roles).HasRole)
+	group.Use(middleware.NewRoles(enums.Player, enums.VenueAdmin).HasRole)
 	group.Get("/", bookController.RetrieveBookings)
 	group.Post("/", bookController.CreateBooking)
 	group.Get("/:bookingId", bookController.GetBookingById)

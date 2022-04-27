@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/middleware"
 )
 
@@ -10,8 +11,7 @@ func ConfigureMatchHandlers(app *fiber.App) {
 
 	matchController := InitializeMatchController()
 
-	roles := []middleware.UserRole{{Role: "player"}, {Role: "venueAdmin"}}
-	group.Use(middleware.NewRoles(roles).HasRole)
+	group.Use(middleware.NewRoles(enums.Player, enums.VenueAdmin).HasRole)
 
 	group.Get("/", matchController.RetrieveMatches)
 	group.Get("/:matchId", matchController.RetrieveMatchById)

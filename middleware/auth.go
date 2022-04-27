@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/utils"
 	"golang.org/x/exp/slices"
 )
@@ -11,14 +12,10 @@ import (
 var IsAuthenticated = jwtware.New(jwtware.Config{SigningKey: []byte(config.AccessSecret)})
 
 type Roles struct {
-	Roles []UserRole
+	Roles []enums.Role
 }
 
-type UserRole struct {
-	Role string
-}
-
-func NewRoles(roles []UserRole) Roles {
+func NewRoles(roles ...enums.Role) Roles {
 	return Roles{Roles: roles}
 }
 
@@ -31,14 +28,14 @@ func (r Roles) HasRole(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func isValid(roles []interface{}, expectedRoles []UserRole) bool {
+func isValid(roles []interface{}, expectedRoles []enums.Role) bool {
 	if len(roles) == 0 {
 		return false
 	}
 
 	var isValid bool
 	for _, r := range roles {
-		i := slices.IndexFunc(expectedRoles, func(uR UserRole) bool { return uR.Role == r })
+		i := slices.IndexFunc(expectedRoles, func(rol enums.Role) bool { return rol.String() == r })
 		if i != -1 {
 			isValid = true
 			break

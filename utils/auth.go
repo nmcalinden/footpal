@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/models"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -62,12 +63,12 @@ func CheckPasswordHash(password, hash string) bool {
 
 func buildRoles(isAdmin bool, isPlayer bool) []string {
 	var roles []string
-	roles = append(roles, "everyone")
+	roles = append(roles, enums.All.String())
 	if isAdmin {
-		roles = append(roles, "venueAdmin")
+		roles = append(roles, enums.VenueAdmin.String())
 	}
 	if isPlayer {
-		roles = append(roles, "player")
+		roles = append(roles, enums.Player.String())
 	}
 	return roles
 }

@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/middleware"
 )
 
@@ -10,14 +11,12 @@ func ConfigurePlayerHandlers(app *fiber.App) {
 
 	playerController := InitializePlayerController()
 
-	roles := []middleware.UserRole{{Role: "everyone"}}
-	group.Use(middleware.NewRoles(roles).HasRole)
+	group.Use(middleware.NewRoles(enums.All).HasRole)
 
 	group.Get("/", playerController.RetrievePlayers)
 	group.Get("/:playerId", playerController.RetrievePlayerById)
 
-	roles = []middleware.UserRole{{Role: "player"}}
-	group.Use(middleware.NewRoles(roles).HasRole)
+	group.Use(middleware.NewRoles(enums.Player).HasRole)
 
 	group.Get("/:playerId/matches", playerController.GetPlayerMatches)
 	group.Put("/:playerId", playerController.UpdatePlayer)

@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/enums"
 	"github.com/nmcalinden/footpal/middleware"
 )
 
@@ -18,8 +19,7 @@ func ConfigureVenueHandlers(app *fiber.App) {
 	group.Get("/:venueId/timeslots", venueController.RetrieveVenueTimeSlots)
 
 	group.Use(middleware.IsAuthenticated)
-	roles := []middleware.UserRole{{Role: "venueAdmin"}}
-	group.Use(middleware.NewRoles(roles).HasRole)
+	group.Use(middleware.NewRoles(enums.VenueAdmin).HasRole)
 
 	group.Post("/", venueController.CreateVenue)
 	group.Put("/:venueId", venueController.UpdateVenue)
