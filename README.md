@@ -7,13 +7,18 @@ Golang POC for a 5 a side booking app
 - Opt in to games
 - Connect with local football community
 
-### Local Setup
+### TOC
+- [Setup](#setup)
+- [Run](#run)
+- [Dependencies](#dependencies)
+
+### Setup
 1. Go `go1.16+`
 2. Docker `latest`
 3. IDE `GoLand 2021.3.4`
 4. Environment Variables: `ACCESS_SECRET` and `REFRESH_SECRET` _Note_: Add environment variables either via terminal or IDE Configuration
 
-## Run/Debug Configuration
+### Run
 1. Clone Repo
 2. Install Dependencies: `go install`
 3. Initialize DB: `docker-compose up`
@@ -23,7 +28,7 @@ Golang POC for a 5 a side booking app
 6. Swagger: `http://localhost:3000/swagger`
 
 
- ## Dependencies
+ ### Dependencies
 |                                                             | Description                                                                                                                                                                                                                                                                                                                                                                                   |
 |-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [air](https://github.com/cosmtrek/air)                      | Live reload for Go apps                                                                                                                                                                                                                                                                                                                                                                       |
