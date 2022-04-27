@@ -1,10 +1,11 @@
 package repository
 
 import (
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+//go:generate mockgen -destination=./mocks/user_mock.go -package=mocks github.com/nmcalinden/footpal/repository UserRepositoryI
 
 type UserRepositoryI interface {
 	FindById(id *int) (*models.User, error)
@@ -20,8 +21,6 @@ type UserRepository struct {
 func NewUserRepository(database *sqlx.DB) *UserRepository {
 	return &UserRepository{database: database}
 }
-
-var UserRepoSet = wire.NewSet(NewUserRepository, wire.Bind(new(UserRepositoryI), new(*UserRepository)))
 
 func (r UserRepository) FindById(id *int) (*models.User, error) {
 	var user models.User

@@ -2,10 +2,11 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+//go:generate mockgen -destination=./mocks/venue_mock.go -package=mocks github.com/nmcalinden/footpal/repository VenueRepositoryI
 
 type VenueRepositoryI interface {
 	FindAll() (*[]models.Venue, error)
@@ -34,8 +35,6 @@ type VenueRepository struct {
 func NewVenueRepository(database *sqlx.DB) *VenueRepository {
 	return &VenueRepository{database: database}
 }
-
-var VenueRepoSet = wire.NewSet(NewVenueRepository, wire.Bind(new(VenueRepositoryI), new(*VenueRepository)))
 
 func (r VenueRepository) FindAll() (*[]models.Venue, error) {
 	var venues []models.Venue

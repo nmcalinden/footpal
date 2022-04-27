@@ -7,6 +7,7 @@
 package routers
 
 import (
+	"github.com/google/wire"
 	"github.com/nmcalinden/footpal/config"
 	"github.com/nmcalinden/footpal/controllers"
 	"github.com/nmcalinden/footpal/repository"
@@ -70,3 +71,19 @@ func InitializeVenueController() *controllers.VenueController {
 	venueController := controllers.NewVenueController(venueService)
 	return venueController
 }
+
+// wire.go:
+
+var BookingRepoSet = wire.NewSet(repository.NewBookingRepository, wire.Bind(new(repository.BookingRepositoryI), new(*repository.BookingRepository)))
+
+var MatchRepoSet = wire.NewSet(repository.NewMatchRepository, wire.Bind(new(repository.MatchRepositoryI), new(*repository.MatchRepository)))
+
+var MatchPlayerRepoSet = wire.NewSet(repository.NewMatchPlayerRepository, wire.Bind(new(repository.MatchPlayerRepositoryI), new(*repository.MatchPlayerRepository)))
+
+var PlayerRepoSet = wire.NewSet(repository.NewPlayerRepository, wire.Bind(new(repository.PlayerRepositoryI), new(*repository.PlayerRepository)))
+
+var SquadRepoSet = wire.NewSet(repository.NewSquadRepository, wire.Bind(new(repository.SquadRepositoryI), new(*repository.SquadRepository)))
+
+var UserRepoSet = wire.NewSet(repository.NewUserRepository, wire.Bind(new(repository.UserRepositoryI), new(*repository.UserRepository)))
+
+var VenueRepoSet = wire.NewSet(repository.NewVenueRepository, wire.Bind(new(repository.VenueRepositoryI), new(*repository.VenueRepository)))

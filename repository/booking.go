@@ -1,10 +1,11 @@
 package repository
 
 import (
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+//go:generate mockgen -destination=./mocks/booking_mock.go -package=mocks github.com/nmcalinden/footpal/repository BookingRepositoryI
 
 type BookingRepositoryI interface {
 	FindAll() (*[]models.Booking, error)
@@ -17,8 +18,6 @@ type BookingRepositoryI interface {
 type BookingRepository struct {
 	database *sqlx.DB
 }
-
-var BookingRepoSet = wire.NewSet(NewBookingRepository, wire.Bind(new(BookingRepositoryI), new(*BookingRepository)))
 
 func NewBookingRepository(database *sqlx.DB) *BookingRepository {
 	return &BookingRepository{database: database}

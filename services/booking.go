@@ -8,10 +8,10 @@ import (
 )
 
 type BookingService struct {
-	bookingRepo *repository.BookingRepository
+	bookingRepo repository.BookingRepositoryI
 }
 
-func NewBookingService(bookingRepo *repository.BookingRepository) *BookingService {
+func NewBookingService(bookingRepo repository.BookingRepositoryI) *BookingService {
 	return &BookingService{bookingRepo: bookingRepo}
 }
 

@@ -2,10 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+//go:generate mockgen -destination=./mocks/match_player_mock.go -package=mocks github.com/nmcalinden/footpal/repository MatchPlayerRepositoryI
 
 type MatchPlayerRepositoryI interface {
 	FindByMatchId(matchId *int) (*[]models.MatchPlayer, error)
@@ -23,8 +24,6 @@ type MatchPlayerRepository struct {
 func NewMatchPlayerRepository(database *sqlx.DB) *MatchPlayerRepository {
 	return &MatchPlayerRepository{database: database}
 }
-
-var MatchPlayerRepoSet = wire.NewSet(NewMatchPlayerRepository, wire.Bind(new(MatchPlayerRepositoryI), new(*MatchPlayerRepository)))
 
 func (r MatchPlayerRepository) FindByMatchId(matchId *int) (*[]models.MatchPlayer, error) {
 	var matchPlayers []models.MatchPlayer

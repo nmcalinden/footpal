@@ -2,10 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/models"
 )
+
+//go:generate mockgen -destination=./mocks/squad_mock.go -package=mocks github.com/nmcalinden/footpal/repository SquadRepositoryI
 
 type SquadRepositoryI interface {
 	FindAll() (*[]models.Squad, error)
@@ -27,8 +28,6 @@ type SquadRepository struct {
 func NewSquadRepository(database *sqlx.DB) *SquadRepository {
 	return &SquadRepository{database: database}
 }
-
-var SquadRepoSet = wire.NewSet(NewSquadRepository, wire.Bind(new(SquadRepositoryI), new(*SquadRepository)))
 
 func (r SquadRepository) FindAll() (*[]models.Squad, error) {
 	var squads []models.Squad

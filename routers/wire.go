@@ -11,50 +11,43 @@ import (
 	"github.com/nmcalinden/footpal/services"
 )
 
+var BookingRepoSet = wire.NewSet(repository.NewBookingRepository, wire.Bind(new(repository.BookingRepositoryI), new(*repository.BookingRepository)))
+var MatchRepoSet = wire.NewSet(repository.NewMatchRepository, wire.Bind(new(repository.MatchRepositoryI), new(*repository.MatchRepository)))
+var MatchPlayerRepoSet = wire.NewSet(repository.NewMatchPlayerRepository, wire.Bind(new(repository.MatchPlayerRepositoryI), new(*repository.MatchPlayerRepository)))
+var PlayerRepoSet = wire.NewSet(repository.NewPlayerRepository, wire.Bind(new(repository.PlayerRepositoryI), new(*repository.PlayerRepository)))
+var SquadRepoSet = wire.NewSet(repository.NewSquadRepository, wire.Bind(new(repository.SquadRepositoryI), new(*repository.SquadRepository)))
+var UserRepoSet = wire.NewSet(repository.NewUserRepository, wire.Bind(new(repository.UserRepositoryI), new(*repository.UserRepository)))
+var VenueRepoSet = wire.NewSet(repository.NewVenueRepository, wire.Bind(new(repository.VenueRepositoryI), new(*repository.VenueRepository)))
+
 func InitializeBookingController() *controllers.BookingController {
-	wire.Build(
-		controllers.NewBookingController, services.NewBookingService,
-		repository.BookingRepoSet, config.GetConnection)
+	wire.Build(controllers.NewBookingController, services.NewBookingService, BookingRepoSet, config.GetConnection)
 	return nil
 }
 
 func InitializeMatchController() *controllers.MatchController {
-	wire.Build(
-		controllers.NewMatchController, services.NewMatchService,
-		repository.MatchRepoSet, repository.MatchPlayerRepoSet,
-		config.GetConnection)
+	wire.Build(controllers.NewMatchController, services.NewMatchService, MatchRepoSet, MatchPlayerRepoSet, config.GetConnection)
 	return nil
 }
 
 func InitializePlayerController() *controllers.PlayerController {
 	wire.Build(
-		controllers.NewPlayerController, services.NewPlayerService,
-		repository.PlayerRepoSet, repository.UserRepoSet, repository.MatchRepoSet,
-		repository.MatchPlayerRepoSet, repository.SquadRepoSet,
-		config.GetConnection)
+		controllers.NewPlayerController, services.NewPlayerService, PlayerRepoSet, UserRepoSet, MatchRepoSet,
+		MatchPlayerRepoSet, SquadRepoSet, config.GetConnection)
 	return nil
 }
 
 func InitializeSquadController() *controllers.SquadController {
-	wire.Build(
-		controllers.NewSquadController, services.NewSquadService,
-		repository.PlayerRepoSet, repository.SquadRepoSet,
-		config.GetConnection)
+	wire.Build(controllers.NewSquadController, services.NewSquadService, PlayerRepoSet, SquadRepoSet, config.GetConnection)
 	return nil
 }
 
 func InitializeUserController() *controllers.UserController {
-	wire.Build(
-		controllers.NewUserController, services.NewUserService,
-		repository.UserRepoSet, repository.PlayerRepoSet, repository.VenueRepoSet,
-		config.GetConnection)
+	wire.Build(controllers.NewUserController, services.NewUserService, UserRepoSet, PlayerRepoSet,
+		VenueRepoSet, config.GetConnection)
 	return nil
 }
 
 func InitializeVenueController() *controllers.VenueController {
-	wire.Build(
-		controllers.NewVenueController, services.NewVenueService,
-		repository.VenueRepoSet,
-		config.GetConnection)
+	wire.Build(controllers.NewVenueController, services.NewVenueService, VenueRepoSet, config.GetConnection)
 	return nil
 }
