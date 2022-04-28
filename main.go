@@ -6,9 +6,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/helmet/v2"
+	"github.com/nmcalinden/footpal/api/routers"
+	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/config"
-	"github.com/nmcalinden/footpal/routers"
-	"github.com/nmcalinden/footpal/utils"
 	"log"
 )
 

@@ -1,0 +1,19 @@
+package routers
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/api/enums"
+	"github.com/nmcalinden/footpal/api/middleware"
+)
+
+func ConfigureUserHandlers(app *fiber.App) {
+	group := app.Group("/")
+
+	userController := InitializeUserController()
+
+	group.Post("/login", userController.LoginHandler)
+	group.Post("/register", userController.RegisterHandler)
+	group.Post("/refresh", userController.RefreshToken)
+
+	group.Delete("/deactivate", middleware.IsAuthenticated, middleware.NewRoles(enums.Player).HasRole, userController.DeactivateHandler)
+}
