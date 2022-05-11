@@ -12,7 +12,7 @@ type Register struct {
 	Password string `json:"password" validate:"required,min=5,max=25"`
 
 	//default: true
-	IsPlayer bool `json:"isPlayer" validate:"required"`
+	IsPlayer bool `json:"isPlayer"`
 }
 
 type Refresh struct {

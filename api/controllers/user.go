@@ -15,6 +15,25 @@ func NewUserController(userService *services.UserService) *UserController {
 	return &UserController{userService: userService}
 }
 
+// UserHandler @Summary      User
+// @Description  Get logged-in user details
+// @Tags         user
+// @Produce      json
+// @Security ApiKeyAuth
+// @Success      200 {object} views.PlayerUser
+// @Failure      500 {object} utils.ErrorResponse
+// @Router       /me [get]
+func (con UserController) UserHandler(c *fiber.Ctx) error {
+	claims := utils.GetClaims(c.Locals("user"))
+	userId := int(claims["sub"].(float64))
+
+	usr, err := con.userService.GetUser(userId)
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get user details")
+	}
+	return c.Status(fiber.StatusOK).JSON(usr)
+}
+
 // LoginHandler @Summary      Login
 // @Description  Login to Footpal
 // @Tags         user
@@ -97,7 +116,7 @@ func (con UserController) RefreshToken(c *fiber.Ctx) error {
 // @Router       /deactivate [delete]
 func (con UserController) DeactivateHandler(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
-	userId := claims["id"].(int)
+	userId := int(claims["sub"].(float64))
 
 	err := con.userService.Deactivate(&userId)
 	if err != nil {

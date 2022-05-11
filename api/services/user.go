@@ -4,11 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/nmcalinden/footpal/api/mappers"
 	"github.com/nmcalinden/footpal/api/models"
 	"github.com/nmcalinden/footpal/api/payloads"
 	"github.com/nmcalinden/footpal/api/repository"
 	"github.com/nmcalinden/footpal/api/utils"
+	"github.com/nmcalinden/footpal/api/views"
 	"github.com/nmcalinden/footpal/config"
+	"log"
 	"sync"
 )
 
@@ -25,6 +28,24 @@ func NewUserService(usrRepo repository.UserRepositoryI, pRepo repository.PlayerR
 		playerRepo: pRepo,
 		venueRepo:  vRepo,
 	}
+}
+
+func (s *UserService) GetUser(id int) (*views.PlayerUser, error) {
+	res, err := s.userRepo.FindById(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	player, _ := s.playerRepo.FindByUserId(&id)
+
+	var user views.PlayerUser
+	err = mappers.MapToUser(&user, *player, *res)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (s *UserService) Login(login *payloads.Login) (*payloads.TokenPairResponse, error) {

@@ -19,7 +19,7 @@ func ConfigurePlayerHandlers(app *fiber.App) {
 	group.Use(middleware.NewRoles(enums.Player).HasRole)
 
 	group.Get("/:playerId/matches", playerController.GetPlayerMatches)
-	group.Put("/:playerId", playerController.UpdatePlayer)
+	group.Put("/", playerController.UpdatePlayer)
 	group.Get("/:playerId/squads", playerController.GetSquadsByUser)
 	group.Get("/:playerId/squads/:squadId", playerController.GetSquadByPlayer)
 	group.Post("/:playerId/squads/:squadId", playerController.JoinSquad)

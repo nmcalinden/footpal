@@ -9,7 +9,18 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-var IsAuthenticated = jwtware.New(jwtware.Config{SigningKey: []byte(config.AccessSecret)})
+var IsAuthenticated = jwtware.New(jwtware.Config{
+	SigningKey:   []byte(config.AccessSecret),
+	ErrorHandler: jwtError,
+})
+
+func jwtError(ctx *fiber.Ctx, err error) error {
+	if err.Error() == "Missing or malformed JWT" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Missing or malformed JWT"})
+	}
+	return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid or expired JWT", "data": nil})
+
+}
 
 type Roles struct {
 	Roles []enums.Role

@@ -288,7 +288,6 @@ definitions:
     required:
     - email
     - forename
-    - isPlayer
     - password
     - surname
     type: object
@@ -400,6 +399,21 @@ definitions:
         type: string
       playerId:
         type: integer
+    type: object
+  views.PlayerUser:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      phoneNo:
+        type: string
+      postcode:
+        type: string
     type: object
   views.Players:
     properties:
@@ -779,6 +793,24 @@ paths:
       - ApiKeyAuth: []
       tags:
       - match
+  /me:
+    get:
+      description: Get logged-in user details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.PlayerUser'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - user
   /players:
     get:
       description: Retrieve all players
@@ -825,7 +857,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Player'
+            $ref: '#/definitions/views.PlayerUser'
         "400":
           description: Bad Request
           schema:
@@ -1155,6 +1187,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       tags:
       - squad
     post:

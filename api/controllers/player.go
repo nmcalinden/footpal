@@ -50,14 +50,14 @@ func (con PlayerController) RetrievePlayers(c *fiber.Ctx) error {
 // @Tags         player
 // @Produce      json
 // @Param 		 message body payloads.PlayerRequest true "Request"
-// @Success      200 {object} models.Player
+// @Success      200 {object} views.PlayerUser
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /players [put]
 func (con PlayerController) UpdatePlayer(c *fiber.Ctx) error {
 	claims := utils.GetClaims(c.Locals("user"))
-	userId := claims["id"].(int)
+	userId := int(claims["sub"].(float64))
 
 	p := new(payloads.PlayerRequest)
 	if err := c.BodyParser(&p); err != nil {

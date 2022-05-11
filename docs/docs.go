@@ -549,6 +549,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get logged-in user details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/views.PlayerUser"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/players": {
             "get": {
                 "security": [
@@ -624,7 +654,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Player"
+                            "$ref": "#/definitions/views.PlayerUser"
                         }
                     },
                     "400": {
@@ -1123,6 +1153,11 @@ const docTemplate = `{
         },
         "/squads": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all squads",
                 "produces": [
                     "application/json"
@@ -2436,7 +2471,6 @@ const docTemplate = `{
             "required": [
                 "email",
                 "forename",
-                "isPlayer",
                 "password",
                 "surname"
             ],
@@ -2621,6 +2655,29 @@ const docTemplate = `{
                 },
                 "playerId": {
                     "type": "integer"
+                }
+            }
+        },
+        "views.PlayerUser": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
                 }
             }
         },

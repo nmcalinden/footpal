@@ -169,7 +169,7 @@ func (s *PlayerService) GetMatchesByPlayer(userId *int) (*[]models.Match, error)
 	return s.matchPlayerRepo.FindMatchesByPlayer(p.PlayerId)
 }
 
-func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRequest) (*models.Player, error) {
+func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRequest) (*views.PlayerUser, error) {
 	p, err := s.playerRepo.FindByUserId(userId)
 	if err != nil {
 		return nil, err
@@ -181,7 +181,21 @@ func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRe
 	p.Postcode = playerRequest.Postcode
 	p.City = playerRequest.City
 
-	return s.playerRepo.Update(p)
+	player, err := s.playerRepo.Update(p)
+	if err != nil {
+		return nil, err
+	}
+
+	usr, _ := s.userRepo.FindById(userId)
+
+	var user views.PlayerUser
+	err = mappers.MapToUser(&user, *player, *usr)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (s *PlayerService) JoinSquad(userId *int, squadId *int) error {

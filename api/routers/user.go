@@ -15,5 +15,6 @@ func ConfigureUserHandlers(app *fiber.App) {
 	group.Post("/register", userController.RegisterHandler)
 	group.Post("/refresh", userController.RefreshToken)
 
+	group.Get("/me", middleware.IsAuthenticated, middleware.NewRoles(enums.All).HasRole, userController.UserHandler)
 	group.Delete("/deactivate", middleware.IsAuthenticated, middleware.NewRoles(enums.Player).HasRole, userController.DeactivateHandler)
 }

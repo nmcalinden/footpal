@@ -542,6 +542,36 @@
                 }
             }
         },
+        "/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get logged-in user details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/views.PlayerUser"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/players": {
             "get": {
                 "security": [
@@ -617,7 +647,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Player"
+                            "$ref": "#/definitions/views.PlayerUser"
                         }
                     },
                     "400": {
@@ -1116,6 +1146,11 @@
         },
         "/squads": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve all squads",
                 "produces": [
                     "application/json"
@@ -2429,7 +2464,6 @@
             "required": [
                 "email",
                 "forename",
-                "isPlayer",
                 "password",
                 "surname"
             ],
@@ -2614,6 +2648,29 @@
                 },
                 "playerId": {
                     "type": "integer"
+                }
+            }
+        },
+        "views.PlayerUser": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
                 }
             }
         },

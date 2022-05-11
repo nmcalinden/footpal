@@ -15,13 +15,12 @@ func ConfigureSquadPlayers(app *fiber.App) {
 
 	squadController := InitializeSquadController()
 
-	group.Get("/", squadController.RetrieveSquads)
-	group.Get("/:squadId", squadController.RetrieveSquadById)
-	group.Get("/:squadId/players", squadController.RetrieveSquadPlayers)
-
 	group.Use(middleware.IsAuthenticated)
 	group.Use(middleware.NewRoles(enums.Player).HasRole)
 
+	group.Get("/", squadController.RetrieveSquads)
+	group.Get("/:squadId", squadController.RetrieveSquadById)
+	group.Get("/:squadId/players", squadController.RetrieveSquadPlayers)
 	group.Post("/", squadController.CreateSquadGroup)
 	group.Put("/:squadId", squadController.UpdateSquadInfo)
 	group.Put("/:squadId/players/:playerId", squadController.ApprovePlayerToSquad)

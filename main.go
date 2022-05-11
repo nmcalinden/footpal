@@ -46,7 +46,7 @@ func main() {
 	routers.ConfigureBookingHandlers(app)
 	routers.ConfigureMatchHandlers(app)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":8081"))
 }
 
 func defaultErrorHandler(ctx *fiber.Ctx, err error) error {

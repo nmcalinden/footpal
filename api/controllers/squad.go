@@ -26,6 +26,7 @@ func NewSquadController(squadService *services.SquadService) *SquadController {
 // @Produce      json
 // @Success      200  {array}  models.Squad
 // @Failure      500  {object}  utils.ErrorResponse
+// @Security ApiKeyAuth
 // @Router       /squads [get]
 func (con SquadController) RetrieveSquads(c *fiber.Ctx) error {
 	s, err := con.squadService.GetSquads()
