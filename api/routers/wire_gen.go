@@ -8,67 +8,68 @@ package routers
 
 import (
 	"github.com/google/wire"
-	controllers2 "github.com/nmcalinden/footpal/api/controllers"
+	"github.com/nmcalinden/footpal/api/controllers"
 	"github.com/nmcalinden/footpal/api/repository"
-	services2 "github.com/nmcalinden/footpal/api/services"
+	"github.com/nmcalinden/footpal/api/services"
 	"github.com/nmcalinden/footpal/config"
 )
 
 // Injectors from wire.go:
 
-func InitializeBookingController() *controllers2.BookingController {
+func InitializeBookingController() *controllers.BookingController {
 	db := config.GetConnection()
 	bookingRepository := repository.NewBookingRepository(db)
-	bookingService := services2.NewBookingService(bookingRepository)
-	bookingController := controllers2.NewBookingController(bookingService)
+	bookingService := services.NewBookingService(bookingRepository)
+	bookingController := controllers.NewBookingController(bookingService)
 	return bookingController
 }
 
-func InitializeMatchController() *controllers2.MatchController {
+func InitializeMatchController() *controllers.MatchController {
 	db := config.GetConnection()
 	matchRepository := repository.NewMatchRepository(db)
 	matchPlayerRepository := repository.NewMatchPlayerRepository(db)
-	matchService := services2.NewMatchService(matchRepository, matchPlayerRepository)
-	matchController := controllers2.NewMatchController(matchService)
+	squadRepository := repository.NewSquadRepository(db)
+	matchService := services.NewMatchService(matchRepository, matchPlayerRepository, squadRepository)
+	matchController := controllers.NewMatchController(matchService)
 	return matchController
 }
 
-func InitializePlayerController() *controllers2.PlayerController {
+func InitializePlayerController() *controllers.PlayerController {
 	db := config.GetConnection()
 	playerRepository := repository.NewPlayerRepository(db)
 	userRepository := repository.NewUserRepository(db)
 	matchRepository := repository.NewMatchRepository(db)
 	matchPlayerRepository := repository.NewMatchPlayerRepository(db)
 	squadRepository := repository.NewSquadRepository(db)
-	playerService := services2.NewPlayerService(playerRepository, userRepository, matchRepository, matchPlayerRepository, squadRepository)
-	playerController := controllers2.NewPlayerController(playerService)
+	playerService := services.NewPlayerService(playerRepository, userRepository, matchRepository, matchPlayerRepository, squadRepository)
+	playerController := controllers.NewPlayerController(playerService)
 	return playerController
 }
 
-func InitializeSquadController() *controllers2.SquadController {
+func InitializeSquadController() *controllers.SquadController {
 	db := config.GetConnection()
 	playerRepository := repository.NewPlayerRepository(db)
 	squadRepository := repository.NewSquadRepository(db)
-	squadService := services2.NewSquadService(playerRepository, squadRepository)
-	squadController := controllers2.NewSquadController(squadService)
+	squadService := services.NewSquadService(playerRepository, squadRepository)
+	squadController := controllers.NewSquadController(squadService)
 	return squadController
 }
 
-func InitializeUserController() *controllers2.UserController {
+func InitializeUserController() *controllers.UserController {
 	db := config.GetConnection()
 	userRepository := repository.NewUserRepository(db)
 	playerRepository := repository.NewPlayerRepository(db)
 	venueRepository := repository.NewVenueRepository(db)
-	userService := services2.NewUserService(userRepository, playerRepository, venueRepository)
-	userController := controllers2.NewUserController(userService)
+	userService := services.NewUserService(userRepository, playerRepository, venueRepository)
+	userController := controllers.NewUserController(userService)
 	return userController
 }
 
-func InitializeVenueController() *controllers2.VenueController {
+func InitializeVenueController() *controllers.VenueController {
 	db := config.GetConnection()
 	venueRepository := repository.NewVenueRepository(db)
-	venueService := services2.NewVenueService(venueRepository)
-	venueController := controllers2.NewVenueController(venueService)
+	venueService := services.NewVenueService(venueRepository)
+	venueController := controllers.NewVenueController(venueService)
 	return venueController
 }
 

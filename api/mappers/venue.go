@@ -8,6 +8,21 @@ import (
 	"gopkg.in/jeevatkm/go-model.v1"
 )
 
+func MapToVenueSummaries(v []models.Venue) (*[]views.VenueSummary, error) {
+	var errs error
+	var res []views.VenueSummary
+	for _, vs := range v {
+		ven := views.VenueSummary{}
+		mErrs := model.Copy(&ven, vs)
+		if mErrs != nil {
+			errs = multierror.Append(errs, mErrs...)
+		}
+		res = append(res, ven)
+	}
+
+	return &res, errs
+}
+
 func MapToVenueView(v models.Venue, p []models.Pitch) (*views.Venue, error) {
 	var vP []views.VenuePitchSummary
 	for _, ps := range p {

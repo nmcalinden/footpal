@@ -360,7 +360,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Match"
+                                "$ref": "#/definitions/views.MatchSummary"
                             }
                         }
                     },
@@ -1613,6 +1613,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/venues/summary": {
+            "get": {
+                "description": "Retrieve all venues",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.VenueSummary"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/venues/{venueId}": {
             "get": {
                 "description": "Retrieve venue by venueId",
@@ -2144,7 +2172,8 @@ const docTemplate = `{
                 "lastUpdated",
                 "matchAccessStatusId",
                 "matchDate",
-                "matchStatusId"
+                "matchStatusId",
+                "squadId"
             ],
             "properties": {
                 "bookingId": {
@@ -2172,6 +2201,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "matchStatusId": {
+                    "type": "integer"
+                },
+                "squadId": {
                     "type": "integer"
                 }
             }
@@ -2610,6 +2642,41 @@ const docTemplate = `{
                 }
             }
         },
+        "views.MatchSummary": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "matchDate": {
+                    "type": "string"
+                },
+                "maxPlayers": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "pitchName": {
+                    "type": "string"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "squadName": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                },
+                "venueName": {
+                    "type": "string"
+                }
+            }
+        },
         "views.Pagination": {
             "type": "object",
             "properties": {
@@ -2740,6 +2807,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "views.VenueSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -2754,7 +2832,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1:3000",
+	Host:             "127.0.0.1:8081",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Footpal API",

@@ -49,6 +49,8 @@ definitions:
         type: integer
       matchStatusId:
         type: integer
+      squadId:
+        type: integer
     required:
     - bookingId
     - cost
@@ -58,6 +60,7 @@ definitions:
     - matchAccessStatusId
     - matchDate
     - matchStatusId
+    - squadId
     type: object
   models.MatchPlayer:
     properties:
@@ -369,6 +372,29 @@ definitions:
     - phoneNo
     - postcode
     type: object
+  views.MatchSummary:
+    properties:
+      cost:
+        type: number
+      id:
+        type: integer
+      matchDate:
+        type: string
+      maxPlayers:
+        type: integer
+      pitchId:
+        type: integer
+      pitchName:
+        type: string
+      squadId:
+        type: integer
+      squadName:
+        type: string
+      venueId:
+        type: integer
+      venueName:
+        type: string
+    type: object
   views.Pagination:
     properties:
       _links:
@@ -454,7 +480,14 @@ definitions:
       name:
         type: string
     type: object
-host: 127.0.0.1:3000
+  views.VenueSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: 127.0.0.1:8081
 info:
   contact:
     email: nathan.mcalinden@unosquare.com
@@ -673,7 +706,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Match'
+              $ref: '#/definitions/views.MatchSummary'
             type: array
         "500":
           description: Internal Server Error
@@ -1762,6 +1795,24 @@ paths:
           description: ""
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+  /venues/summary:
+    get:
+      description: Retrieve all venues
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.VenueSummary'
+            type: array
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
       tags:

@@ -35,6 +35,19 @@ func (s *VenueService) GetVenues() (*[]views.Venue, error) {
 	return &res, nil
 }
 
+func (s *VenueService) GetVenueSummaries() (*[]views.VenueSummary, error) {
+	venues, err := s.venueRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := mappers.MapToVenueSummaries(*venues)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (s *VenueService) GetVenueById(venueId *int) (*views.Venue, error) {
 	v, err := s.venueRepo.FindById(venueId)
 	if err != nil {

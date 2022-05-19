@@ -10,7 +10,7 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:3000",
+    "host": "127.0.0.1:8081",
     "basePath": "/",
     "paths": {
         "/bookings": {
@@ -353,7 +353,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Match"
+                                "$ref": "#/definitions/views.MatchSummary"
                             }
                         }
                     },
@@ -1606,6 +1606,34 @@
                 }
             }
         },
+        "/venues/summary": {
+            "get": {
+                "description": "Retrieve all venues",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.VenueSummary"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/venues/{venueId}": {
             "get": {
                 "description": "Retrieve venue by venueId",
@@ -2137,7 +2165,8 @@
                 "lastUpdated",
                 "matchAccessStatusId",
                 "matchDate",
-                "matchStatusId"
+                "matchStatusId",
+                "squadId"
             ],
             "properties": {
                 "bookingId": {
@@ -2165,6 +2194,9 @@
                     "type": "integer"
                 },
                 "matchStatusId": {
+                    "type": "integer"
+                },
+                "squadId": {
                     "type": "integer"
                 }
             }
@@ -2603,6 +2635,41 @@
                 }
             }
         },
+        "views.MatchSummary": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "matchDate": {
+                    "type": "string"
+                },
+                "maxPlayers": {
+                    "type": "integer"
+                },
+                "pitchId": {
+                    "type": "integer"
+                },
+                "pitchName": {
+                    "type": "string"
+                },
+                "squadId": {
+                    "type": "integer"
+                },
+                "squadName": {
+                    "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                },
+                "venueName": {
+                    "type": "string"
+                }
+            }
+        },
         "views.Pagination": {
             "type": "object",
             "properties": {
@@ -2726,6 +2793,17 @@
                 "href": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.VenueSummary": {
+            "type": "object",
+            "properties": {
                 "id": {
                     "type": "integer"
                 },

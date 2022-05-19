@@ -33,6 +33,22 @@ func (con VenueController) RetrieveVenues(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(p)
 }
 
+// RetrieveVenueSummaries @Summary  Retrieve List of Venues
+// @Description  Retrieve all venues
+// @Tags         venue
+// @Produce      json
+// @Success      200  {array}  views.VenueSummary
+// @Success      500  {object}  utils.ErrorResponse
+// @Router       /venues/summary [get]
+func (con VenueController) RetrieveVenueSummaries(c *fiber.Ctx) error {
+	p, err := con.venueService.GetVenueSummaries()
+
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to retrieve venues")
+	}
+	return c.Status(fiber.StatusOK).JSON(p)
+}
+
 // RetrieveVenueById @Summary      Retrieve Venues by id
 // @Description  Retrieve venue by venueId
 // @Tags         venue

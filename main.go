@@ -18,7 +18,7 @@ import (
 // @termsOfService http://swagger.io/terms/
 // @contact.name Footpal Support
 // @contact.email nathan.mcalinden@unosquare.com
-// @host 127.0.0.1:3000
+// @host 127.0.0.1:8081
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization

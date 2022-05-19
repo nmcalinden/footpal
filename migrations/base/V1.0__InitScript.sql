@@ -170,6 +170,7 @@ CREATE TABLE match
     booking_id				INTEGER NOT NULL,
     match_access_status_id	INTEGER NOT NULL,
     match_status_id			INTEGER NOT NULL,
+    squad_id			    INTEGER,
     match_date              DATE,
     cost					DECIMAL,
     is_paid  				BOOLEAN,
@@ -180,7 +181,9 @@ CREATE TABLE match
     CONSTRAINT fk_match_access_id FOREIGN KEY (match_access_status_id)
         REFERENCES match_access_status_ref(id),
     CONSTRAINT fk_match_status_id FOREIGN KEY (match_status_id)
-        REFERENCES match_status_ref(id)
+        REFERENCES match_status_ref(id),
+    CONSTRAINT fk_squad_id FOREIGN KEY (squad_id)
+        REFERENCES squad(id)
 );
 
 CREATE TABLE match_player

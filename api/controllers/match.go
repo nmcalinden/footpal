@@ -19,7 +19,7 @@ func NewMatchController(matchService *services.MatchService) *MatchController {
 // @Description  Retrieve all public matches
 // @Tags         match
 // @Produce      json
-// @Success      200  {array}  models.Match
+// @Success      200  {array}  views.MatchSummary
 // @Failure      500  {object}  utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /matches [get]

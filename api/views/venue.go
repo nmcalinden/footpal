@@ -1,5 +1,14 @@
 package views
 
+type VenueSummary struct {
+	VenueId *int   `json:"id,omitempty"`
+	Name    string `json:"name"`
+}
+
+type VenueCity struct {
+	City string `json:"city"`
+}
+
 type Venue struct {
 	VenueId  *int                `json:"id,omitempty"`
 	Name     string              `json:"name"`

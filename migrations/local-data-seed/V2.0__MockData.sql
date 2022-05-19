@@ -26,9 +26,7 @@ INSERT INTO footpaldb.public.venue(venue_name, venue_address, postcode, city, ph
 INSERT INTO footpaldb.public.venue(venue_name, venue_address, postcode, city, phone_no, email) VALUES ('Lurgan Liars Soccer Dome', '95 William Street', 'BT66 8RT', 'Belfast', '07824712319', 'lurgansoccerdome@info.co.uk');
 
 -- Init Venue Admins
-INSERT INTO footpaldb.public.venue_admin(footpal_user_id, venue_id) VALUES (2, 1);
-INSERT INTO footpaldb.public.venue_admin(footpal_user_id, venue_id) VALUES (6, 2);
-INSERT INTO footpaldb.public.venue_admin(footpal_user_id, venue_id) VALUES (4, 2);
+INSERT INTO footpaldb.public.venue_admin(footpal_user_id, venue_id) VALUES (3, 1);
 
 -- Init Players
 INSERT INTO footpaldb.public.player(footpal_user_id, nickname, phone_no, postcode, city) VALUES (1, null, '07858274821', 'BT34 5RW', 'Craigavon');
@@ -231,9 +229,9 @@ INSERT INTO footpaldb.public.pitch_slot(booking_id, pitch_time_slot_id, match_da
 INSERT INTO footpaldb.public.pitch_slot(booking_id, pitch_time_slot_id, match_date, booking_status_id) VALUES(2, 52, DATE '2022-04-25', 4);
 
 -- Init Match
-INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 1, DATE '2022-04-20', 30.0, false, current_timestamp, current_timestamp);
-INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 4, DATE '2022-04-27', 30.0, false, current_timestamp, current_timestamp);
-INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 4, DATE '2022-05-04', 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, squad_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 1, 1, DATE '2022-04-20', 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, squad_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 4, 1, DATE '2022-04-27', 30.0, false, current_timestamp, current_timestamp);
+INSERT INTO footpaldb.public.match(booking_id, match_access_status_id, match_status_id, squad_id, match_date, cost, is_paid, created, last_updated) VALUES(1, 2, 4, null, DATE '2022-05-04', 30.0, false, current_timestamp, current_timestamp);
 
 -- Init Match Player
 INSERT INTO footpaldb.public.match_player(match_id, player_id, amount_to_pay, payment_type_id)  VALUES(1, 4, 3.0, 1);

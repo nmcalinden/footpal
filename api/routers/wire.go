@@ -25,7 +25,7 @@ func InitializeBookingController() *controllers2.BookingController {
 }
 
 func InitializeMatchController() *controllers2.MatchController {
-	wire.Build(controllers2.NewMatchController, services2.NewMatchService, MatchRepoSet, MatchPlayerRepoSet, config.GetConnection)
+	wire.Build(controllers2.NewMatchController, services2.NewMatchService, MatchRepoSet, MatchPlayerRepoSet, SquadRepoSet, config.GetConnection)
 	return nil
 }
 

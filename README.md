@@ -23,9 +23,9 @@ Golang POC for a 5 a side booking app
 2. Install Dependencies: `go install`
 3. Initialize DB: `docker-compose up`
 4. Run: `go run main.go` or `air` (live reloads)
-5. Visit: `http://localhost:3000`
+5. Visit: `http://localhost:8081`
    1. If this does not work, use url from start up in terminal
-6. Swagger: `http://localhost:3000/swagger`
+6. Swagger: `http://localhost:8081/swagger`
 
 
  ### Dependencies

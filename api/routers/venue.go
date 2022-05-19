@@ -12,6 +12,7 @@ func ConfigureVenueHandlers(app *fiber.App) {
 	venueController := InitializeVenueController()
 
 	group.Get("/", venueController.RetrieveVenues)
+	group.Get("/summary", venueController.RetrieveVenueSummaries)
 	group.Get("/:venueId", venueController.RetrieveVenueById)
 	group.Get("/:venueId/pitches", venueController.RetrievePitchesByVenue)
 	group.Get("/:venueId/pitches/:pitchId", venueController.RetrievePitch)
