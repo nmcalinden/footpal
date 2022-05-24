@@ -391,17 +391,53 @@ func (con VenueController) RetrievePitchTimeSlots(c *fiber.Ctx) error {
 }
 
 // RetrieveVenueTimeSlots @Summary      Retrieve Venue time slots
-// @Description  Retrieve all time slots by Venue
+// @Description  Retrieve pitch slots by venue and date range
+// @Tags         booking
+// @Produce      json
+// @Param        venueId path  int  true  "Venue ID"
+// @Param        from query  string  true  "Date from - Format: YYYY-MM-DD"
+// @Param        to   query  string  false  "Date to - Format: YYYY-MM-DD"
+// @Success      200  {array} views.PitchBookingDetails
+// @Failure      400 {object} utils.ErrorResponse
+// @Failure      500 {object} utils.ErrorResponse
+// @Router       /venues/{venueId}/timeslots [get]
+func (con VenueController) RetrieveVenueTimeSlots(c *fiber.Ctx) error {
+	v, err := strconv.Atoi(c.Params("venueId"))
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Venue ID supplied is invalid")
+	}
+
+	f := c.Query("from")
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Date From supplied is invalid")
+	}
+
+	t := c.Query("to")
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Date To supplied is invalid")
+	}
+
+	res, err := con.venueService.GetVenueTimeslots(&v, f, t)
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get bookings")
+	}
+	return c.Status(fiber.StatusOK).JSON(res)
+}
+
+// RetrieveVenueOpeningHours @Summary      Retrieve Venue Opening Hours
+// @Description  Retrieve opening hours by Venue
 // @Tags         venue
 // @Produce      json
 // @Param        venueId   path  int  true  "Venue ID"
-// @Success      200
+// @Success      200 {array} views.VenueOpeningHour
 // @Failure      400 {object} utils.ErrorResponse
-// @Router       /venues/{venueId}/timeslots [get]
-func (con VenueController) RetrieveVenueTimeSlots(c *fiber.Ctx) error {
-	_, err := strconv.Atoi(c.Params("venueId"))
+// @Router       /venues/{venueId}/hours [get]
+func (con VenueController) RetrieveVenueOpeningHours(c *fiber.Ctx) error {
+	v, err := strconv.Atoi(c.Params("venueId"))
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
 	}
-	return c.SendStatus(fiber.StatusOK)
+
+	o, err := con.venueService.GetVenueOpeningHours(&v)
+	return c.Status(fiber.StatusOK).JSON(o)
 }

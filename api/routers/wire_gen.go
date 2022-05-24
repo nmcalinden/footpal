@@ -68,7 +68,8 @@ func InitializeUserController() *controllers.UserController {
 func InitializeVenueController() *controllers.VenueController {
 	db := config.GetConnection()
 	venueRepository := repository.NewVenueRepository(db)
-	venueService := services.NewVenueService(venueRepository)
+	pitchRepository := repository.NewPitchRepository(db)
+	venueService := services.NewVenueService(venueRepository, pitchRepository)
 	venueController := controllers.NewVenueController(venueService)
 	return venueController
 }
@@ -80,6 +81,8 @@ var BookingRepoSet = wire.NewSet(repository.NewBookingRepository, wire.Bind(new(
 var MatchRepoSet = wire.NewSet(repository.NewMatchRepository, wire.Bind(new(repository.MatchRepositoryI), new(*repository.MatchRepository)))
 
 var MatchPlayerRepoSet = wire.NewSet(repository.NewMatchPlayerRepository, wire.Bind(new(repository.MatchPlayerRepositoryI), new(*repository.MatchPlayerRepository)))
+
+var PitchRepoSet = wire.NewSet(repository.NewPitchRepository, wire.Bind(new(repository.PitchRepositoryI), new(*repository.PitchRepository)))
 
 var PlayerRepoSet = wire.NewSet(repository.NewPlayerRepository, wire.Bind(new(repository.PlayerRepositoryI), new(*repository.PlayerRepository)))
 

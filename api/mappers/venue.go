@@ -8,6 +8,10 @@ import (
 	"gopkg.in/jeevatkm/go-model.v1"
 )
 
+const (
+	pitchTime = "15:04"
+)
+
 func MapToVenueSummaries(v []models.Venue) (*[]views.VenueSummary, error) {
 	var errs error
 	var res []views.VenueSummary
@@ -39,6 +43,44 @@ func MapToVenueView(v models.Venue, p []models.Pitch) (*views.Venue, error) {
 
 	venue.Pitches = vP
 	return &venue, nil
+}
+
+func MapToPitchSlotsByVenue(dest *views.PitchBookingDetails, b []models.VenueTimeSlot, pts []models.PitchTimeSlot, fd string, d string) error {
+	var l []views.PitchTimeSlotBooking
+	for _, pt := range pts {
+		k := getPitchTimeSlotBooking(pt, b)
+		l = append(l, *k)
+	}
+
+	dest.MatchDate = fd
+	dest.DayOfWeek = d
+	dest.TimeSlots = l
+	return nil
+}
+
+func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot) *views.PitchTimeSlotBooking {
+	st := pts.StartTime.Format(pitchTime)
+	et := pts.EndTime.Format(pitchTime)
+
+	k := views.PitchTimeSlotBooking{
+		PitchTimeSlotId: pts.PitchTimeSlotId,
+		StartTime:       st,
+		EndTime:         et,
+		IsBooked:        isSlotBooked(pts, b),
+	}
+
+	return &k
+}
+func isSlotBooked(pts models.PitchTimeSlot, b []models.VenueTimeSlot) bool {
+	var o = false
+	for _, bs := range b {
+		if pts.PitchTimeSlotId == bs.PitchTimeSlotId && pts.DayOfWeek == bs.DayOfWeek {
+			o = true
+			break
+		}
+	}
+
+	return o
 }
 
 func buildPitchSummary(v models.Venue, ps models.Pitch) views.VenuePitchSummary {

@@ -25,3 +25,9 @@ type VenuePitchSummary struct {
 	Name    string `json:"name"`
 	Href    string `json:"href"`
 }
+
+type VenueOpeningHour struct {
+	DayOfWeek string `json:"dayOfWeek"`
+	Open      string `json:"open"`
+	Close     string `json:"close"`
+}

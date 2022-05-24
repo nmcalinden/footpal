@@ -11,7 +11,7 @@ type Pitch struct {
 }
 
 type PitchSlot struct {
-	PitchSlotId     string `json:"pitchSlotId" validate:"required" db:"id"`
+	PitchSlotId     int    `json:"pitchSlotId" validate:"required" db:"id"`
 	BookingId       string `json:"bookingId" validate:"required" db:"booking_id"`
 	PitchTimeSlotId string `json:"pitchTimeSlotId" validate:"required" db:"pitch_time_slot_id"`
 	MatchDate       string `json:"matchDate" validate:"required" db:"match_date"`
@@ -19,7 +19,7 @@ type PitchSlot struct {
 }
 
 type PitchTimeSlot struct {
-	PitchTimeSlotId string    `json:"pitchTimeSlotId" validate:"required" db:"id"`
+	PitchTimeSlotId int       `json:"pitchTimeSlotId" validate:"required" db:"id"`
 	DayOfWeek       string    `json:"dayOfWeek" validate:"required,min=3,max=10" db:"day_of_week"`
 	StartTime       time.Time `json:"startTime" validate:"required" db:"start_time"`
 	EndTime         time.Time `json:"endTime" validate:"required" db:"end_time"`

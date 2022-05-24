@@ -23,16 +23,7 @@ type OpeningHours struct {
 }
 
 type VenueTimeSlot struct {
-	PitchId   int         `json:"pitchId,omitempty"`
-	TimeSlots []TimeSlots `json:"timeSlots"`
-}
-
-type TimeSlots struct {
-	DayOfWeek string  `json:"day"`
-	Slots     []Times `json:"slots"`
-}
-
-type Times struct {
-	StartTime string `json:"startTime"`
-	EndTime   string `json:"endTime"`
+	PitchTimeSlotId int    `json:"pitchTimeSlotId" db:"pitch_time_slot_id"`
+	DayOfWeek       string `json:"dayOfWeek" db:"day_of_week"`
+	MatchDate       string `json:"matchDate" db:"match_date"`
 }

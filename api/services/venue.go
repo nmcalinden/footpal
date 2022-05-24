@@ -7,14 +7,16 @@ import (
 	"github.com/nmcalinden/footpal/api/repository"
 	"github.com/nmcalinden/footpal/api/views"
 	"log"
+	"time"
 )
 
 type VenueService struct {
 	venueRepo repository.VenueRepositoryI
+	pitchRepo repository.PitchRepositoryI
 }
 
-func NewVenueService(venueRepo repository.VenueRepositoryI) *VenueService {
-	return &VenueService{venueRepo: venueRepo}
+func NewVenueService(venueRepo repository.VenueRepositoryI, pitchRepo repository.PitchRepositoryI) *VenueService {
+	return &VenueService{venueRepo: venueRepo, pitchRepo: pitchRepo}
 }
 
 func (s *VenueService) GetVenues() (*[]views.Venue, error) {
@@ -68,8 +70,40 @@ func (s *VenueService) GetVenuePitch(venueId *int, pitchId *int) (*models.Pitch,
 	return s.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
 }
 
-func (s *VenueService) GetVenueTimeslots(venueId *int) (*[]models.VenueTimeSlot, error) {
-	return s.venueRepo.FindTimeslotsByVenueId(venueId)
+func (s *VenueService) GetVenueTimeslots(v *int, f string, t string) (*[]views.PitchBookingDetails, error) {
+	fd, err := time.Parse("2006-01-02", f)
+
+	if t == "" {
+		t = f
+	}
+	td, err := time.Parse("2006-01-02", t)
+
+	b, err := s.venueRepo.FindTimeslotsByVenueIdAndDateRange(*v, f, t)
+	if err != nil {
+		return nil, err
+	}
+
+	var bd []views.PitchBookingDetails
+	for fd.Before(td) {
+		dayOfWeek := fd.Weekday().String()
+
+		p, err := s.pitchRepo.FindAllByVenueIdAndDay(*v, dayOfWeek)
+		if err != nil {
+			return nil, err
+		}
+
+		var res views.PitchBookingDetails
+		err = mappers.MapToPitchSlotsByVenue(&res, *b, *p, fd.Format("2006-01-02"), dayOfWeek)
+
+		if err != nil {
+			return nil, err
+		}
+
+		bd = append(bd, res)
+		fd = fd.AddDate(0, 0, 1)
+	}
+
+	return &bd, nil
 }
 
 func (s *VenueService) GetVenuePitchTimeslots(venueId *int, pitchId *int) (*[]models.PitchTimeSlot, error) {
@@ -172,4 +206,13 @@ func (s *VenueService) getVenueResponse(v models.Venue) (*views.Venue, error) {
 		return nil, errs
 	}
 	return m, nil
+}
+
+func (s *VenueService) GetVenueOpeningHours(v *int) (*[]views.VenueOpeningHour, error) {
+	p, err := s.pitchRepo.FindAllByVenueId(*v)
+	if err != nil {
+		return nil, err
+	}
+
+	return mappers.MapPitchSlotsToOpeningHours(*p)
 }

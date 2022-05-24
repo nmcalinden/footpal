@@ -7,10 +7,11 @@ import (
 )
 
 func ConfigureBookingHandlers(app *fiber.App) {
-	group := app.Group("/bookings", middleware.IsAuthenticated)
+	group := app.Group("/bookings")
 
 	bookController := InitializeBookingController()
 
+	group.Use(middleware.IsAuthenticated)
 	group.Use(middleware.NewRoles(enums.Player, enums.VenueAdmin).HasRole)
 	group.Get("/", bookController.RetrieveBookings)
 	group.Post("/", bookController.CreateBooking)

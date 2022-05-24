@@ -14,6 +14,7 @@ func ConfigureVenueHandlers(app *fiber.App) {
 	group.Get("/", venueController.RetrieveVenues)
 	group.Get("/summary", venueController.RetrieveVenueSummaries)
 	group.Get("/:venueId", venueController.RetrieveVenueById)
+	group.Get("/:venueId/hours", venueController.RetrieveVenueOpeningHours)
 	group.Get("/:venueId/pitches", venueController.RetrievePitchesByVenue)
 	group.Get("/:venueId/pitches/:pitchId", venueController.RetrievePitch)
 	group.Get("/:venueId/pitches/:pitchId/timeslots", venueController.RetrievePitchTimeSlots)

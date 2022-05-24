@@ -95,6 +95,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/bookings/venues/{venueId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retrieve pitch slots by venue and date range",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "booking"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date from - Format: YYYY-MM-DD",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date to - Format: YYYY-MM-DD",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.PitchBookingDetails"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bookings/{bookingId}": {
             "get": {
                 "security": [
@@ -1834,6 +1895,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/venues/{venueId}/hours": {
+            "get": {
+                "description": "Retrieve opening hours by Venue",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.VenueOpeningHour"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/venues/{venueId}/pitches": {
             "get": {
                 "description": "Get Pitches by Venue",
@@ -2669,6 +2767,9 @@ const docTemplate = `{
                 "squadName": {
                     "type": "string"
                 },
+                "time": {
+                    "type": "string"
+                },
                 "venueId": {
                     "type": "integer"
                 },
@@ -2704,6 +2805,40 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "previous": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.PitchBookingDetails": {
+            "type": "object",
+            "properties": {
+                "dayOfWeek": {
+                    "type": "string"
+                },
+                "matchDate": {
+                    "type": "string"
+                },
+                "timeSlots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.PitchTimeSlotBooking"
+                    }
+                }
+            }
+        },
+        "views.PitchTimeSlotBooking": {
+            "type": "object",
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isBooked": {
+                    "type": "boolean"
+                },
+                "startTime": {
                     "type": "string"
                 }
             }
@@ -2790,6 +2925,20 @@ const docTemplate = `{
                     }
                 },
                 "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.VenueOpeningHour": {
+            "type": "object",
+            "properties": {
+                "close": {
+                    "type": "string"
+                },
+                "dayOfWeek": {
+                    "type": "string"
+                },
+                "open": {
                     "type": "string"
                 }
             }

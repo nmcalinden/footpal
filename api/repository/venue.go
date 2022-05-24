@@ -24,7 +24,7 @@ type VenueRepositoryI interface {
 	DeleteAdmin(venueAdminId *int) error
 	UpdatePitch(pitch *models.Pitch) (*models.Pitch, error)
 	DeletePitch(pitchId *int) error
-	FindTimeslotsByVenueId(venueId *int) (*[]models.VenueTimeSlot, error)
+	FindTimeslotsByVenueIdAndDateRange(venueId int, from string, to string) (*[]models.VenueTimeSlot, error)
 	FindPitchTimeslots(pitchId *int) (*[]models.PitchTimeSlot, error)
 }
 
@@ -164,6 +164,20 @@ func (r VenueRepository) DeletePitch(pitchId *int) error {
 	return validateDeletion(res, err)
 }
 
+func (r VenueRepository) FindTimeslotsByVenueIdAndDateRange(v int, f string, t string) (*[]models.VenueTimeSlot, error) {
+	q := "SELECT DISTINCT ps.pitch_time_slot_id, ps.match_date, pts.day_of_week from pitch_slot as ps " +
+		"JOIN pitch_time_slot pts on ps.pitch_time_slot_id = pts.id " +
+		"JOIN pitch p on pts.pitch_id = p.id " +
+		"WHERE p.venue_id = $1 AND ps.booking_status_id= 1 AND ps.match_date between $2 AND $3"
+
+	var bs []models.VenueTimeSlot
+
+	err := r.database.Select(&bs, q, v, f, t)
+	if err != nil {
+		return nil, err
+	}
+	return &bs, nil
+}
 func (r VenueRepository) FindTimeslotsByVenueId(venueId *int) (*[]models.VenueTimeSlot, error) {
 	var timeSlots []models.VenueTimeSlot
 	return &timeSlots, nil
