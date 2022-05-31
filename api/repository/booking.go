@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/nmcalinden/footpal/api/models"
+	"strconv"
 )
 
 //go:generate mockgen -destination=./mocks/booking_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository BookingRepositoryI
@@ -13,6 +14,7 @@ type BookingRepositoryI interface {
 	FindMatchesByBookingId(id *int) (*[]models.Match, error)
 	Save(booking *models.Booking) (*int, error)
 	Update(booking *models.Booking) (*models.Booking, error)
+	FindAvailableVenues(venueId *int, matchDate string, city *string, players *int) (*[]models.Venue, error)
 }
 
 type BookingRepository struct {
@@ -48,6 +50,31 @@ func (r BookingRepository) FindMatchesByBookingId(id *int) (*[]models.Match, err
 		return nil, err
 	}
 	return &matches, nil
+}
+
+func (r BookingRepository) FindAvailableVenues(v *int, m string, c *string, p *int) (*[]models.Venue, error) {
+	var vs []models.Venue
+	q := "SELECT DISTINCT v.* FROM venue v " +
+		"LEFT JOIN pitch p on v.id = p.venue_id JOIN pitch_time_slot pts on p.id = pts.pitch_id " +
+		"WHERE pts.id NOT IN (SELECT pitch_time_slot_id FROM pitch_slot where match_date = $1)"
+
+	if v != nil {
+		q += " AND v.id = " + strconv.Itoa(*v)
+	}
+
+	if c != nil {
+		q += " AND v.city = " + *c
+	}
+
+	if p != nil {
+		q += " AND p.max_players = " + strconv.Itoa(*p)
+	}
+
+	err := r.database.Select(&vs, q, m)
+	if err != nil {
+		return nil, err
+	}
+	return &vs, nil
 }
 
 func (r BookingRepository) Save(booking *models.Booking) (*int, error) {

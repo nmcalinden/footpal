@@ -84,7 +84,7 @@ func (s *VenueService) GetVenueTimeslots(v *int, f string, t string) (*[]views.P
 	}
 
 	var bd []views.PitchBookingDetails
-	for fd.Before(td) {
+	for fd.Equal(td) || fd.Before(td) {
 		dayOfWeek := fd.Weekday().String()
 
 		p, err := s.pitchRepo.FindAllByVenueIdAndDay(*v, dayOfWeek)

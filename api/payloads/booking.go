@@ -10,3 +10,10 @@ type BookingRequest struct {
 	MatchAccessStatusId int    `json:"matchAccessStatusId" validate:"required"`
 	SquadId             int    `json:"squadId" validate:"omitempty"`
 }
+
+type BookingSearchRequest struct {
+	VenueId    *int    `json:"venueId" validate:"required"`
+	Date       string  `json:"date" validate:"required"`
+	City       *string `json:"city"`
+	MaxPlayers *int    `json:"maxPlayers"`
+}

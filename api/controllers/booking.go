@@ -60,6 +60,33 @@ func (con BookingController) CreateBooking(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusAccepted).JSON(bookingId)
 }
 
+// FindAvailableSlotsByVenue @Summary  Find venues with available slots
+// @Description  Find Venues with available bookings
+// @Tags         booking
+// @Produce      json
+// @Param 		 message body payloads.BookingSearchRequest true "Request"
+// @Success      200 {array} models.Venue
+// @Failure      400 {object} utils.ErrorResponse
+// @Failure      500 {object} utils.ErrorResponse
+// @Router       /bookings/search [post]
+func (con BookingController) FindAvailableSlotsByVenue(c *fiber.Ctx) error {
+	bs := new(payloads.BookingSearchRequest)
+	if err := c.BodyParser(&bs); err != nil {
+		return err
+	}
+
+	if errors := utils.ValidateStruct(*bs); errors != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	}
+
+	res, err := con.bookingService.FindVenuesWithAvailableBookings(bs)
+
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to find venues")
+	}
+	return c.Status(fiber.StatusAccepted).JSON(res)
+}
+
 // GetBookingById @Summary      Retrieve booking
 // @Description  Retrieve booking by bookingId
 // @Tags         booking

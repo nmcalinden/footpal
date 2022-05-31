@@ -6,6 +6,7 @@ import (
 	"github.com/nmcalinden/footpal/api/models"
 	"github.com/nmcalinden/footpal/api/views"
 	"gopkg.in/jeevatkm/go-model.v1"
+	"time"
 )
 
 const (
@@ -47,9 +48,13 @@ func MapToVenueView(v models.Venue, p []models.Pitch) (*views.Venue, error) {
 
 func MapToPitchSlotsByVenue(dest *views.PitchBookingDetails, b []models.VenueTimeSlot, pts []models.PitchTimeSlot, fd string, d string) error {
 	var l []views.PitchTimeSlotBooking
+
+	ct := time.Now()
 	for _, pt := range pts {
-		k := getPitchTimeSlotBooking(pt, b)
-		l = append(l, *k)
+		k := getPitchTimeSlotBooking(pt, b, ct)
+		if k != nil {
+			l = append(l, *k)
+		}
 	}
 
 	dest.MatchDate = fd
@@ -58,7 +63,13 @@ func MapToPitchSlotsByVenue(dest *views.PitchBookingDetails, b []models.VenueTim
 	return nil
 }
 
-func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot) *views.PitchTimeSlotBooking {
+func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot, ct time.Time) *views.PitchTimeSlotBooking {
+	ctH, _, _ := ct.Clock()
+	ptsH, _, _ := pts.StartTime.Clock()
+	if ptsH <= ctH {
+		return nil
+	}
+
 	st := pts.StartTime.Format(pitchTime)
 	et := pts.EndTime.Format(pitchTime)
 

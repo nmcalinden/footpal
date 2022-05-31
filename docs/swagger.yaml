@@ -194,6 +194,20 @@ definitions:
     - startTime
     - venueId
     type: object
+  payloads.BookingSearchRequest:
+    properties:
+      city:
+        type: string
+      date:
+        type: string
+      maxPlayers:
+        type: integer
+      venueId:
+        type: integer
+    required:
+    - date
+    - venueId
+    type: object
   payloads.JoinMatchResponse:
     properties:
       matchId:
@@ -690,24 +704,16 @@ paths:
       - ApiKeyAuth: []
       tags:
       - booking
-  /bookings/venues/{venueId}:
-    get:
-      description: Retrieve pitch slots by venue and date range
+  /bookings/search:
+    post:
+      description: Find Venues with available bookings
       parameters:
-      - description: Venue ID
-        in: path
-        name: venueId
+      - description: Request
+        in: body
+        name: message
         required: true
-        type: integer
-      - description: 'Date from - Format: YYYY-MM-DD'
-        in: query
-        name: from
-        required: true
-        type: string
-      - description: 'Date to - Format: YYYY-MM-DD'
-        in: query
-        name: to
-        type: string
+        schema:
+          $ref: '#/definitions/payloads.BookingSearchRequest'
       produces:
       - application/json
       responses:
@@ -715,7 +721,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/views.PitchBookingDetails'
+              $ref: '#/definitions/models.Venue'
             type: array
         "400":
           description: Bad Request
@@ -725,8 +731,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-      security:
-      - ApiKeyAuth: []
       tags:
       - booking
   /deactivate:
@@ -1877,24 +1881,41 @@ paths:
       - venue
   /venues/{venueId}/timeslots:
     get:
-      description: Retrieve all time slots by Venue
+      description: Retrieve pitch slots by venue and date range
       parameters:
       - description: Venue ID
         in: path
         name: venueId
         required: true
         type: integer
+      - description: 'Date from - Format: YYYY-MM-DD'
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: 'Date to - Format: YYYY-MM-DD'
+        in: query
+        name: to
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.PitchBookingDetails'
+            type: array
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
       tags:
-      - venue
+      - booking
   /venues/summary:
     get:
       description: Retrieve all venues

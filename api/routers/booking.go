@@ -15,6 +15,7 @@ func ConfigureBookingHandlers(app *fiber.App) {
 	group.Use(middleware.NewRoles(enums.Player, enums.VenueAdmin).HasRole)
 	group.Get("/", bookController.RetrieveBookings)
 	group.Post("/", bookController.CreateBooking)
+	group.Post("/search", bookController.FindAvailableSlotsByVenue)
 	group.Get("/:bookingId", bookController.GetBookingById)
 	group.Put("/:bookingId", bookController.UpdateBooking)
 	group.Delete("/:bookingId", bookController.CancelBooking)

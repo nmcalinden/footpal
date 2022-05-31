@@ -95,14 +95,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/bookings/venues/{venueId}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Retrieve pitch slots by venue and date range",
+        "/bookings/search": {
+            "post": {
+                "description": "Find Venues with available bookings",
                 "produces": [
                     "application/json"
                 ],
@@ -111,24 +106,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Venue ID",
-                        "name": "venueId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Date from - Format: YYYY-MM-DD",
-                        "name": "from",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Date to - Format: YYYY-MM-DD",
-                        "name": "to",
-                        "in": "query"
+                        "description": "Request",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payloads.BookingSearchRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -137,7 +121,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/views.PitchBookingDetails"
+                                "$ref": "#/definitions/models.Venue"
                             }
                         }
                     },
@@ -2186,12 +2170,12 @@ const docTemplate = `{
         },
         "/venues/{venueId}/timeslots": {
             "get": {
-                "description": "Retrieve all time slots by Venue",
+                "description": "Retrieve pitch slots by venue and date range",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "venue"
+                    "booking"
                 ],
                 "parameters": [
                     {
@@ -2200,14 +2184,39 @@ const docTemplate = `{
                         "name": "venueId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date from - Format: YYYY-MM-DD",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date to - Format: YYYY-MM-DD",
+                        "name": "to",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.PitchBookingDetails"
+                            }
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/ErrorResponse"
                         }
@@ -2488,6 +2497,27 @@ const docTemplate = `{
                 },
                 "startTime": {
                     "type": "string"
+                },
+                "venueId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payloads.BookingSearchRequest": {
+            "type": "object",
+            "required": [
+                "date",
+                "venueId"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "maxPlayers": {
+                    "type": "integer"
                 },
                 "venueId": {
                     "type": "integer"

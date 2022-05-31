@@ -58,3 +58,13 @@ func (s *BookingService) CancelBooking(bookingId *int) (*int, error) {
 	response, dErr := s.bookingRepo.Update(b)
 	return response.BookingId, dErr
 }
+
+func (s *BookingService) FindVenuesWithAvailableBookings(b *payloads.BookingSearchRequest) (*[]models.Venue, error) {
+	v, err := s.bookingRepo.FindAvailableVenues(b.VenueId, b.Date, b.City, b.MaxPlayers)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return v, nil
+}
