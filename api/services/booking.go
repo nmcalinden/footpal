@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/nmcalinden/footpal/api/models"
 	"github.com/nmcalinden/footpal/api/payloads"
 	"github.com/nmcalinden/footpal/api/repository"
@@ -27,14 +28,115 @@ func (s *BookingService) GetMatchesByBooking(bookingId *int) (*[]models.Match, e
 	return s.bookingRepo.FindMatchesByBookingId(bookingId)
 }
 
-func (s *BookingService) CreateNewBooking(bookingRequest *payloads.BookingRequest) (*int, error) {
+func (s *BookingService) CreateNewBooking(bookingRequest *payloads.BookingRequest, userId int) (*int, error) {
+	m, err := s.bookingRepo.IsExistingMatchPresent(&bookingRequest.MatchDate, &bookingRequest.PitchTimeSlotId)
+	if err != nil {
+		return nil, err
+	}
+
+	if *m {
+		return nil, errors.New("bookingAlreadyExists")
+	}
+
 	newBooking := models.Booking{
-		BookingStatusId: 4,
-		CreatedBy:       bookingRequest.VenueId,
+		BookingStatusId: 1,
+		CreatedBy:       userId,
 		Created:         time.Now(),
 		LastUpdated:     time.Now(),
 	}
-	return s.bookingRepo.Save(&newBooking)
+
+	ms, err := buildMatchesFromBooking(bookingRequest)
+	ps, err := buildPitchSlotsFromBooking(bookingRequest)
+	if err != nil {
+		return nil, err
+	}
+	return s.bookingRepo.Save(&newBooking, ms, ps)
+}
+
+func buildMatchesFromBooking(br *payloads.BookingRequest) (*[]models.Match, error) {
+	var ms []models.Match
+	match := models.Match{
+		BookingId:           0,
+		MatchAccessStatusId: 1,
+		MatchStatusId:       1,
+		SquadId:             br.SquadId,
+		MatchDate:           br.MatchDate,
+		Cost:                30,
+		IsPaid:              false,
+		Created:             time.Now(),
+		LastUpdated:         time.Now(),
+	}
+
+	ms = append(ms, match)
+
+	md := br.MatchDate
+
+	if br.NoOfWeeks > 1 {
+		var i = 1
+
+		for i < br.NoOfWeeks {
+			fmd, err := time.Parse("2006-01-02", md)
+			if err != nil {
+				return nil, err
+			}
+
+			fmd = fmd.AddDate(0, 0, 7)
+			md = fmd.Format("2006-01-02")
+			match = models.Match{
+				BookingId:           0,
+				MatchAccessStatusId: 1,
+				MatchStatusId:       4,
+				SquadId:             br.SquadId,
+				MatchDate:           md,
+				Cost:                30,
+				IsPaid:              false,
+				Created:             time.Now(),
+				LastUpdated:         time.Now(),
+			}
+
+			ms = append(ms, match)
+			i += 1
+		}
+	}
+
+	return &ms, nil
+}
+
+func buildPitchSlotsFromBooking(br *payloads.BookingRequest) (*[]models.PitchSlot, error) {
+	var ps []models.PitchSlot
+	pitchSlot := models.PitchSlot{
+		PitchTimeSlotId: br.PitchTimeSlotId,
+		MatchDate:       br.MatchDate,
+		BookingStatusId: 1,
+	}
+
+	ps = append(ps, pitchSlot)
+
+	md := br.MatchDate
+
+	if br.NoOfWeeks > 1 {
+		var i = 1
+
+		for i < br.NoOfWeeks {
+			fmd, err := time.Parse("2006-01-02", md)
+			if err != nil {
+				return nil, err
+			}
+
+			fmd = fmd.AddDate(0, 0, 7)
+			md = fmd.Format("2006-01-02")
+			pitchSlot = models.PitchSlot{
+				PitchTimeSlotId: br.PitchTimeSlotId,
+				MatchDate:       md,
+				BookingStatusId: 1,
+			}
+
+			ps = append(ps, pitchSlot)
+			i++
+		}
+	}
+
+	return &ps, nil
 }
 
 func (s *BookingService) EditBooking(bookingId *int, bookingRequest *payloads.BookingRequest) (*models.Booking, error) {
@@ -44,7 +146,7 @@ func (s *BookingService) EditBooking(bookingId *int, bookingRequest *payloads.Bo
 	}
 
 	b.LastUpdated = time.Now()
-	b.CreatedBy = bookingRequest.SquadId //TODO - Test example
+	b.CreatedBy = 1 //TODO - Test example
 	return s.bookingRepo.Update(b)
 }
 

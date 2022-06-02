@@ -19,6 +19,7 @@ func ConfigureVenueHandlers(app *fiber.App) {
 	group.Get("/:venueId/pitches/:pitchId", venueController.RetrievePitch)
 	group.Get("/:venueId/pitches/:pitchId/timeslots", venueController.RetrievePitchTimeSlots)
 	group.Get("/:venueId/timeslots", venueController.RetrieveVenueTimeSlots)
+	group.Get("/:venueId/timeslots/:pitchTimeslotId/pitch", venueController.RetrievePitchByTimeSlot)
 
 	group.Use(middleware.IsAuthenticated)
 	group.Use(middleware.NewRoles(enums.VenueAdmin).HasRole)

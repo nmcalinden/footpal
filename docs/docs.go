@@ -2018,6 +2018,13 @@ const docTemplate = `{
                         "name": "venueId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pitch ID",
+                        "name": "pitchId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2223,6 +2230,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/venues/{venueId}/timeslots/{pitchTimeslotId}/pitch": {
+            "get": {
+                "description": "Get pitch info by venue and time slot",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "venue"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Venue ID",
+                        "name": "venueId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pitch Time slot ID",
+                        "name": "pitchTimeslotId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pitch"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2353,6 +2401,9 @@ const docTemplate = `{
                 "cost": {
                     "type": "number"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "maxPlayers": {
                     "type": "integer"
                 },
@@ -2360,9 +2411,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 3
-                },
-                "pitchId": {
-                    "type": "integer"
                 },
                 "venueId": {
                     "type": "integer"
@@ -2466,37 +2514,31 @@ const docTemplate = `{
         "payloads.BookingRequest": {
             "type": "object",
             "required": [
-                "day",
-                "endTime",
-                "matchAccessStatusId",
+                "matchDate",
+                "matchType",
                 "noOfWeeks",
-                "pitchId",
-                "startTime",
+                "payment",
+                "pitchTimeSlotId",
                 "venueId"
             ],
             "properties": {
-                "day": {
-                    "type": "string",
-                    "maxLength": 10,
-                    "minLength": 3
-                },
-                "endTime": {
+                "matchDate": {
                     "type": "string"
                 },
-                "matchAccessStatusId": {
-                    "type": "integer"
+                "matchType": {
+                    "type": "string"
                 },
                 "noOfWeeks": {
                     "type": "integer"
                 },
-                "pitchId": {
+                "payment": {
+                    "type": "string"
+                },
+                "pitchTimeSlotId": {
                     "type": "integer"
                 },
                 "squadId": {
                     "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
                 },
                 "venueId": {
                     "type": "integer"

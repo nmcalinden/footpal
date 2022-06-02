@@ -50,8 +50,10 @@ func MapToPitchSlotsByVenue(dest *views.PitchBookingDetails, b []models.VenueTim
 	var l []views.PitchTimeSlotBooking
 
 	ct := time.Now()
+	x, _ := time.Parse("2006-01-02", fd)
+	isToday := ct.Truncate(24 * time.Hour).Equal(x.Truncate(24 * time.Hour))
 	for _, pt := range pts {
-		k := getPitchTimeSlotBooking(pt, b, ct)
+		k := getPitchTimeSlotBooking(pt, b, ct, isToday)
 		if k != nil {
 			l = append(l, *k)
 		}
@@ -63,10 +65,33 @@ func MapToPitchSlotsByVenue(dest *views.PitchBookingDetails, b []models.VenueTim
 	return nil
 }
 
-func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot, ct time.Time) *views.PitchTimeSlotBooking {
+func MapToPitchTimeslotView(dest *views.PitchTimeSlot, p models.Pitch, pts models.PitchTimeSlot) error {
+
+	pi := views.Pitch{}
+	mErrs := model.Copy(&pi, p)
+	if mErrs != nil {
+		var rErr error
+		return multierror.Append(rErr, mErrs...)
+	}
+
+	st := pts.StartTime.Format(pitchTime)
+	et := pts.EndTime.Format(pitchTime)
+	pv := views.TimeSlot{
+		PitchTimeSlotId: pts.PitchTimeSlotId,
+		DayOfWeek:       pts.DayOfWeek,
+		StartTime:       st,
+		EndTime:         et,
+	}
+
+	dest.Pitch = pi
+	dest.TimeSlot = pv
+	return nil
+}
+
+func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot, ct time.Time, isToday bool) *views.PitchTimeSlotBooking {
 	ctH, _, _ := ct.Clock()
 	ptsH, _, _ := pts.StartTime.Clock()
-	if ptsH <= ctH {
+	if ptsH <= ctH && isToday {
 		return nil
 	}
 

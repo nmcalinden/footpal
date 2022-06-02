@@ -70,6 +70,22 @@ func (s *VenueService) GetVenuePitch(venueId *int, pitchId *int) (*models.Pitch,
 	return s.venueRepo.FindPitchByVenueIdAndPitchId(venueId, pitchId)
 }
 
+func (s *VenueService) GetVenuePitchByTimeslot(venueId *int, pitchTimeSlotId *int) (*views.PitchTimeSlot, error) {
+	p, err := s.venueRepo.FindPitchByVenueIdAndPitchTimeslotId(venueId, pitchTimeSlotId)
+	if err != nil {
+		return nil, err
+	}
+
+	t, err := s.venueRepo.FindTimeslotById(venueId, pitchTimeSlotId)
+	if err != nil {
+		return nil, err
+	}
+
+	var res views.PitchTimeSlot
+	mappers.MapToPitchTimeslotView(&res, *p, *t)
+	return &res, nil
+}
+
 func (s *VenueService) GetVenueTimeslots(v *int, f string, t string) (*[]views.PitchBookingDetails, error) {
 	fd, err := time.Parse("2006-01-02", f)
 

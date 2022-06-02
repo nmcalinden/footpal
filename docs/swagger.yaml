@@ -84,14 +84,14 @@ definitions:
     properties:
       cost:
         type: number
+      id:
+        type: integer
       maxPlayers:
         type: integer
       name:
         maxLength: 100
         minLength: 3
         type: string
-      pitchId:
-        type: integer
       venueId:
         type: integer
     required:
@@ -167,31 +167,26 @@ definitions:
     type: object
   payloads.BookingRequest:
     properties:
-      day:
-        maxLength: 10
-        minLength: 3
+      matchDate:
         type: string
-      endTime:
+      matchType:
         type: string
-      matchAccessStatusId:
-        type: integer
       noOfWeeks:
         type: integer
-      pitchId:
+      payment:
+        type: string
+      pitchTimeSlotId:
         type: integer
       squadId:
         type: integer
-      startTime:
-        type: string
       venueId:
         type: integer
     required:
-    - day
-    - endTime
-    - matchAccessStatusId
+    - matchDate
+    - matchType
     - noOfWeeks
-    - pitchId
-    - startTime
+    - payment
+    - pitchTimeSlotId
     - venueId
     type: object
   payloads.BookingSearchRequest:
@@ -1807,6 +1802,11 @@ paths:
         name: venueId
         required: true
         type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -1916,6 +1916,33 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       tags:
       - booking
+  /venues/{venueId}/timeslots/{pitchTimeslotId}/pitch:
+    get:
+      description: Get pitch info by venue and time slot
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch Time slot ID
+        in: path
+        name: pitchTimeslotId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
   /venues/summary:
     get:
       description: Retrieve all venues

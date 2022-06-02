@@ -278,6 +278,7 @@ func (con VenueController) AddPitchToVenue(c *fiber.Ctx) error {
 // @Tags         venue
 // @Produce      json
 // @Param        venueId   path  int  true  "Venue ID"
+// @Param        pitchId   path  int  true  "Pitch ID"
 // @Success      200 {object} models.Pitch
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /venues/{venueId}/pitches/{pitchId} [get]
@@ -292,20 +293,40 @@ func (con VenueController) RetrievePitch(c *fiber.Ctx) error {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Pitch Id supplied is invalid")
 	}
 
-	var p []models.Pitch
-
-	result := models.Pitch{}
-	for _, s := range p {
-		if s.VenueId == venueId && s.PitchId == &pitchId {
-			result = s
-			break
-		}
-	}
-	if *result.PitchId == 0 {
+	res, err := con.venueService.GetVenuePitch(&venueId, &pitchId)
+	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Pitch does not exist")
 	}
 
-	return c.Status(fiber.StatusOK).JSON(result)
+	return c.Status(fiber.StatusOK).JSON(res)
+}
+
+// RetrievePitchByTimeSlot @Summary      Get Venue Pitch
+// @Description  Get pitch info by venue and time slot
+// @Tags         venue
+// @Produce      json
+// @Param        venueId   path  int  true  "Venue ID"
+// @Param        pitchTimeslotId   path  int  true  "Pitch Time slot ID"
+// @Success      200 {object} models.Pitch
+// @Failure      400 {object} utils.ErrorResponse
+// @Router       /venues/{venueId}/timeslots/{pitchTimeslotId}/pitch [get]
+func (con VenueController) RetrievePitchByTimeSlot(c *fiber.Ctx) error {
+	venueId, err := strconv.Atoi(c.Params("venueId"))
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "VenueId supplied is invalid")
+	}
+
+	timeSlotId, err := strconv.Atoi(c.Params("pitchTimeslotId"))
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Pitch Id supplied is invalid")
+	}
+
+	res, err := con.venueService.GetVenuePitchByTimeslot(&venueId, &timeSlotId)
+	if err != nil {
+		return utils.BuildErrorResponse(c, fiber.StatusBadRequest, "Pitch does not exist")
+	}
+
+	return c.Status(fiber.StatusOK).JSON(res)
 }
 
 // UpdatePitchInfo @Summary      Edit Pitch

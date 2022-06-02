@@ -16,6 +16,7 @@ type VenueRepositoryI interface {
 	FindAdminByUserId(userId *int) (*models.VenueAdmin, error)
 	FindPitchesByVenue(venueId *int) (*[]models.Pitch, error)
 	FindPitchByVenueIdAndPitchId(venueId *int, pitchId *int) (*models.Pitch, error)
+	FindPitchByVenueIdAndPitchTimeslotId(venueId *int, pitchTimeSlotId *int) (*models.Pitch, error)
 	Save(venue *models.Venue) (*int, error)
 	SaveAdmin(admin *models.VenueAdmin) (*int, error)
 	SavePitch(pitch *models.Pitch) (*int, error)
@@ -26,6 +27,7 @@ type VenueRepositoryI interface {
 	DeletePitch(pitchId *int) error
 	FindTimeslotsByVenueIdAndDateRange(venueId int, from string, to string) (*[]models.VenueTimeSlot, error)
 	FindPitchTimeslots(pitchId *int) (*[]models.PitchTimeSlot, error)
+	FindTimeslotById(venueId *int, pitchTimeSlotId *int) (*models.PitchTimeSlot, error)
 }
 
 type VenueRepository struct {
@@ -99,6 +101,17 @@ func (r VenueRepository) FindPitchByVenueIdAndPitchId(venueId *int, pitchId *int
 	return &pitch, nil
 }
 
+func (r VenueRepository) FindPitchByVenueIdAndPitchTimeslotId(venueId *int, pitchTimeSlotId *int) (*models.Pitch, error) {
+	var pitch models.Pitch
+
+	q := "SELECT p.* FROM footpaldb.public.pitch p LEFT JOIN footpaldb.public.pitch_time_slot pts on p.id = pts.pitch_id WHERE p.venue_id = $1 AND pts.id = $2"
+	err := r.database.Get(&pitch, q, venueId, pitchTimeSlotId)
+	if err != nil {
+		return nil, err
+	}
+	return &pitch, nil
+}
+
 func (r VenueRepository) Save(venue *models.Venue) (*int, error) {
 	_, err := r.database.NamedExec(`INSERT INTO footpaldb.public.venue(venue_name, venue_address, postcode, 
                                    city, phone_no, email) VALUES(:venue_name, :venue_address, :postcode, :city, :phone_no, :email)`, venue)
@@ -164,6 +177,17 @@ func (r VenueRepository) DeletePitch(pitchId *int) error {
 	return validateDeletion(res, err)
 }
 
+func (r VenueRepository) FindTimeslotById(v *int, pts *int) (*models.PitchTimeSlot, error) {
+	q := "SELECT pts.* FROM footpaldb.public.pitch_time_slot pts " +
+		"LEFT JOIN footpaldb.public.pitch p on p.id = pts.pitch_id WHERE venue_id = $1 AND pts.id = $2"
+	var ps models.PitchTimeSlot
+	err := r.database.Get(&ps, q, v, pts)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ps, nil
+}
 func (r VenueRepository) FindTimeslotsByVenueIdAndDateRange(v int, f string, t string) (*[]models.VenueTimeSlot, error) {
 	q := "SELECT DISTINCT ps.pitch_time_slot_id, ps.match_date, pts.day_of_week from pitch_slot as ps " +
 		"JOIN pitch_time_slot pts on ps.pitch_time_slot_id = pts.id " +

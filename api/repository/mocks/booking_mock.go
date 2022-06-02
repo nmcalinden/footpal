@@ -49,6 +49,21 @@ func (mr *MockBookingRepositoryIMockRecorder) FindAll() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAll", reflect.TypeOf((*MockBookingRepositoryI)(nil).FindAll))
 }
 
+// FindAvailableVenues mocks base method.
+func (m *MockBookingRepositoryI) FindAvailableVenues(arg0 *int, arg1 string, arg2 *string, arg3 *int) (*[]models.Venue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAvailableVenues", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(*[]models.Venue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAvailableVenues indicates an expected call of FindAvailableVenues.
+func (mr *MockBookingRepositoryIMockRecorder) FindAvailableVenues(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAvailableVenues", reflect.TypeOf((*MockBookingRepositoryI)(nil).FindAvailableVenues), arg0, arg1, arg2, arg3)
+}
+
 // FindById mocks base method.
 func (m *MockBookingRepositoryI) FindById(arg0 *int) (*models.Booking, error) {
 	m.ctrl.T.Helper()
@@ -79,19 +94,34 @@ func (mr *MockBookingRepositoryIMockRecorder) FindMatchesByBookingId(arg0 interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMatchesByBookingId", reflect.TypeOf((*MockBookingRepositoryI)(nil).FindMatchesByBookingId), arg0)
 }
 
-// Save mocks base method.
-func (m *MockBookingRepositoryI) Save(arg0 *models.Booking) (*int, error) {
+// IsExistingMatchPresent mocks base method.
+func (m *MockBookingRepositoryI) IsExistingMatchPresent(arg0 *string, arg1 *int) (*bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", arg0)
+	ret := m.ctrl.Call(m, "IsExistingMatchPresent", arg0, arg1)
+	ret0, _ := ret[0].(*bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsExistingMatchPresent indicates an expected call of IsExistingMatchPresent.
+func (mr *MockBookingRepositoryIMockRecorder) IsExistingMatchPresent(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsExistingMatchPresent", reflect.TypeOf((*MockBookingRepositoryI)(nil).IsExistingMatchPresent), arg0, arg1)
+}
+
+// Save mocks base method.
+func (m *MockBookingRepositoryI) Save(arg0 *models.Booking, arg1 *[]models.Match, arg2 *[]models.PitchSlot) (*int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Save indicates an expected call of Save.
-func (mr *MockBookingRepositoryIMockRecorder) Save(arg0 interface{}) *gomock.Call {
+func (mr *MockBookingRepositoryIMockRecorder) Save(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockBookingRepositoryI)(nil).Save), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockBookingRepositoryI)(nil).Save), arg0, arg1, arg2)
 }
 
 // Update mocks base method.

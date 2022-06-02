@@ -43,6 +43,9 @@ func (con BookingController) RetrieveBookings(c *fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @Router       /bookings [post]
 func (con BookingController) CreateBooking(c *fiber.Ctx) error {
+	claims := utils.GetClaims(c.Locals("user"))
+	userId := int(claims["sub"].(float64))
+
 	newBooking := new(payloads.BookingRequest)
 	if err := c.BodyParser(&newBooking); err != nil {
 		return err
@@ -52,7 +55,7 @@ func (con BookingController) CreateBooking(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	bookingId, err := con.bookingService.CreateNewBooking(newBooking)
+	bookingId, err := con.bookingService.CreateNewBooking(newBooking, userId)
 
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to create booking")

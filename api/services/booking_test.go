@@ -16,6 +16,21 @@ type BookingRepositoryMock struct {
 	mock.Mock
 }
 
+func (r *BookingRepositoryMock) Save(booking *models.Booking, matches *[]models.Match, pitchSlots *[]models.PitchSlot) (*int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r *BookingRepositoryMock) FindAvailableVenues(venueId *int, matchDate string, city *string, players *int) (*[]models.Venue, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r *BookingRepositoryMock) IsExistingMatchPresent(matchDate *string, pitchTimeslotId *int) (*bool, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (r *BookingRepositoryMock) FindAll() (*[]models.Booking, error) {
 	var bookingRecords []models.Booking
 
@@ -48,10 +63,6 @@ func (r *BookingRepositoryMock) FindById(id *int) (*models.Booking, error) {
 func (r *BookingRepositoryMock) FindMatchesByBookingId(id *int) (*[]models.Match, error) {
 	var matches []models.Match
 	return &matches, nil
-}
-
-func (r *BookingRepositoryMock) Save(booking *models.Booking) (*int, error) {
-	return booking.BookingId, nil
 }
 
 func (r *BookingRepositoryMock) Update(booking *models.Booking) (*models.Booking, error) {
