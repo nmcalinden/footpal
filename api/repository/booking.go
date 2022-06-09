@@ -11,12 +11,14 @@ import (
 
 type BookingRepositoryI interface {
 	FindAll() (*[]models.Booking, error)
+	FindAllByUserId(userId *int) (*[]models.Booking, error)
 	FindById(id *int) (*models.Booking, error)
 	FindMatchesByBookingId(id *int) (*[]models.Match, error)
 	Save(booking *models.Booking, matches *[]models.Match, pitchSlots *[]models.PitchSlot) (*int, error)
 	Update(booking *models.Booking) (*models.Booking, error)
 	FindAvailableVenues(venueId *int, matchDate string, city *string, players *int) (*[]models.Venue, error)
 	IsExistingMatchPresent(matchDate *string, pitchTimeslotId *int) (*bool, error)
+	GetTotalUserBookings(userId *int) (*int, error)
 }
 
 type BookingRepository struct {
@@ -30,6 +32,16 @@ func NewBookingRepository(database *sqlx.DB) *BookingRepository {
 func (r BookingRepository) FindAll() (*[]models.Booking, error) {
 	var bookingRecords []models.Booking
 	err := r.database.Select(&bookingRecords, "SELECT * FROM footpaldb.public.booking")
+	if err != nil || len(bookingRecords) == 0 {
+		return nil, err
+	}
+	return &bookingRecords, nil
+}
+
+func (r BookingRepository) FindAllByUserId(u *int) (*[]models.Booking, error) {
+	var bookingRecords []models.Booking
+	err := r.database.Select(&bookingRecords, "SELECT * FROM footpaldb.public.booking WHERE created_by=$1 "+
+		"ORDER BY created DESC", u)
 	if err != nil || len(bookingRecords) == 0 {
 		return nil, err
 	}
@@ -132,7 +144,16 @@ func (r BookingRepository) Save(booking *models.Booking, matches *[]models.Match
 	if err != nil {
 		return nil, errors.New("tx commit error")
 	}
-	return booking.BookingId, nil
+	return &lastInsertedId, nil
+}
+
+func (r BookingRepository) GetTotalUserBookings(userId *int) (*int, error) {
+	var count int
+	err := r.database.Get(&count, "SELECT count(*) from footpaldb.public.booking WHERE created_by=$1", userId)
+	if err != nil {
+		return nil, err
+	}
+	return &count, nil
 }
 
 func saveMatches(tx *sqlx.Tx, matches *[]models.Match, bId int) error {

@@ -5,6 +5,7 @@ import (
 	"github.com/nmcalinden/footpal/api/models"
 	"github.com/nmcalinden/footpal/api/payloads"
 	"github.com/nmcalinden/footpal/api/repository"
+	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/api/views"
 	"log"
 	"time"
@@ -109,7 +110,7 @@ func (s *VenueService) GetVenueTimeslots(v *int, f string, t string) (*[]views.P
 		}
 
 		var res views.PitchBookingDetails
-		err = mappers.MapToPitchSlotsByVenue(&res, *b, *p, fd.Format("2006-01-02"), dayOfWeek)
+		err = mappers.MapToPitchSlotsByVenue(&res, *b, *p, utils.GetFormattedDate(fd), dayOfWeek)
 
 		if err != nil {
 			return nil, err

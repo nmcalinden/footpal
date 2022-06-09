@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/api/errors"
 	"github.com/nmcalinden/footpal/api/payloads"
 	"github.com/nmcalinden/footpal/api/services"
 	"github.com/nmcalinden/footpal/api/utils"
@@ -20,13 +21,20 @@ func NewBookingController(bookingService *services.BookingService) *BookingContr
 // @Description  Retrieve all bookings by user
 // @Tags         booking
 // @Produce      json
-// @Success      200  {array} models.Booking
+// @Success      200  {array} views.UserBookings
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings [get]
 func (con BookingController) RetrieveBookings(c *fiber.Ctx) error {
-	bookingRecords, err := con.bookingService.GetBookings()
+	claims := utils.GetClaims(c.Locals("user"))
+	userId := int(claims["sub"].(float64))
+
+	bookingRecords, err := con.bookingService.GetBookings(&userId)
 	if err != nil {
+		e, ok := err.(*errors.FpError)
+		if ok && e.ErrorCode == errors.NoResults {
+			return c.Status(fiber.StatusOK).JSON(new(interface{}))
+		}
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to get bookings")
 	}
 	return c.Status(fiber.StatusOK).JSON(bookingRecords)
@@ -37,7 +45,7 @@ func (con BookingController) RetrieveBookings(c *fiber.Ctx) error {
 // @Tags         booking
 // @Produce      json
 // @Param 		 message body payloads.BookingRequest true "Request"
-// @Success      202
+// @Success      202 {object} payloads.BookingResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
@@ -51,8 +59,8 @@ func (con BookingController) CreateBooking(c *fiber.Ctx) error {
 		return err
 	}
 
-	if errors := utils.ValidateStruct(*newBooking); errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if err := utils.ValidateStruct(*newBooking); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	bookingId, err := con.bookingService.CreateNewBooking(newBooking, userId)
@@ -60,7 +68,9 @@ func (con BookingController) CreateBooking(c *fiber.Ctx) error {
 	if err != nil {
 		return utils.BuildErrorResponse(c, fiber.StatusInternalServerError, "Failed to create booking")
 	}
-	return c.Status(fiber.StatusAccepted).JSON(bookingId)
+
+	res := payloads.BookingResponse{BookingId: *bookingId}
+	return c.Status(fiber.StatusAccepted).JSON(res)
 }
 
 // FindAvailableSlotsByVenue @Summary  Find venues with available slots
@@ -78,8 +88,8 @@ func (con BookingController) FindAvailableSlotsByVenue(c *fiber.Ctx) error {
 		return err
 	}
 
-	if errors := utils.ValidateStruct(*bs); errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if err := utils.ValidateStruct(*bs); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	res, err := con.bookingService.FindVenuesWithAvailableBookings(bs)
@@ -135,8 +145,8 @@ func (con BookingController) UpdateBooking(c *fiber.Ctx) error {
 		return err
 	}
 
-	if errors := utils.ValidateStruct(*b); errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if err := utils.ValidateStruct(*b); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	response, bErr := con.bookingService.EditBooking(&bookingId, b)

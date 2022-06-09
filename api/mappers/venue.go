@@ -4,13 +4,10 @@ import (
 	"fmt"
 	"github.com/hashicorp/go-multierror"
 	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/api/views"
 	"gopkg.in/jeevatkm/go-model.v1"
 	"time"
-)
-
-const (
-	pitchTime = "15:04"
 )
 
 func MapToVenueSummaries(v []models.Venue) (*[]views.VenueSummary, error) {
@@ -74,8 +71,8 @@ func MapToPitchTimeslotView(dest *views.PitchTimeSlot, p models.Pitch, pts model
 		return multierror.Append(rErr, mErrs...)
 	}
 
-	st := pts.StartTime.Format(pitchTime)
-	et := pts.EndTime.Format(pitchTime)
+	st := utils.GetFormattedTime(pts.StartTime)
+	et := utils.GetFormattedTime(pts.EndTime)
 	pv := views.TimeSlot{
 		PitchTimeSlotId: pts.PitchTimeSlotId,
 		DayOfWeek:       pts.DayOfWeek,
@@ -95,8 +92,8 @@ func getPitchTimeSlotBooking(pts models.PitchTimeSlot, b []models.VenueTimeSlot,
 		return nil
 	}
 
-	st := pts.StartTime.Format(pitchTime)
-	et := pts.EndTime.Format(pitchTime)
+	st := utils.GetFormattedTime(pts.StartTime)
+	et := utils.GetFormattedTime(pts.EndTime)
 
 	k := views.PitchTimeSlotBooking{
 		PitchTimeSlotId: pts.PitchTimeSlotId,

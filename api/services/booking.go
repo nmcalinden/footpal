@@ -2,22 +2,106 @@ package services
 
 import (
 	"errors"
+	"github.com/gofiber/fiber/v2"
+	errors2 "github.com/nmcalinden/footpal/api/errors"
 	"github.com/nmcalinden/footpal/api/models"
 	"github.com/nmcalinden/footpal/api/payloads"
 	"github.com/nmcalinden/footpal/api/repository"
+	"github.com/nmcalinden/footpal/api/utils"
+	"github.com/nmcalinden/footpal/api/views"
+	"sort"
 	"time"
 )
 
 type BookingService struct {
 	bookingRepo repository.BookingRepositoryI
+	matchRepo   repository.MatchRepositoryI
+	statusRepo  repository.StatusRepositoryI
 }
 
-func NewBookingService(bookingRepo repository.BookingRepositoryI) *BookingService {
-	return &BookingService{bookingRepo: bookingRepo}
+func NewBookingService(bookingRepo repository.BookingRepositoryI, matchRepo repository.MatchRepositoryI,
+	statusRepo repository.StatusRepositoryI) *BookingService {
+	return &BookingService{bookingRepo: bookingRepo, matchRepo: matchRepo, statusRepo: statusRepo}
 }
 
-func (s *BookingService) GetBookings() (*[]models.Booking, error) {
-	return s.bookingRepo.FindAll()
+func (s *BookingService) GetBookings(userId *int) (*[]views.UserBooking, error) {
+	var userBookings []views.UserBooking
+	b, err := s.bookingRepo.FindAllByUserId(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	if b == nil {
+		return nil, errors2.GetError(errors2.NoResults, fiber.StatusOK, "No Results")
+	}
+	for _, booking := range *b {
+		res, err := s.buildUserBooking(booking)
+		if err != nil {
+			return nil, err
+		}
+		userBookings = append(userBookings, *res)
+	}
+
+	sort.Slice(userBookings[:], func(i, j int) bool {
+		md1, _ := utils.ParseDateFromTimestampString(userBookings[i].MatchDate)
+		md2, _ := utils.ParseDateFromTimestampString(userBookings[j].MatchDate)
+		return md1.Before(md2)
+	})
+
+	return &userBookings, err
+}
+
+func (s *BookingService) buildUserBooking(booking models.Booking) (*views.UserBooking, error) {
+	m, err := s.bookingRepo.FindMatchesByBookingId(booking.BookingId)
+	if err != nil || len(*m) == 0 {
+		return nil, err
+	}
+
+	mbd, err := s.matchRepo.FindMatchDetailsByBookingId(booking.BookingId)
+	if err != nil {
+		return nil, err
+	}
+
+	var matchSummary []views.BookingMatchSummary
+	var bookingPaid = true
+	for _, match := range *m {
+		ms := views.BookingMatchSummary{
+			MatchId:   *match.MatchId,
+			MatchDate: match.MatchDate,
+		}
+
+		if !match.IsPaid {
+			bookingPaid = false
+		}
+		matchSummary = append(matchSummary, ms)
+	}
+
+	bStatus, err := s.statusRepo.FindBookingStatusById(&booking.BookingStatusId)
+	if err != nil {
+		return nil, err
+	}
+
+	matches := *mbd
+	totalCost := matches[0].Cost * float32(len(matches))
+	res := views.UserBooking{
+		BookingId:     *booking.BookingId,
+		BookingStatus: *bStatus,
+		MatchDate:     matches[0].MatchDate,
+		StartTime:     utils.GetFormattedTime(matches[0].StartTime),
+		NoOfWeeks:     len(matches),
+		TotalCost:     totalCost,
+		IsBookingPaid: bookingPaid,
+		Venue: views.BookingVenueSummary{
+			VenueId: matches[0].VenueId,
+			Name:    matches[0].VenueName,
+		},
+		Pitch: views.BookingPitchSummary{
+			PitchId: matches[0].PitchId,
+			Name:    matches[0].PitchName,
+		},
+		Matches: matchSummary,
+	}
+	return &res, nil
 }
 
 func (s *BookingService) GetBookingById(bookingId *int) (*models.Booking, error) {
@@ -75,13 +159,13 @@ func buildMatchesFromBooking(br *payloads.BookingRequest) (*[]models.Match, erro
 		var i = 1
 
 		for i < br.NoOfWeeks {
-			fmd, err := time.Parse("2006-01-02", md)
+			fmd, err := utils.ParseDateFromString(md)
 			if err != nil {
 				return nil, err
 			}
 
 			fmd = fmd.AddDate(0, 0, 7)
-			md = fmd.Format("2006-01-02")
+			md = utils.GetFormattedDate(fmd)
 			match = models.Match{
 				BookingId:           0,
 				MatchAccessStatusId: 1,
@@ -118,13 +202,13 @@ func buildPitchSlotsFromBooking(br *payloads.BookingRequest) (*[]models.PitchSlo
 		var i = 1
 
 		for i < br.NoOfWeeks {
-			fmd, err := time.Parse("2006-01-02", md)
+			fmd, err := utils.ParseDateFromString(md)
 			if err != nil {
 				return nil, err
 			}
 
 			fmd = fmd.AddDate(0, 0, 7)
-			md = fmd.Format("2006-01-02")
+			md = utils.GetFormattedDate(fmd)
 			pitchSlot = models.PitchSlot{
 				PitchTimeSlotId: br.PitchTimeSlotId,
 				MatchDate:       md,

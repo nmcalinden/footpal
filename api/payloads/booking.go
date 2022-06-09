@@ -10,6 +10,10 @@ type BookingRequest struct {
 	SquadId         *int   `json:"squadId" validate:"omitempty"`
 }
 
+type BookingResponse struct {
+	BookingId int `json:"id"`
+}
+
 type BookingSearchRequest struct {
 	VenueId    *int    `json:"venueId" validate:"required"`
 	Date       string  `json:"date" validate:"required"`

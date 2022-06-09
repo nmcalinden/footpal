@@ -17,11 +17,12 @@ var MatchPlayerRepoSet = wire.NewSet(repository.NewMatchPlayerRepository, wire.B
 var PitchRepoSet = wire.NewSet(repository.NewPitchRepository, wire.Bind(new(repository.PitchRepositoryI), new(*repository.PitchRepository)))
 var PlayerRepoSet = wire.NewSet(repository.NewPlayerRepository, wire.Bind(new(repository.PlayerRepositoryI), new(*repository.PlayerRepository)))
 var SquadRepoSet = wire.NewSet(repository.NewSquadRepository, wire.Bind(new(repository.SquadRepositoryI), new(*repository.SquadRepository)))
+var StatusRepoSet = wire.NewSet(repository.NewStatusRepository, wire.Bind(new(repository.StatusRepositoryI), new(*repository.StatusRepository)))
 var UserRepoSet = wire.NewSet(repository.NewUserRepository, wire.Bind(new(repository.UserRepositoryI), new(*repository.UserRepository)))
 var VenueRepoSet = wire.NewSet(repository.NewVenueRepository, wire.Bind(new(repository.VenueRepositoryI), new(*repository.VenueRepository)))
 
 func InitializeBookingController() *controllers.BookingController {
-	wire.Build(controllers.NewBookingController, services.NewBookingService, BookingRepoSet, config.GetConnection)
+	wire.Build(controllers.NewBookingController, services.NewBookingService, BookingRepoSet, MatchRepoSet, StatusRepoSet, config.GetConnection)
 	return nil
 }
 

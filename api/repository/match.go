@@ -12,6 +12,7 @@ type MatchRepositoryI interface {
 	FindById(id *int) (*models.Match, error)
 	Update(match *models.Match) (*models.Match, error)
 	DeletePlayerByMatch(matchId *int, playerId *int) error
+	FindMatchDetailsByBookingId(bookingId *int) (*[]models.MatchBookingDetail, error)
 	FindMatchDetailByBookingIdAndMatchDate(bookingId int, matchDate string) (*models.MatchBookingDetail, error)
 }
 
@@ -41,14 +42,19 @@ func (r MatchRepository) FindById(id *int) (*models.Match, error) {
 	return &match, nil
 }
 
-func (r MatchRepository) FindMatchDetailByBookingIdAndMatchDate(bookingId int, matchDate string) (*models.MatchBookingDetail, error) {
-	q := "SELECT v.id as venue_id, v.venue_name, p.id as pitch_id, p.pitch_name, p.max_players, p.cost, ps.match_date, " +
-		"pts.start_time from pitch_slot as ps " +
-		"JOIN pitch_time_slot pts on pts.id = ps.pitch_time_slot_id " +
-		"JOIN pitch p on pts.pitch_id = p.id " +
-		"JOIN venue v on p.venue_id = v.id " +
-		"WHERE ps.booking_id = $1 AND ps.match_date = $2"
+func (r MatchRepository) FindMatchDetailsByBookingId(bookingId *int) (*[]models.MatchBookingDetail, error) {
+	q := r.getMatchBookingDetailQuery()
+	var match []models.MatchBookingDetail
+	err := r.database.Select(&match, q, bookingId)
+	if err != nil {
+		return nil, err
+	}
 
+	return &match, nil
+}
+
+func (r MatchRepository) FindMatchDetailByBookingIdAndMatchDate(bookingId int, matchDate string) (*models.MatchBookingDetail, error) {
+	q := r.getMatchBookingDetailQuery() + " AND ps.match_date = $2"
 	var match models.MatchBookingDetail
 	err := r.database.Get(&match, q, bookingId, matchDate)
 	if err != nil {
@@ -56,6 +62,15 @@ func (r MatchRepository) FindMatchDetailByBookingIdAndMatchDate(bookingId int, m
 	}
 
 	return &match, nil
+}
+
+func (r MatchRepository) getMatchBookingDetailQuery() string {
+	return "SELECT v.id as venue_id, v.venue_name, p.id as pitch_id, p.pitch_name, p.max_players, p.cost, ps.match_date, " +
+		"pts.start_time from pitch_slot as ps " +
+		"JOIN pitch_time_slot pts on pts.id = ps.pitch_time_slot_id " +
+		"JOIN pitch p on pts.pitch_id = p.id " +
+		"JOIN venue v on p.venue_id = v.id " +
+		"WHERE ps.booking_id = $1"
 }
 
 func (r MatchRepository) Update(match *models.Match) (*models.Match, error) {

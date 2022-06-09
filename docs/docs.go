@@ -34,14 +34,29 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Booking"
-                            }
+                            "$ref": "#/definitions/views.BookingsByUser"
                         }
                     },
                     "500": {
@@ -78,7 +93,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "202": {
-                        "description": ""
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/payloads.BookingResponse"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -2545,6 +2563,14 @@ const docTemplate = `{
                 }
             }
         },
+        "payloads.BookingResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "payloads.BookingSearchRequest": {
             "type": "object",
             "required": [
@@ -2812,6 +2838,42 @@ const docTemplate = `{
                 }
             }
         },
+        "views.BookingPitchSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.BookingVenueSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "views.BookingsByUser": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.UserBooking"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/views.Pagination"
+                }
+            }
+        },
         "views.MatchSummary": {
             "type": "object",
             "properties": {
@@ -2966,6 +3028,38 @@ const docTemplate = `{
                 },
                 "pagination": {
                     "$ref": "#/definitions/views.Pagination"
+                }
+            }
+        },
+        "views.UserBooking": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isPaid": {
+                    "type": "boolean"
+                },
+                "matchDate": {
+                    "type": "string"
+                },
+                "noOfWeeks": {
+                    "type": "integer"
+                },
+                "pitch": {
+                    "$ref": "#/definitions/views.BookingPitchSummary"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalCost": {
+                    "type": "number"
+                },
+                "venue": {
+                    "$ref": "#/definitions/views.BookingVenueSummary"
                 }
             }
         },

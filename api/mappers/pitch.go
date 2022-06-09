@@ -2,12 +2,9 @@ package mappers
 
 import (
 	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/api/views"
 	"time"
-)
-
-const (
-	ot = "15:04"
 )
 
 func MapPitchSlotsToOpeningHours(pts []models.PitchTimeSlot) (*[]views.VenueOpeningHour, error) {
@@ -37,8 +34,8 @@ func buildDayOpeningHours(t []models.PitchTimeSlot, d time.Weekday) views.VenueO
 	o := ""
 	c := ""
 	if len(t) > 0 {
-		o = t[0].StartTime.Format(ot)
-		c = t[len(t)-1].EndTime.Format(ot)
+		o = utils.GetFormattedTime(t[0].StartTime)
+		c = utils.GetFormattedTime(t[len(t)-1].EndTime)
 	}
 
 	return views.VenueOpeningHour{

@@ -19,7 +19,9 @@ import (
 func InitializeBookingController() *controllers.BookingController {
 	db := config.GetConnection()
 	bookingRepository := repository.NewBookingRepository(db)
-	bookingService := services.NewBookingService(bookingRepository)
+	matchRepository := repository.NewMatchRepository(db)
+	statusRepository := repository.NewStatusRepository(db)
+	bookingService := services.NewBookingService(bookingRepository, matchRepository, statusRepository)
 	bookingController := controllers.NewBookingController(bookingService)
 	return bookingController
 }
@@ -87,6 +89,8 @@ var PitchRepoSet = wire.NewSet(repository.NewPitchRepository, wire.Bind(new(repo
 var PlayerRepoSet = wire.NewSet(repository.NewPlayerRepository, wire.Bind(new(repository.PlayerRepositoryI), new(*repository.PlayerRepository)))
 
 var SquadRepoSet = wire.NewSet(repository.NewSquadRepository, wire.Bind(new(repository.SquadRepositoryI), new(*repository.SquadRepository)))
+
+var StatusRepoSet = wire.NewSet(repository.NewStatusRepository, wire.Bind(new(repository.StatusRepositoryI), new(*repository.StatusRepository)))
 
 var UserRepoSet = wire.NewSet(repository.NewUserRepository, wire.Bind(new(repository.UserRepositoryI), new(*repository.UserRepository)))
 

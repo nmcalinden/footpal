@@ -189,6 +189,11 @@ definitions:
     - pitchTimeSlotId
     - venueId
     type: object
+  payloads.BookingResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   payloads.BookingSearchRequest:
     properties:
       city:
@@ -381,6 +386,29 @@ definitions:
     - phoneNo
     - postcode
     type: object
+  views.BookingPitchSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  views.BookingVenueSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  views.BookingsByUser:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/views.UserBooking'
+        type: array
+      pagination:
+        $ref: '#/definitions/views.Pagination'
+    type: object
   views.MatchSummary:
     properties:
       cost:
@@ -483,6 +511,27 @@ definitions:
       pagination:
         $ref: '#/definitions/views.Pagination'
     type: object
+  views.UserBooking:
+    properties:
+      id:
+        type: integer
+      isPaid:
+        type: boolean
+      matchDate:
+        type: string
+      noOfWeeks:
+        type: integer
+      pitch:
+        $ref: '#/definitions/views.BookingPitchSummary'
+      startTime:
+        type: string
+      status:
+        type: string
+      totalCost:
+        type: number
+      venue:
+        $ref: '#/definitions/views.BookingVenueSummary'
+    type: object
   views.Venue:
     properties:
       address:
@@ -542,15 +591,26 @@ paths:
   /bookings:
     get:
       description: Retrieve all bookings by user
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Booking'
-            type: array
+            $ref: '#/definitions/views.BookingsByUser'
         "500":
           description: Internal Server Error
           schema:
@@ -572,7 +632,9 @@ paths:
       - application/json
       responses:
         "202":
-          description: ""
+          description: Accepted
+          schema:
+            $ref: '#/definitions/payloads.BookingResponse'
         "400":
           description: Bad Request
           schema:
