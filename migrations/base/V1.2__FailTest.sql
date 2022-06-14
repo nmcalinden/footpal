@@ -1,2 +1,2 @@
 -- Booking Status
-INSERT INTO test_table VALUES (1, 'approved');
+INSERT INTO booking_status_ref VALUES (5, 'test');
