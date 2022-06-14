@@ -39,6 +39,7 @@ func main() {
 
 	utils.ConfigureSwagger(app)
 
+	routers.ConfigureHealthHandler(app)
 	routers.ConfigureUserHandlers(app)
 	routers.ConfigureVenueHandlers(app)
 	routers.ConfigurePlayerHandlers(app)
