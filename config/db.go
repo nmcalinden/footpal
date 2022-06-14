@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"os"
 	"time"
 )
 
@@ -38,6 +39,11 @@ func GetConnection() *sqlx.DB {
 }
 
 func getDSN() string {
+
+	dbConn := os.Getenv("API_DB_URL")
+	if dbConn != "" {
+		return dbConn
+	}
 	return fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 }
