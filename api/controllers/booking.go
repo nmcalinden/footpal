@@ -22,7 +22,7 @@ func NewBookingController(bookingService *services.BookingService) *BookingContr
 // @Description  Retrieve all bookings by user
 // @Tags         booking
 // @Produce      json
-// @Success      200  {array} views.UserBookings
+// @Success      200  {array} views.UserBooking
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings [get]

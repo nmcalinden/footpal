@@ -10,7 +10,6 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:8081",
     "basePath": "/",
     "paths": {
         "/bookings": {
@@ -27,29 +26,14 @@
                 "tags": [
                     "booking"
                 ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "default": 0,
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.BookingsByUser"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.UserBooking"
+                            }
                         }
                     },
                     "500": {
@@ -2831,6 +2815,17 @@
                 }
             }
         },
+        "views.BookingMatchSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "matchDate": {
+                    "type": "string"
+                }
+            }
+        },
         "views.BookingPitchSummary": {
             "type": "object",
             "properties": {
@@ -2850,20 +2845,6 @@
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "views.BookingsByUser": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/views.UserBooking"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/views.Pagination"
                 }
             }
         },
@@ -2911,10 +2892,10 @@
                 "_links": {
                     "$ref": "#/definitions/views.PaginationLinks"
                 },
-                "lastId": {
+                "limit": {
                     "type": "integer"
                 },
-                "limit": {
+                "offset": {
                     "type": "integer"
                 },
                 "size": {
@@ -3035,6 +3016,12 @@
                 },
                 "matchDate": {
                     "type": "string"
+                },
+                "matches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.BookingMatchSummary"
+                    }
                 },
                 "noOfWeeks": {
                     "type": "integer"

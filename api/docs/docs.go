@@ -34,29 +34,14 @@ const docTemplate = `{
                 "tags": [
                     "booking"
                 ],
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "default": 0,
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.BookingsByUser"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/views.UserBooking"
+                            }
                         }
                     },
                     "500": {
@@ -2838,6 +2823,17 @@ const docTemplate = `{
                 }
             }
         },
+        "views.BookingMatchSummary": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "matchDate": {
+                    "type": "string"
+                }
+            }
+        },
         "views.BookingPitchSummary": {
             "type": "object",
             "properties": {
@@ -2857,20 +2853,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "views.BookingsByUser": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/views.UserBooking"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/views.Pagination"
                 }
             }
         },
@@ -2918,10 +2900,10 @@ const docTemplate = `{
                 "_links": {
                     "$ref": "#/definitions/views.PaginationLinks"
                 },
-                "lastId": {
+                "limit": {
                     "type": "integer"
                 },
-                "limit": {
+                "offset": {
                     "type": "integer"
                 },
                 "size": {
@@ -3043,6 +3025,12 @@ const docTemplate = `{
                 "matchDate": {
                     "type": "string"
                 },
+                "matches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.BookingMatchSummary"
+                    }
+                },
                 "noOfWeeks": {
                     "type": "integer"
                 },
@@ -3147,7 +3135,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1:8081",
+	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Footpal API",

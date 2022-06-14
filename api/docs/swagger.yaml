@@ -386,6 +386,13 @@ definitions:
     - phoneNo
     - postcode
     type: object
+  views.BookingMatchSummary:
+    properties:
+      id:
+        type: integer
+      matchDate:
+        type: string
+    type: object
   views.BookingPitchSummary:
     properties:
       id:
@@ -399,15 +406,6 @@ definitions:
         type: integer
       name:
         type: string
-    type: object
-  views.BookingsByUser:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/views.UserBooking'
-        type: array
-      pagination:
-        $ref: '#/definitions/views.Pagination'
     type: object
   views.MatchSummary:
     properties:
@@ -438,9 +436,9 @@ definitions:
     properties:
       _links:
         $ref: '#/definitions/views.PaginationLinks'
-      lastId:
-        type: integer
       limit:
+        type: integer
+      offset:
         type: integer
       size:
         type: integer
@@ -519,6 +517,10 @@ definitions:
         type: boolean
       matchDate:
         type: string
+      matches:
+        items:
+          $ref: '#/definitions/views.BookingMatchSummary'
+        type: array
       noOfWeeks:
         type: integer
       pitch:
@@ -578,7 +580,6 @@ definitions:
       name:
         type: string
     type: object
-host: 127.0.0.1:8081
 info:
   contact:
     email: nathan.mcalinden@unosquare.com
@@ -591,26 +592,15 @@ paths:
   /bookings:
     get:
       description: Retrieve all bookings by user
-      parameters:
-      - default: 10
-        description: Limit
-        in: query
-        name: limit
-        required: true
-        type: integer
-      - default: 0
-        description: Offset
-        in: query
-        name: offset
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/views.BookingsByUser'
+            items:
+              $ref: '#/definitions/views.UserBooking'
+            type: array
         "500":
           description: Internal Server Error
           schema:
