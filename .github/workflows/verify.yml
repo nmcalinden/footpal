@@ -1,0 +1,11 @@
+name: Verify Migrations
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: execute flyway in docker compose 🐳
+      run: docker-compose up --abort-on-container-exit
