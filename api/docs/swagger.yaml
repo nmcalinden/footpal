@@ -1,0 +1,2031 @@
+basePath: /
+definitions:
+  ErrorResponse:
+    properties:
+      message:
+        type: string
+      param:
+        type: string
+      value:
+        type: string
+    type: object
+  controllers.SquadResponse:
+    type: object
+  models.Booking:
+    properties:
+      bookingId:
+        type: integer
+      bookingStatusId:
+        type: integer
+      created:
+        type: string
+      createdBy:
+        type: integer
+      lastUpdated:
+        type: string
+    required:
+    - bookingStatusId
+    - created
+    - createdBy
+    - lastUpdated
+    type: object
+  models.Match:
+    properties:
+      bookingId:
+        type: integer
+      cost:
+        type: number
+      created:
+        type: string
+      isPaid:
+        type: boolean
+      lastUpdated:
+        type: string
+      matchAccessStatusId:
+        type: integer
+      matchDate:
+        type: string
+      matchId:
+        type: integer
+      matchStatusId:
+        type: integer
+      squadId:
+        type: integer
+    required:
+    - bookingId
+    - cost
+    - created
+    - isPaid
+    - lastUpdated
+    - matchAccessStatusId
+    - matchDate
+    - matchStatusId
+    - squadId
+    type: object
+  models.MatchPlayer:
+    properties:
+      amountToPay:
+        type: number
+      matchId:
+        type: integer
+      matchPlayerId:
+        type: integer
+      paymentTypeId:
+        type: integer
+      playerId:
+        type: integer
+    required:
+    - amountToPay
+    - matchId
+    - paymentTypeId
+    - playerId
+    type: object
+  models.Pitch:
+    properties:
+      cost:
+        type: number
+      id:
+        type: integer
+      maxPlayers:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+      venueId:
+        type: integer
+    required:
+    - cost
+    - maxPlayers
+    - name
+    - venueId
+    type: object
+  models.Player:
+    properties:
+      address:
+        maxLength: 15
+        minLength: 11
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      nickname:
+        maxLength: 16
+        minLength: 2
+        type: string
+      playerId:
+        type: integer
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+      userId:
+        type: integer
+    required:
+    - address
+    - city
+    - nickname
+    - postcode
+    type: object
+  models.Squad:
+    properties:
+      city:
+        type: string
+      name:
+        type: string
+      squadId:
+        type: integer
+    type: object
+  models.SquadPlayerDetails:
+    properties:
+      forename:
+        type: string
+      nickname:
+        type: string
+      playerId:
+        type: integer
+      surname:
+        type: string
+    type: object
+  models.Venue:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phoneNo:
+        type: string
+      postcode:
+        type: string
+    type: object
+  payloads.BookingRequest:
+    properties:
+      matchDate:
+        type: string
+      matchType:
+        type: string
+      noOfWeeks:
+        type: integer
+      payment:
+        type: string
+      pitchTimeSlotId:
+        type: integer
+      squadId:
+        type: integer
+      venueId:
+        type: integer
+    required:
+    - matchDate
+    - matchType
+    - noOfWeeks
+    - payment
+    - pitchTimeSlotId
+    - venueId
+    type: object
+  payloads.BookingResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  payloads.BookingSearchRequest:
+    properties:
+      city:
+        type: string
+      date:
+        type: string
+      maxPlayers:
+        type: integer
+      venueId:
+        type: integer
+    required:
+    - date
+    - venueId
+    type: object
+  payloads.JoinMatchResponse:
+    properties:
+      matchId:
+        type: integer
+    type: object
+  payloads.Login:
+    properties:
+      email:
+        maxLength: 100
+        minLength: 5
+        type: string
+      password:
+        maxLength: 25
+        minLength: 5
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  payloads.PitchRequest:
+    properties:
+      cost:
+        type: number
+      maxPlayers:
+        maximum: 22
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - cost
+    - maxPlayers
+    - name
+    type: object
+  payloads.PlayerPaymentRequest:
+    properties:
+      amountToPay:
+        type: number
+    required:
+    - amountToPay
+    type: object
+  payloads.PlayerRequest:
+    properties:
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      nickname:
+        maxLength: 16
+        minLength: 2
+        type: string
+      phoneNo:
+        maxLength: 15
+        minLength: 11
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+    required:
+    - city
+    - nickname
+    - phoneNo
+    - postcode
+    type: object
+  payloads.Refresh:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  payloads.Register:
+    properties:
+      email:
+        maxLength: 100
+        minLength: 5
+        type: string
+      forename:
+        maxLength: 50
+        minLength: 3
+        type: string
+      isPlayer:
+        description: 'default: true'
+        type: boolean
+      password:
+        maxLength: 25
+        minLength: 5
+        type: string
+      surname:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - forename
+    - password
+    - surname
+    type: object
+  payloads.RegisterResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  payloads.SquadRequest:
+    properties:
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      name:
+        maxLength: 30
+        minLength: 2
+        type: string
+    required:
+    - city
+    - name
+    type: object
+  payloads.TokenPairResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  payloads.VenueAdminRequest:
+    properties:
+      userId:
+        type: integer
+      venueId:
+        type: integer
+    type: object
+  payloads.VenueAdminResponse:
+    properties:
+      email:
+        type: string
+      forename:
+        type: string
+      surname:
+        type: string
+      venueAdminId:
+        type: integer
+    type: object
+  payloads.VenueRequest:
+    properties:
+      address:
+        maxLength: 100
+        minLength: 3
+        type: string
+      city:
+        maxLength: 50
+        minLength: 3
+        type: string
+      email:
+        maxLength: 100
+        minLength: 10
+        type: string
+      name:
+        maxLength: 100
+        minLength: 3
+        type: string
+      phoneNo:
+        maxLength: 15
+        minLength: 11
+        type: string
+      postcode:
+        maxLength: 8
+        minLength: 5
+        type: string
+    required:
+    - address
+    - city
+    - email
+    - name
+    - phoneNo
+    - postcode
+    type: object
+  views.BookingPitchSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  views.BookingVenueSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  views.BookingsByUser:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/views.UserBooking'
+        type: array
+      pagination:
+        $ref: '#/definitions/views.Pagination'
+    type: object
+  views.MatchSummary:
+    properties:
+      cost:
+        type: number
+      id:
+        type: integer
+      matchDate:
+        type: string
+      maxPlayers:
+        type: integer
+      pitchId:
+        type: integer
+      pitchName:
+        type: string
+      squadId:
+        type: integer
+      squadName:
+        type: string
+      time:
+        type: string
+      venueId:
+        type: integer
+      venueName:
+        type: string
+    type: object
+  views.Pagination:
+    properties:
+      _links:
+        $ref: '#/definitions/views.PaginationLinks'
+      lastId:
+        type: integer
+      limit:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  views.PaginationLinks:
+    properties:
+      next:
+        type: string
+      previous:
+        type: string
+    type: object
+  views.PitchBookingDetails:
+    properties:
+      dayOfWeek:
+        type: string
+      matchDate:
+        type: string
+      timeSlots:
+        items:
+          $ref: '#/definitions/views.PitchTimeSlotBooking'
+        type: array
+    type: object
+  views.PitchTimeSlotBooking:
+    properties:
+      endTime:
+        type: string
+      id:
+        type: integer
+      isBooked:
+        type: boolean
+      startTime:
+        type: string
+    type: object
+  views.Player:
+    properties:
+      city:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      playerId:
+        type: integer
+    type: object
+  views.PlayerUser:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      phoneNo:
+        type: string
+      postcode:
+        type: string
+    type: object
+  views.Players:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/views.Player'
+        type: array
+      pagination:
+        $ref: '#/definitions/views.Pagination'
+    type: object
+  views.UserBooking:
+    properties:
+      id:
+        type: integer
+      isPaid:
+        type: boolean
+      matchDate:
+        type: string
+      noOfWeeks:
+        type: integer
+      pitch:
+        $ref: '#/definitions/views.BookingPitchSummary'
+      startTime:
+        type: string
+      status:
+        type: string
+      totalCost:
+        type: number
+      venue:
+        $ref: '#/definitions/views.BookingVenueSummary'
+    type: object
+  views.Venue:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phoneNo:
+        type: string
+      pitches:
+        items:
+          $ref: '#/definitions/views.VenuePitchSummary'
+        type: array
+      postcode:
+        type: string
+    type: object
+  views.VenueOpeningHour:
+    properties:
+      close:
+        type: string
+      dayOfWeek:
+        type: string
+      open:
+        type: string
+    type: object
+  views.VenuePitchSummary:
+    properties:
+      href:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  views.VenueSummary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: 127.0.0.1:8081
+info:
+  contact:
+    email: nathan.mcalinden@unosquare.com
+    name: Footpal Support
+  description: This is swagger for Footpal
+  termsOfService: http://swagger.io/terms/
+  title: Footpal API
+  version: "1.0"
+paths:
+  /bookings:
+    get:
+      description: Retrieve all bookings by user
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.BookingsByUser'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+    post:
+      description: Create new single or recurring booking testing
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.BookingRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/payloads.BookingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+  /bookings/{bookingId}:
+    delete:
+      description: Cancel active or pending booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+    get:
+      description: Retrieve booking by bookingId
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Booking'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+    put:
+      description: Edit booking details
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.BookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Booking'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+  /bookings/{bookingId}/matches:
+    get:
+      description: Get all matches linked to booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: bookingId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - booking
+  /bookings/search:
+    post:
+      description: Find Venues with available bookings
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.BookingSearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Venue'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - booking
+  /deactivate:
+    delete:
+      description: Delete user from Footpal
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - user
+  /login:
+    post:
+      description: Login to Footpal
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.TokenPairResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - user
+  /matches:
+    get:
+      description: Retrieve all public matches
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.MatchSummary'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - match
+  /matches/{matchId}:
+    delete:
+      description: Cancel match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - match
+    get:
+      description: Retrieve match details by matchId
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Match'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - match
+  /matches/{matchId}/players:
+    get:
+      description: Retrieve all players opted into a match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.MatchPlayer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - match
+  /matches/{matchId}/players/{playerId}:
+    delete:
+      description: As a booking/squad admin, remove player from match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - match
+  /me:
+    get:
+      description: Get logged-in user details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.PlayerUser'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - user
+  /players:
+    get:
+      description: Retrieve all players
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: After ID
+        in: query
+        name: after_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.Players'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+    put:
+      description: Edit player information
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.PlayerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.PlayerUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/{playerId}:
+    get:
+      description: Get Player information
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.Player'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/matches:
+    get:
+      description: Retrieve a players opted in matches
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/matches/{matchId}:
+    delete:
+      description: Leave match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+    post:
+      description: Request to join match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.JoinMatchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/matches/{matchId}/pay:
+    post:
+      description: For a match, pay amount owed by player
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.PlayerPaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+    put:
+      description: For a match, pay amount owed by player
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: integer
+      - description: Payment Type ID
+        in: query
+        name: paymentTypeId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/squads:
+    get:
+      description: Retrieve all squads linked to player
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Squad'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /players/squads/{squadId}:
+    get:
+      description: Retrieve squad by squad id
+      parameters:
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Player'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+    post:
+      description: Request to join squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - player
+  /refresh:
+    post:
+      description: Refresh token
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.Refresh'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.TokenPairResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - user
+  /register:
+    post:
+      description: Register as new player
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - user
+  /squads:
+    get:
+      description: Retrieve all squads
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Squad'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+    post:
+      description: Create new squad for building up a team of players
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.SquadRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.SquadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+  /squads/{squadId}:
+    delete:
+      description: Delete squad from footpal
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: accepted
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+    get:
+      description: Get squad by squadId
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Squad'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - squad
+    put:
+      description: Update Squad Info
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.SquadRequest'
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Squad'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+  /squads/{squadId}/players:
+    get:
+      description: List of players associated with squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SquadPlayerDetails'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - squad
+  /squads/{squadId}/players/{playerId}:
+    delete:
+      description: Remove player from squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+    put:
+      description: Approve player to join squad
+      parameters:
+      - description: Squad ID
+        in: path
+        name: squadId
+        required: true
+        type: integer
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - squad
+  /venues:
+    get:
+      description: Retrieve all venues
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.Venue'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+    post:
+      description: Create new football venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.VenueRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+    put:
+      description: Edit venue details
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.VenueRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Venue'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+  /venues/{venueId}:
+    delete:
+      description: Remove venue from Footpal
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+    get:
+      description: Retrieve venue by venueId
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.Venue'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+  /venues/{venueId}/admins:
+    delete:
+      description: Remove administrator from venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+    get:
+      description: Retrieve venue administrators
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/payloads.VenueAdminResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+    post:
+      description: Add new administrator to venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.VenueAdminRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/payloads.VenueAdminResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+  /venues/{venueId}/hours:
+    get:
+      description: Retrieve opening hours by Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.VenueOpeningHour'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+  /venues/{venueId}/pitches:
+    get:
+      description: Get Pitches by Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pitch'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+    post:
+      description: Add new pitch to existing venue
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.PitchRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pitch'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+  /venues/{venueId}/pitches/{pitchId}:
+    delete:
+      description: Remove pitch from venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+    get:
+      description: Get pitch info by venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+    put:
+      description: Edit pitch details
+      parameters:
+      - description: Request
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.PitchRequest'
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - venue
+  /venues/{venueId}/pitches/{pitchId}/timeslots:
+    get:
+      description: Retrieve all time slots by Pitch
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch ID
+        in: path
+        name: pitchId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+  /venues/{venueId}/timeslots:
+    get:
+      description: Retrieve pitch slots by venue and date range
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: 'Date from - Format: YYYY-MM-DD'
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: 'Date to - Format: YYYY-MM-DD'
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.PitchBookingDetails'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - booking
+  /venues/{venueId}/timeslots/{pitchTimeslotId}/pitch:
+    get:
+      description: Get pitch info by venue and time slot
+      parameters:
+      - description: Venue ID
+        in: path
+        name: venueId
+        required: true
+        type: integer
+      - description: Pitch Time slot ID
+        in: path
+        name: pitchTimeslotId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pitch'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+  /venues/summary:
+    get:
+      description: Retrieve all venues
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.VenueSummary'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - venue
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
