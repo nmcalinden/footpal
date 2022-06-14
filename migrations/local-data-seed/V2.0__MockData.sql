@@ -1,24 +1,24 @@
 -- Init Mock Users
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('John', 'Bloggs', 'jbloggs@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Mary', 'Foster', 'mfoster@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Pete', 'West', 'pwest@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Mike', 'Turner', 'mturner-boyyy@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Lucy', 'Luck', 'll123@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Tom', 'Smith', 'tsmith@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Gareth', 'Clone', 'gclone@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Randy', 'Marsh', 'rthemarsh123@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Vince', 'Vaughn', 'vincey@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Owen', 'Wils', 'owils9800@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Kevy', 'Fergie', 'fergieboy@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Betty', 'Fulton', 'fulton.b@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Ally', 'Baba', 'ally.baba@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Timmy', 'Turner', 'tt@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Drew', 'OnPage', 'haha@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Joel', 'Crowe', 'thejoel@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Yeti', 'Netty', 'yeti@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Harold', 'Hart', 'thehartyboy@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Beth', 'Brock', 'rockthebrock8382@gmail.com', crypt('password', gen_salt('bf')));
-INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Lionel', 'Messi', 'messi10@gmail.com', crypt('password', gen_salt('bf')));
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('John', 'Bloggs', 'jbloggs@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Mary', 'Foster', 'mfoster@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Pete', 'West', 'pwest@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Mike', 'Turner', 'mturner-boyyy@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Lucy', 'Luck', 'll123@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Tom', 'Smith', 'tsmith@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Gareth', 'Clone', 'gclone@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Randy', 'Marsh', 'rthemarsh123@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Vince', 'Vaughn', 'vincey@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Owen', 'Wils', 'owils9800@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Kevy', 'Fergie', 'fergieboy@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Betty', 'Fulton', 'fulton.b@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Ally', 'Baba', 'ally.baba@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Timmy', 'Turner', 'tt@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Drew', 'OnPage', 'haha@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Joel', 'Crowe', 'thejoel@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Yeti', 'Netty', 'yeti@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Harold', 'Hart', 'thehartyboy@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Beth', 'Brock', 'rockthebrock8382@gmail.com', 'password');
+INSERT INTO footpaldb.public.footpal_user(forename, surname, email, password) VALUES ('Lionel', 'Messi', 'messi10@gmail.com', 'password');
 
 -- Init Venues
 

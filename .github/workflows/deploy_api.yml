@@ -31,7 +31,7 @@ jobs:
     - name: Build and push image to Lightsail
       id: build-image
       run: |
-        docker build --build-arg API_DB_URL="${{ secrets.API_DB_URL }}" -t footpal-api:latest .
+        docker build --build-arg API_DB_URL="${{ secrets.API_DB_URL }}" API_HOST="${{ secrets.API_HOST }}" -t footpal-api:latest .
         aws lightsail push-container-image --region eu-west-1 --service-name footpal-api-1 --label footpal-api --image footpal-api:latest
     - name: Deploy Service
       run: |
