@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/api/payloads"
-	"github.com/nmcalinden/footpal/api/services"
-	"github.com/nmcalinden/footpal/api/utils"
+	"github.com/nmcalinden/footpal/payloads"
+	"github.com/nmcalinden/footpal/services"
+	"github.com/nmcalinden/footpal/utils"
 )
 
 type UserController struct {

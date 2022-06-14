@@ -8,10 +8,10 @@ package routers
 
 import (
 	"github.com/google/wire"
-	"github.com/nmcalinden/footpal/api/controllers"
-	"github.com/nmcalinden/footpal/api/repository"
-	"github.com/nmcalinden/footpal/api/services"
 	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/controllers"
+	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/services"
 )
 
 // Injectors from wire.go:

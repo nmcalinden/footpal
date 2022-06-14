@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/api/controllers"
+	"github.com/nmcalinden/footpal/controllers"
 )
 
 func ConfigureHealthHandler(app *fiber.App) {

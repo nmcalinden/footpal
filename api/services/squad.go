@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/payloads"
-	"github.com/nmcalinden/footpal/api/repository"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
+	"github.com/nmcalinden/footpal/repository"
 )
 
 type SquadService struct {

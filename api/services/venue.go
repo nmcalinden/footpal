@@ -1,14 +1,15 @@
 package services
 
 import (
-	"github.com/nmcalinden/footpal/api/mappers"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/payloads"
-	"github.com/nmcalinden/footpal/api/repository"
-	"github.com/nmcalinden/footpal/api/utils"
-	"github.com/nmcalinden/footpal/api/views"
 	"log"
 	"time"
+
+	"github.com/nmcalinden/footpal/mappers"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
+	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/utils"
+	"github.com/nmcalinden/footpal/views"
 )
 
 type VenueService struct {

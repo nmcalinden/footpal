@@ -2,10 +2,10 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/player_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository PlayerRepositoryI
+//go:generate mockgen -destination=./mocks/player_mock.go -package=mocks github.com/nmcalinden/footpal/repository PlayerRepositoryI
 
 type PlayerRepositoryI interface {
 	FindAll(limit int, after int) (*[]models.Player, error)

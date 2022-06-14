@@ -2,12 +2,13 @@ package repository
 
 import (
 	"errors"
-	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
 	"strconv"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/booking_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository BookingRepositoryI
+//go:generate mockgen -destination=./mocks/booking_mock.go -package=mocks github.com/nmcalinden/footpal/repository BookingRepositoryI
 
 type BookingRepositoryI interface {
 	FindAll() (*[]models.Booking, error)

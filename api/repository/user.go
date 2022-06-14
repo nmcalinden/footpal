@@ -2,10 +2,10 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/user_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository UserRepositoryI
+//go:generate mockgen -destination=./mocks/user_mock.go -package=mocks github.com/nmcalinden/footpal/repository UserRepositoryI
 
 type UserRepositoryI interface {
 	FindById(id *int) (*models.User, error)

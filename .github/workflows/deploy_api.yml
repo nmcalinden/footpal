@@ -3,9 +3,9 @@ name: Deploy API
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'api/**'
+      - deploy_api
+#    paths:
+#      - 'api/**'
 
 defaults:
  run:

@@ -2,11 +2,12 @@ package repository
 
 import (
 	"fmt"
+
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/match_player_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository MatchPlayerRepositoryI
+//go:generate mockgen -destination=./mocks/match_player_mock.go -package=mocks github.com/nmcalinden/footpal/repository MatchPlayerRepositoryI
 
 type MatchPlayerRepositoryI interface {
 	FindByMatchId(matchId *int) (*[]models.MatchPlayer, error)
