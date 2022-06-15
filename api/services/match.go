@@ -1,14 +1,15 @@
 package services
 
 import (
-	"github.com/hashicorp/go-multierror"
-	"github.com/nmcalinden/footpal/api/mappers"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/repository"
-	"github.com/nmcalinden/footpal/api/views"
 	"log"
 	"sort"
 	"sync"
+
+	"github.com/hashicorp/go-multierror"
+	"github.com/nmcalinden/footpal/mappers"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/views"
 )
 
 type MatchService struct {

@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/api/services"
-	"github.com/nmcalinden/footpal/api/utils"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/services"
+	"github.com/nmcalinden/footpal/utils"
 )
 
 type MatchController struct {

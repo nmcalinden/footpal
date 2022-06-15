@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/api/errors"
-	"github.com/nmcalinden/footpal/api/payloads"
-	"github.com/nmcalinden/footpal/api/services"
-	"github.com/nmcalinden/footpal/api/utils"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/nmcalinden/footpal/errors"
+	"github.com/nmcalinden/footpal/payloads"
+	"github.com/nmcalinden/footpal/services"
+	"github.com/nmcalinden/footpal/utils"
 )
 
 type BookingController struct {
@@ -21,7 +22,7 @@ func NewBookingController(bookingService *services.BookingService) *BookingContr
 // @Description  Retrieve all bookings by user
 // @Tags         booking
 // @Produce      json
-// @Success      200  {array} views.UserBookings
+// @Success      200  {array} views.UserBooking
 // @Failure      500 {object} utils.ErrorResponse
 // @Security ApiKeyAuth
 // @Router       /bookings [get]

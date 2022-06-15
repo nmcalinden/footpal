@@ -2,10 +2,10 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/pitch_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository PitchRepositoryI
+//go:generate mockgen -destination=./mocks/pitch_mock.go -package=mocks github.com/nmcalinden/footpal/repository PitchRepositoryI
 
 type PitchRepositoryI interface {
 	FindAllByVenueId(venueId int) (*[]models.PitchTimeSlot, error)

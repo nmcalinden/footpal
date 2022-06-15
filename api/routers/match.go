@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/nmcalinden/footpal/api/enums"
-	"github.com/nmcalinden/footpal/api/middleware"
+	"github.com/nmcalinden/footpal/enums"
+	"github.com/nmcalinden/footpal/middleware"
 )
 
 func ConfigureMatchHandlers(app *fiber.App) {

@@ -2,12 +2,13 @@ package utils
 
 import (
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/nmcalinden/footpal/api/enums"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/config"
-	"golang.org/x/crypto/bcrypt"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/enums"
+	"github.com/nmcalinden/footpal/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetClaims(token interface{}) jwt.MapClaims {

@@ -4,7 +4,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-//go:generate mockgen -destination=./mocks/status_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository StatusRepositoryI
+//go:generate mockgen -destination=./mocks/status_mock.go -package=mocks github.com/nmcalinden/footpal/repository StatusRepositoryI
 
 type StatusRepositoryI interface {
 	FindBookingStatusById(int *int) (*string, error)

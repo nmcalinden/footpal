@@ -3,16 +3,17 @@ package services
 import (
 	"errors"
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/nmcalinden/footpal/api/mappers"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/payloads"
-	"github.com/nmcalinden/footpal/api/repository"
-	"github.com/nmcalinden/footpal/api/utils"
-	"github.com/nmcalinden/footpal/api/views"
-	"github.com/nmcalinden/footpal/config"
 	"log"
 	"sync"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/mappers"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/payloads"
+	"github.com/nmcalinden/footpal/repository"
+	"github.com/nmcalinden/footpal/utils"
+	"github.com/nmcalinden/footpal/views"
 )
 
 type UserService struct {

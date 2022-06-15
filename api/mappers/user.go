@@ -2,9 +2,10 @@ package mappers
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/go-multierror"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/views"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/views"
 	"gopkg.in/jeevatkm/go-model.v1"
 )
 

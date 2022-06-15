@@ -3,9 +3,9 @@ package middleware
 import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
-	"github.com/nmcalinden/footpal/api/enums"
-	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/config"
+	"github.com/nmcalinden/footpal/enums"
+	"github.com/nmcalinden/footpal/utils"
 	"golang.org/x/exp/slices"
 )
 

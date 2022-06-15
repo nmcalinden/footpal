@@ -2,12 +2,13 @@ package mappers
 
 import (
 	"fmt"
-	"github.com/hashicorp/go-multierror"
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/utils"
-	"github.com/nmcalinden/footpal/api/views"
-	"gopkg.in/jeevatkm/go-model.v1"
 	"time"
+
+	"github.com/hashicorp/go-multierror"
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/utils"
+	"github.com/nmcalinden/footpal/views"
+	"gopkg.in/jeevatkm/go-model.v1"
 )
 
 func MapToVenueSummaries(v []models.Venue) (*[]views.VenueSummary, error) {

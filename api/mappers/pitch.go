@@ -1,10 +1,11 @@
 package mappers
 
 import (
-	"github.com/nmcalinden/footpal/api/models"
-	"github.com/nmcalinden/footpal/api/utils"
-	"github.com/nmcalinden/footpal/api/views"
 	"time"
+
+	"github.com/nmcalinden/footpal/models"
+	"github.com/nmcalinden/footpal/utils"
+	"github.com/nmcalinden/footpal/views"
 )
 
 func MapPitchSlotsToOpeningHours(pts []models.PitchTimeSlot) (*[]views.VenueOpeningHour, error) {

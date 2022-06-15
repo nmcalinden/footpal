@@ -2,11 +2,12 @@ package repository
 
 import (
 	"fmt"
+
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/squad_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository SquadRepositoryI
+//go:generate mockgen -destination=./mocks/squad_mock.go -package=mocks github.com/nmcalinden/footpal/repository SquadRepositoryI
 
 type SquadRepositoryI interface {
 	FindAll() (*[]models.Squad, error)

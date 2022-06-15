@@ -2,11 +2,12 @@ package repository
 
 import (
 	"database/sql"
+
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcalinden/footpal/api/models"
+	"github.com/nmcalinden/footpal/models"
 )
 
-//go:generate mockgen -destination=./mocks/venue_mock.go -package=mocks github.com/nmcalinden/footpal/api/repository VenueRepositoryI
+//go:generate mockgen -destination=./mocks/venue_mock.go -package=mocks github.com/nmcalinden/footpal/repository VenueRepositoryI
 
 type VenueRepositoryI interface {
 	FindAll() (*[]models.Venue, error)

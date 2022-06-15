@@ -1,15 +1,18 @@
 package main
 
 import (
+	"github.com/nmcalinden/footpal/docs"
+	"log"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/helmet/v2"
-	"github.com/nmcalinden/footpal/api/routers"
-	"github.com/nmcalinden/footpal/api/utils"
 	"github.com/nmcalinden/footpal/config"
-	"log"
+	"github.com/nmcalinden/footpal/routers"
+	"github.com/nmcalinden/footpal/utils"
 )
 
 // @title Footpal API
@@ -18,12 +21,12 @@ import (
 // @termsOfService http://swagger.io/terms/
 // @contact.name Footpal Support
 // @contact.email nathan.mcalinden@unosquare.com
-// @host 127.0.0.1:8081
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
 // @BasePath /
 func main() {
+	docs.SwaggerInfo.Host = getHost()
 
 	fiberConfig := fiber.Config{
 		ErrorHandler: defaultErrorHandler,
@@ -48,6 +51,15 @@ func main() {
 	routers.ConfigureMatchHandlers(app)
 
 	log.Fatal(app.Listen(":8081"))
+}
+
+func getHost() string {
+	appHost := os.Getenv("API_HOST")
+	if appHost != "" {
+		return appHost
+	}
+
+	return "127.0.0.1:8081"
 }
 
 func defaultErrorHandler(ctx *fiber.Ctx, err error) error {

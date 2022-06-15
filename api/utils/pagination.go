@@ -2,7 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"github.com/nmcalinden/footpal/api/views"
+
+	"github.com/nmcalinden/footpal/views"
 )
 
 // BuildPagination
