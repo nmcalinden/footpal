@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS Cloud Template to create resources required to host footpal.
 
 Parameters:
+  DBPassword:
+    Type: String
+    Description: Password for the DB admin account
+    Default: '{{resolve:secretsmanager:dev/Footpal/DB:SecretString:Password}}'
   BucketName:
     Type: String
     Description: Name for the S3 hosting bucket
@@ -10,6 +14,7 @@ Parameters:
 Resources:
   Database:
     Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: Retain
     Properties:
       DBInstanceIdentifier: footpaldb
       DBInstanceClass: db.t2.micro
@@ -18,23 +23,22 @@ Resources:
       Engine: postgres
       EngineVersion: '12.9'
       MasterUsername: postgres
-      MasterUserPassword: '{{resolve:secretsmanager:dev/Footpal/DB:SecretString:Password}}'
-    DeletionPolicy: Retain
+      MasterUserPassword: !Ref DBPassword
 
   LightSailApi:
     Type: AWS::Lightsail::Container
+    DeletionPolicy: Retain
     Properties:
       IsDisabled: false
       Power: micro
       Scale: 1
       ServiceName: footpal-api-1
-    DeletionPolicy: Retain
   S3Bucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
     Properties:
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
       BucketName: !Ref BucketName
-    DeletionPolicy: Retain
