@@ -2,10 +2,6 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS Cloud Template to create resources required to host footpal.
 
 Parameters:
-  DBPassword:
-    Type: String
-    Description: Password for the DB admin account
-    Default: '{{resolve:secretsmanager:dev/Footpal/DB:SecretString:Password}}'
   BucketName:
     Type: String
     Description: Name for the S3 hosting bucket
@@ -22,7 +18,7 @@ Resources:
       Engine: postgres
       EngineVersion: '12.9'
       MasterUsername: postgres
-      MasterUserPassword: !Ref DBPassword
+      MasterUserPassword: '{{resolve:secretsmanager:dev/Footpal/DB:SecretString:Password}}'
     DeletionPolicy: Retain
 
   LightSailApi:
