@@ -1,0 +1,38 @@
+name: Deploy CloudFormation
+
+on:
+  push:
+    branches:
+      - main
+      - cloudformation
+    paths:
+      - 'cloudformation/**'
+
+defaults:
+  run:
+    working-directory: ./cloudformation
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: "eu-west-1"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Deploy Shared Infrastructure
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: footpal-Infrastructure-dev
+          template: ./cloudformation/api-infrastructure.yml
+          capabilities: CAPABILITY_NAMED_IAM
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: file://${{ github.workspace }}/cloudformation/api-infrastructure-parameters-dev.json
