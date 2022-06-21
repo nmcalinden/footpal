@@ -5,8 +5,8 @@ on:
     branches:
       - main
       - cloudformation
-    paths:
-      - 'api/**'
+#    paths:
+#      - 'api/**'
 
 defaults:
  run:
