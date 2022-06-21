@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - cloudformation
     paths:
       - 'cloudformation/**'
 
@@ -30,8 +31,8 @@ jobs:
       - name: Deploy Shared Infrastructure
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: api-infrastructure-dev
+          name: api-infrastructure-qa
           template: ./cloudformation/api-infrastructure.yml
           capabilities: CAPABILITY_NAMED_IAM
           no-fail-on-empty-changeset: "1"
-          parameter-overrides: file://${{ github.workspace }}/cloudformation/api-infrastructure-parameters-dev.json
+          parameter-overrides: file://${{ github.workspace }}/cloudformation/api-infrastructure-parameters-qa.json
