@@ -1,15 +1,15 @@
 [
   {
     "ParameterKey": "ApiName",
-    "ParameterValue": "footpal-api-1"
+    "ParameterValue": "footpal-api-dev"
   },
   {
     "ParameterKey": "BucketName",
-    "ParameterValue": "foot-pal.com"
+    "ParameterValue": "footpal-dev"
   },
   {
     "ParameterKey": "DBInstance",
-    "ParameterValue": "footpaldb"
+    "ParameterValue": "footpaldb-dev"
   },
   {
     "ParameterKey": "RDSInstanceRotationSecret",
