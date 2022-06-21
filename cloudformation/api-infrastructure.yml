@@ -18,7 +18,7 @@ Resources:
     Properties:
       DBInstanceIdentifier: footpaldb
       DBInstanceClass: db.t3.micro
-      AllocatedStorage: '20'
+      AllocatedStorage: 20
       PubliclyAccessible: true
       Engine: postgres
       EngineVersion: '13.4'
