@@ -5,8 +5,8 @@ on:
     branches:
       - main
       - cloudformation
-#     paths:
-#       - 'migrations/**'
+    paths:
+       - 'migrations/**'
       
 #defaults:
 #  run:
