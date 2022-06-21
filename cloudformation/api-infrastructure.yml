@@ -5,7 +5,7 @@ Parameters:
   DBPassword:
     Type: String
     Description: Password for the DB admin account
-    Default: '{{resolve:secretsmanager:dev/Footpal/DB:SecretString:Password}}'
+    Default: '{{resolve:secretsmanager:dev/FootpalDB:SecretString:Password}}'
   BucketName:
     Type: String
     Description: Name for the S3 hosting bucket
@@ -15,21 +15,19 @@ Resources:
   Database:
     Type: "AWS::RDS::DBInstance"
     DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       DBInstanceIdentifier: footpaldb
-      DBInstanceClass: db.t2.micro
-      AllocatedStorage: 20
+      DBInstanceClass: db.t3.micro
+      AllocatedStorage: '20'
       PubliclyAccessible: true
       Engine: postgres
-      EngineVersion: '12.9'
+      EngineVersion: '13.4'
       MasterUsername: postgres
       MasterUserPassword: !Ref DBPassword
 
   LightSailApi:
     Type: AWS::Lightsail::Container
     DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       IsDisabled: false
       Power: micro
@@ -38,7 +36,6 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       AccessControl: PublicRead
       WebsiteConfiguration:
