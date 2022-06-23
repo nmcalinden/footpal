@@ -368,7 +368,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/payloads.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.LoginResponse"
                         }
                     },
                     "400": {
@@ -607,7 +607,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.PlayerUser"
+                            "$ref": "#/definitions/views.UserProfile"
                         }
                     },
                     "500": {
@@ -1143,7 +1143,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/payloads.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.LoginResponse"
                         }
                     },
                     "400": {
@@ -2596,6 +2596,17 @@
                 }
             }
         },
+        "payloads.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "jwt": {
+                    "$ref": "#/definitions/payloads.TokenPairResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/views.UserProfile"
+                }
+            }
+        },
         "payloads.PitchRequest": {
             "type": "object",
             "required": [
@@ -2663,10 +2674,10 @@
         "payloads.Refresh": {
             "type": "object",
             "required": [
-                "refresh_token"
+                "refreshToken"
             ],
             "properties": {
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -2736,10 +2747,10 @@
         "payloads.TokenPairResponse": {
             "type": "object",
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 },
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -3040,6 +3051,32 @@
                 },
                 "venue": {
                     "$ref": "#/definitions/views.BookingVenueSummary"
+                }
+            }
+        },
+        "views.UserProfile": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
                 }
             }
         },

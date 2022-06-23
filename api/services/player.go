@@ -190,7 +190,7 @@ func (s *PlayerService) EditPlayer(userId *int, playerRequest *payloads.PlayerRe
 	usr, _ := s.userRepo.FindById(userId)
 
 	var user views.PlayerUser
-	err = mappers.MapToUser(&user, *player, *usr)
+	err = mappers.MapToPlayer(&user, *player, *usr)
 	if err != nil {
 		log.Println(err)
 		return nil, err

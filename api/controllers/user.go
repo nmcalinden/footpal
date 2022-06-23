@@ -20,7 +20,7 @@ func NewUserController(userService *services.UserService) *UserController {
 // @Tags         user
 // @Produce      json
 // @Security ApiKeyAuth
-// @Success      200 {object} views.PlayerUser
+// @Success      200 {object} views.UserProfile
 // @Failure      500 {object} utils.ErrorResponse
 // @Router       /me [get]
 func (con UserController) UserHandler(c *fiber.Ctx) error {
@@ -39,7 +39,7 @@ func (con UserController) UserHandler(c *fiber.Ctx) error {
 // @Tags         user
 // @Produce      json
 // @Param 		 message body payloads.Login true "Request"
-// @Success      200 {object} payloads.TokenPairResponse
+// @Success      200 {object} payloads.LoginResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /login [post]
 func (con UserController) LoginHandler(c *fiber.Ctx) error {
@@ -90,7 +90,7 @@ func (con UserController) RegisterHandler(c *fiber.Ctx) error {
 // @Tags         user
 // @Produce      json
 // @Param 		 message body payloads.Refresh true "Request"
-// @Success      200 {object} payloads.TokenPairResponse
+// @Success      200 {object} payloads.LoginResponse
 // @Failure      400 {object} utils.ErrorResponse
 // @Router       /refresh [post]
 func (con UserController) RefreshToken(c *fiber.Ctx) error {

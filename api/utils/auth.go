@@ -24,7 +24,7 @@ func GetAccessToken(user *models.User, isAdmin bool, isPlayer bool, secretKey st
 		"name":  fmt.Sprintf("%s %s", user.Forename, user.Surname),
 		"email": user.Email,
 		"roles": roles,
-		"exp":   time.Now().Add(time.Minute * 60).Unix(),
+		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 		"iat":   time.Now().Unix(),
 	}
 

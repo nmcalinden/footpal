@@ -31,7 +31,7 @@ func NewUserService(usrRepo repository.UserRepositoryI, pRepo repository.PlayerR
 	}
 }
 
-func (s *UserService) GetUser(id int) (*views.PlayerUser, error) {
+func (s *UserService) GetUser(id int) (*views.UserProfile, error) {
 	res, err := s.userRepo.FindById(&id)
 	if err != nil {
 		return nil, err
@@ -39,8 +39,8 @@ func (s *UserService) GetUser(id int) (*views.PlayerUser, error) {
 
 	player, _ := s.playerRepo.FindByUserId(&id)
 
-	var user views.PlayerUser
-	err = mappers.MapToUser(&user, *player, *res)
+	var user views.UserProfile
+	err = mappers.MapToUserProfile(&user, *player, *res)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -49,7 +49,24 @@ func (s *UserService) GetUser(id int) (*views.PlayerUser, error) {
 	return &user, nil
 }
 
-func (s *UserService) Login(login *payloads.Login) (*payloads.TokenPairResponse, error) {
+func (s *UserService) GetProfile(id int) (*views.PlayerUser, error) {
+	res, err := s.userRepo.FindById(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	player, _ := s.playerRepo.FindByUserId(&id)
+
+	var user views.PlayerUser
+	err = mappers.MapToPlayer(&user, *player, *res)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (s *UserService) Login(login *payloads.Login) (*payloads.LoginResponse, error) {
 	res, err := s.userRepo.FindByEmail(&login.Email)
 	if err != nil {
 		return nil, err
@@ -62,11 +79,20 @@ func (s *UserService) Login(login *payloads.Login) (*payloads.TokenPairResponse,
 		return nil, invalidPw
 	}
 
-	response, err2 := s.getTokenPair(res)
-	if err2 != nil {
-		return nil, err2
+	player, _ := s.playerRepo.FindByUserId(res.UserId)
+	tp, err := s.getTokenPair(res)
+	if err != nil {
+		return nil, err
 	}
-	return response, nil
+	var user views.UserProfile
+	err = mappers.MapToUserProfile(&user, *player, *res)
+	if err != nil {
+		return nil, err
+	}
+	return &payloads.LoginResponse{
+		User: user,
+		JWT:  *tp,
+	}, nil
 }
 
 func (s *UserService) Register(register *payloads.Register) (*int, error) {
@@ -97,7 +123,7 @@ func (s *UserService) Register(register *payloads.Register) (*int, error) {
 
 }
 
-func (s *UserService) Refresh(refreshToken *string) (*payloads.TokenPairResponse, error) {
+func (s *UserService) Refresh(refreshToken *string) (*payloads.LoginResponse, error) {
 	t, err := utils.ParseRefreshToken(refreshToken)
 	if err != nil {
 		return nil, err
@@ -110,7 +136,21 @@ func (s *UserService) Refresh(refreshToken *string) (*payloads.TokenPairResponse
 			return nil, err
 		}
 
-		return s.getTokenPair(res)
+		player, _ := s.playerRepo.FindByUserId(res.UserId)
+		tp, err := s.getTokenPair(res)
+		if err != nil {
+			return nil, err
+		}
+		var user views.UserProfile
+		err = mappers.MapToUserProfile(&user, *player, *res)
+		if err != nil {
+			return nil, err
+		}
+
+		return &payloads.LoginResponse{
+			User: user,
+			JWT:  *tp,
+		}, nil
 	}
 
 	return nil, err

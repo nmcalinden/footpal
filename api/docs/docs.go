@@ -376,7 +376,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/payloads.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.LoginResponse"
                         }
                     },
                     "400": {
@@ -615,7 +615,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.PlayerUser"
+                            "$ref": "#/definitions/views.UserProfile"
                         }
                     },
                     "500": {
@@ -1151,7 +1151,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/payloads.TokenPairResponse"
+                            "$ref": "#/definitions/payloads.LoginResponse"
                         }
                     },
                     "400": {
@@ -2604,6 +2604,17 @@ const docTemplate = `{
                 }
             }
         },
+        "payloads.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "jwt": {
+                    "$ref": "#/definitions/payloads.TokenPairResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/views.UserProfile"
+                }
+            }
+        },
         "payloads.PitchRequest": {
             "type": "object",
             "required": [
@@ -2671,10 +2682,10 @@ const docTemplate = `{
         "payloads.Refresh": {
             "type": "object",
             "required": [
-                "refresh_token"
+                "refreshToken"
             ],
             "properties": {
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -2744,10 +2755,10 @@ const docTemplate = `{
         "payloads.TokenPairResponse": {
             "type": "object",
             "properties": {
-                "access_token": {
+                "accessToken": {
                     "type": "string"
                 },
-                "refresh_token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }
@@ -3048,6 +3059,32 @@ const docTemplate = `{
                 },
                 "venue": {
                     "$ref": "#/definitions/views.BookingVenueSummary"
+                }
+            }
+        },
+        "views.UserProfile": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phoneNo": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
                 }
             }
         },

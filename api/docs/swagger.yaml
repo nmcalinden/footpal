@@ -227,6 +227,13 @@ definitions:
     - email
     - password
     type: object
+  payloads.LoginResponse:
+    properties:
+      jwt:
+        $ref: '#/definitions/payloads.TokenPairResponse'
+      user:
+        $ref: '#/definitions/views.UserProfile'
+    type: object
   payloads.PitchRequest:
     properties:
       cost:
@@ -276,10 +283,10 @@ definitions:
     type: object
   payloads.Refresh:
     properties:
-      refresh_token:
+      refreshToken:
         type: string
     required:
-    - refresh_token
+    - refreshToken
     type: object
   payloads.Register:
     properties:
@@ -329,9 +336,9 @@ definitions:
     type: object
   payloads.TokenPairResponse:
     properties:
-      access_token:
+      accessToken:
         type: string
-      refresh_token:
+      refreshToken:
         type: string
     type: object
   payloads.VenueAdminRequest:
@@ -533,6 +540,23 @@ definitions:
         type: number
       venue:
         $ref: '#/definitions/views.BookingVenueSummary'
+    type: object
+  views.UserProfile:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nickname:
+        type: string
+      phoneNo:
+        type: string
+      postcode:
+        type: string
     type: object
   views.Venue:
     properties:
@@ -812,7 +836,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/payloads.TokenPairResponse'
+            $ref: '#/definitions/payloads.LoginResponse'
         "400":
           description: Bad Request
           schema:
@@ -958,7 +982,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/views.PlayerUser'
+            $ref: '#/definitions/views.UserProfile'
         "500":
           description: Internal Server Error
           schema:
@@ -1297,7 +1321,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/payloads.TokenPairResponse'
+            $ref: '#/definitions/payloads.LoginResponse'
         "400":
           description: Bad Request
           schema:

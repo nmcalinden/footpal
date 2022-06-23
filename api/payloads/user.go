@@ -1,5 +1,7 @@
 package payloads
 
+import "github.com/nmcalinden/footpal/views"
+
 type Login struct {
 	Email    string `json:"email" validate:"required,min=5,max=100"`
 	Password string `json:"password" validate:"required,min=5,max=25"`
@@ -16,14 +18,19 @@ type Register struct {
 }
 
 type Refresh struct {
-	RefreshToken *string `json:"refresh_token" validate:"required"`
+	RefreshToken *string `json:"refreshToken" validate:"required"`
 }
 
 type RegisterResponse struct {
 	Id *int `json:"id"`
 }
 
+type LoginResponse struct {
+	User views.UserProfile `json:"user"`
+	JWT  TokenPairResponse `json:"jwt"`
+}
+
 type TokenPairResponse struct {
-	AccessToken  *string `json:"access_token"`
-	RefreshToken *string `json:"refresh_token"`
+	AccessToken  *string `json:"accessToken"`
+	RefreshToken *string `json:"refreshToken"`
 }
